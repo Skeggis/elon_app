@@ -1,0 +1,117 @@
+import 'package:flutter/material.dart';
+import '../../../../styles/theme.dart';
+import 'dart:math' as math;
+
+class PlayButton extends StatefulWidget {
+  final double width;
+  final MyTheme myTheme = MyTheme();
+  final GestureTapCallback onPressed;
+  PlayButton({this.width = 50.0, this.onPressed});
+  @override
+  State<StatefulWidget> createState() => _PlayButton();
+}
+
+class _PlayButton extends State<PlayButton>
+    with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
+  bool play = false;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {});
+
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 750))
+          ..addListener(() {
+            if (_animationController.status == AnimationStatus.forward) {
+              setState(() {
+                play = true;
+              });
+            } else if (_animationController.status == AnimationStatus.reverse) {
+              setState(() {
+                play = false;
+              });
+            }
+          });
+  }
+
+  void _onTap() {
+    if (widget.onPressed != null) widget.onPressed();
+    if (_animationController.status == AnimationStatus.completed)
+      _animationController.reverse();
+    else
+      _animationController.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      onPressed: _onTap,
+      elevation: 0.0,
+      constraints: BoxConstraints.tight(Size(widget.width, widget.width)),
+      fillColor: Theme.of(context).backgroundColor,
+      shape: CircleBorder(),
+      child: PlayButtonAnimations(
+        controller: _animationController,
+        child: Icon(play ? Icons.pause : Icons.play_arrow,
+            color: widget.myTheme.secondaryColor, size: widget.width * 0.75),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+}
+
+class PlayButtonAnimations extends AnimatedWidget {
+  final MyTheme myTheme = MyTheme();
+  PlayButtonAnimations({Key key, AnimationController controller, this.child})
+      : super(key: key, listenable: controller);
+
+  Animation<double> get _progress => listenable;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.rotate(
+      angle: 2 * math.pi * _progress.value,
+      child: CustomPaint(
+          painter: MyPainter(
+            theColor: myTheme.secondaryColor,
+            start: 0.0,
+            progress: _progress.value,
+          ),
+          child: this.child),
+    );
+  }
+}
+
+class MyPainter extends CustomPainter {
+  Color theColor;
+  double start;
+  double progress;
+  MyPainter({this.theColor, this.start, this.progress = 0.0});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint outerCircle = Paint()
+      ..strokeWidth = 5
+      ..color = theColor != null ? theColor : Colors.black
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    Offset center = Offset(size.width / 2, size.height / 2);
+    double radius = math.min(size.width / 2, size.height / 2) + 5;
+
+    double angle = 2 * math.pi * (this.progress);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), 0, angle,
+        false, outerCircle);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
+}
