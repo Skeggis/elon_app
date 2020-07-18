@@ -134,14 +134,11 @@ class _Move extends State<Move> with SingleTickerProviderStateMixin {
   }
 
   void _onTap() {
+    model.sendStartStop();
     if (_animationController.status == AnimationStatus.completed) {
       _animationController.reverse();
-      model.sendCommand(
-          'MaturKaddurMaturKaddurMaturKaddurMaturKaddurMaturKaddurMaturKad');
     } else {
       _animationController.forward();
-      model.sendCommand(
-          'MaturKaddurMaturKaddurMaturKaddurMaturKaddurMaturKaddurMaturKad');
     }
   }
 

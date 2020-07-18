@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/services/helpers.dart';
 import 'package:myapp/styles/theme.dart';
+import 'package:myapp/services/models/DeviceModel.dart';
 // import 'dart:math' as math;
 
 typedef SquareTap = Function(int nr);
@@ -115,6 +116,8 @@ class _Square extends State<Square> with TickerProviderStateMixin {
     if (!widget.picked) return;
     animController.reset();
     animController.forward();
+    print(widget.sqrNr);
+    model.sendShot(10, ShotType.drop, widget.sqrNr);
   }
 
   BoxDecoration _getBoxDecoration(BuildContext context) {
@@ -163,8 +166,10 @@ class _Square extends State<Square> with TickerProviderStateMixin {
     return widget.picked ? pickedBox : normalBox;
   }
 
+  DeviceModel model;
   @override
   Widget build(BuildContext context) {
+    model = DeviceModel.of(context);
     return GestureDetector(
       onTap: _onTap,
       onDoubleTap: _onDoubleTap,

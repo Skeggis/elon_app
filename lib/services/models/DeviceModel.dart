@@ -6,12 +6,64 @@ import 'package:flutter_blue/flutter_blue.dart';
 
 import 'dart:convert';
 
+enum ShotType { serve, clear, smash, drive, drop }
+
+class Shot {
+  int _maxLeftRight = 100;
+  int _maxUpDown = 100;
+  int _maxMotorSpeed = 100;
+
+  int _amountOfLocationsPerRow = 3;
+  int _amountOfLocationsPerColumn = 3;
+
+  int leftRight; //0-100
+  int upDown; //0-100
+  int motorSpeed; //0-100
+  int delay; //in milliseconds
+
+  int bpm; //Balls per minute
+  int location;
+  ShotType type;
+
+  /// location: 0 - (_amountOfLocationsPerRow*_amountofLocationsPerColumn - 1)
+  Shot({@required this.type, @required this.location, @required this.bpm}) {
+    this.leftRight = (this.location % _amountOfLocationsPerRow) *
+        (_maxLeftRight ~/ _amountOfLocationsPerRow);
+    this.upDown = (_amountOfLocationsPerColumn -
+            this.location ~/ _amountOfLocationsPerColumn) *
+        (_maxUpDown ~/ _amountOfLocationsPerColumn);
+    this.motorSpeed = ((this.upDown / _maxUpDown) * _maxMotorSpeed).toInt();
+
+    const ONE_MINUTE = 60000; //In milliseconds
+    this.delay = ONE_MINUTE ~/ this.bpm;
+    //Todo: Change configurations depending on type of shot.
+    switch (this.type) {
+      case ShotType.serve:
+        break;
+      case ShotType.clear:
+        break;
+      case ShotType.smash:
+        break;
+      case ShotType.drive:
+        break;
+      case ShotType.drop:
+        break;
+      default:
+    }
+  }
+
+  String toString() {
+    return '{${this.delay}, ${this.leftRight}, ${this.upDown}, ${this.motorSpeed}}';
+  }
+}
+
 class DeviceModel extends Model {
   BluetoothDevice _elon;
   List<BluetoothService> _elonServices = [];
   //Balls per minute
   int _bpm = 0;
   int get bpm => _bpm;
+  bool start = false;
 
   void changeBPM(int add) {
     _bpm += add;
@@ -53,19 +105,40 @@ class DeviceModel extends Model {
     notifyListeners();
   }
 
-//Todo: Now the command writes to ALL characteristics of the connected device. Only send to the one with the correct id?
-  void sendCommand(String command) async {
-    if (_elon == null) return;
+  Future<bool> readyForSending() async {
+    if (_elon == null) return false;
     if (_elonServices.length == 0)
       _elonServices = await _elon.discoverServices();
+    return true;
+  }
 
-    // _elonServices[0].characteristics[0].descriptors[0].
-    _elonServices.map((s) => print(s.characteristics));
-    print('Sending');
-    _elonServices[0]
-        .characteristics[0]
-        .write([126, 125], withoutResponse: true);
-    // .write(utf8.encode(command), withoutResponse: true);
+  void sendShot(int bpm, ShotType shotType, int location) async {
+    Shot theShot = Shot(bpm: bpm, location: location, type: shotType);
+    _sendCommand(theShot.toString());
+  }
+
+  void sendStartStop() {
+    start = !start;
+    String command = "!";
+    _sendCommand(command);
+  }
+
+//Todo: Now the command writes to ALL characteristics of the connected device. Only send to the one with the correct id?
+  void _sendCommand(String command) async {
+    if (!(await readyForSending())) return;
+    print("Sending command: $command");
+
+    int maxMessageLength = 70; //75 brings OK+Lost.
+    for (var i = 0; i < command.length; i += maxMessageLength) {
+      String message = command.substring(
+          i,
+          i + maxMessageLength > command.length
+              ? command.length
+              : i + maxMessageLength);
+      _elonServices[0]
+          .characteristics[0]
+          .write(utf8.encode(message), withoutResponse: true);
+    }
   }
 
   static DeviceModel of(BuildContext context) =>
