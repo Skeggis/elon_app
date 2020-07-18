@@ -53,7 +53,7 @@ class Shot {
   }
 
   String toString() {
-    return '{${this.delay}, ${this.leftRight}, ${this.upDown}, ${this.motorSpeed}}';
+    return '{${this.delay},${this.leftRight},${this.upDown},${this.motorSpeed}}';
   }
 }
 
