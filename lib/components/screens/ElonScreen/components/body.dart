@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:myapp/components/screens/ElonScreen/components/Court.dart';
 import 'package:myapp/components/screens/ElonScreen/components/Elon.dart';
 import 'package:myapp/components/screens/ElonScreen/components/SpeedControls.dart';
+import 'package:myapp/components/screens/ElonScreen/components/ShotPath.dart';
+import 'package:myapp/services/models/DeviceModel.dart';
+import 'package:myapp/styles/theme.dart';
 
 class ElonScreenBody extends StatelessWidget {
+  final MyTheme myTheme = MyTheme();
   Widget mainThings(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -19,9 +23,21 @@ class ElonScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        children: [mainThings(context)],
+    Offset offsetEnd =
+        DeviceModel.of(context, rebuildOnChange: true).offsetLocation;
+    Offset offsetStart =
+        DeviceModel.of(context, rebuildOnChange: true).offsetDevice;
+    return CustomPaint(
+      foregroundPainter: ShotPathPainter(
+          theColor: myTheme.secondaryColor,
+          start: 0.0,
+          offsetEnd: offsetEnd,
+          offsetStart: offsetStart),
+      child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [mainThings(context)],
+        ),
       ),
     );
   }

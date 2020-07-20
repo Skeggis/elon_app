@@ -12,7 +12,6 @@ class Court extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 10.0),
       margin: EdgeInsets.fromLTRB(10.0, 25.0, 10.0, 0),
       decoration: BoxDecoration(
-          // color: Colors.blue,
           border: Border(
               bottom: BorderSide(
                   color: Colors.black, width: 3.0, style: BorderStyle.solid))),
@@ -36,12 +35,13 @@ class CourtRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int columns = CourtConfiguration.amountOfColumns;
+    const double padding = 3.0 / CourtConfiguration.amountOfColumns;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         for (var i = 0; i < columns; i++)
           Padding(
-            padding: const EdgeInsets.all(1.0),
+            padding: const EdgeInsets.all(padding),
             child: Square(
               sqrNr: rowNr * columns + i,
             ),
@@ -110,19 +110,33 @@ class _Square extends State<Square> with TickerProviderStateMixin {
       animation.value + 0.99
     ]));
 
-    if (animation.value == 1.0 || animation.value == 0.0) pickedBox = normalBox;
+    if (animation.status == AnimationStatus.completed ||
+        animation.status == AnimationStatus.dismissed) pickedBox = normalBox;
 
     return pickedBox;
+  }
+
+  void _onTapDown(TapDownDetails details, BuildContext context) {
+    var x = details.globalPosition.dx;
+    var y = details.globalPosition.dy;
+    // or user the local position method to get the offset
+    print(details.localPosition);
+    print("tap down " + x.toString() + ", " + y.toString());
+    DeviceModel.of(context).changeShotLocation(x, y);
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => _onTap(context),
+      onTapDown: (TapDownDetails details) => _onTapDown(details, context),
       child: Container(
         decoration: _getBoxDecoration(context),
-        width: screenWidth(context, dividedBy: 4),
-        height: screenWidth(context, dividedBy: 3.75),
+        width: screenWidth(context,
+            dividedBy:
+                (CourtConfiguration.amountOfColumns * (4 / 3)).toDouble()),
+        height: screenWidth(context,
+            dividedBy: (CourtConfiguration.amountOfRows * 1.25).toDouble()),
       ),
     );
   }

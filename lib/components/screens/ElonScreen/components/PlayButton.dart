@@ -6,7 +6,8 @@ class PlayButton extends StatefulWidget {
   final double width;
   final MyTheme myTheme = MyTheme();
   final GestureTapCallback onPressed;
-  PlayButton({this.width = 50.0, this.onPressed});
+  final bool play;
+  PlayButton({this.width = 50.0, this.onPressed, this.play});
   @override
   State<StatefulWidget> createState() => _PlayButton();
 }
@@ -14,38 +15,31 @@ class PlayButton extends StatefulWidget {
 class _PlayButton extends State<PlayButton>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
-  bool play = false;
 
   @override
   void initState() {
     super.initState();
-    setState(() {});
 
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 750))
           ..addListener(() {
-            if (_animationController.status == AnimationStatus.forward) {
-              setState(() {
-                play = true;
-              });
-            } else if (_animationController.status == AnimationStatus.reverse) {
-              setState(() {
-                play = false;
-              });
-            }
+            setState(() {});
           });
   }
 
   void _onTap() {
     if (widget.onPressed != null) widget.onPressed();
-    if (_animationController.status == AnimationStatus.completed)
-      _animationController.reverse();
-    else
-      _animationController.forward();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.play &&
+        (_animationController.status == AnimationStatus.dismissed)) {
+      _animationController.forward();
+    } else if (!widget.play &&
+        (_animationController.status == AnimationStatus.completed)) {
+      _animationController.reverse();
+    }
     return RawMaterialButton(
       onPressed: _onTap,
       elevation: 0.0,
@@ -54,7 +48,7 @@ class _PlayButton extends State<PlayButton>
       shape: CircleBorder(),
       child: PlayButtonAnimations(
         controller: _animationController,
-        child: Icon(play ? Icons.pause : Icons.play_arrow,
+        child: Icon(widget.play ? Icons.pause : Icons.play_arrow,
             color: widget.myTheme.secondaryColor, size: widget.width * 0.75),
       ),
     );

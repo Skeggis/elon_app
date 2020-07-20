@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -75,7 +76,26 @@ class DeviceModel extends Model {
   int get bpm => _bpm;
   int _shotLocation = -1;
   int get shotLocation => _shotLocation;
-  bool _start = false;
+  bool _start = true;
+  bool get start => _start;
+
+  double _xShotLocation = 0;
+  double _yShotLocation = 0;
+  Offset get offsetLocation => Offset(_xShotLocation, _yShotLocation);
+  Offset _offsetDevice;
+  Offset get offsetDevice => _offsetDevice;
+  void setOffsetDevice(Offset offset) {
+    var appBarHeight = AppBar().preferredSize.height;
+    _offsetDevice = Offset(offset.dx, offset.dy - appBarHeight - 35);
+    notifyListeners();
+  }
+
+  void changeShotLocation(double x, double y) {
+    var appBarHeight = AppBar().preferredSize.height;
+    _xShotLocation = x;
+    _yShotLocation = y - appBarHeight - 35;
+    notifyListeners();
+  }
 
   void changeLocation(int loc) {
     _shotLocation = loc;
@@ -94,10 +114,11 @@ class DeviceModel extends Model {
     _sendCommand(theShot.toString());
   }
 
-  void sendStartStop() {
+  void flipStart() {
     _start = !_start;
     String command = "!";
     _sendCommand(command);
+    notifyListeners();
   }
 
 //Todo: Now the command writes to ALL characteristics of the connected device. Only send to the one with the correct id?
@@ -133,8 +154,8 @@ class DeviceModel extends Model {
 enum ShotType { serve, clear, smash, drive, drop }
 
 class CourtConfiguration {
-  static int amountOfColumns = 3;
-  static int amountOfRows = 3;
+  static const int amountOfColumns = 3;
+  static const int amountOfRows = 3;
 }
 
 class Shot {
