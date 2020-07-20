@@ -15,7 +15,6 @@ class ConnectElonScreen extends StatelessWidget {
         title: Text('Elon'),
       ),
       backgroundColor: theme.darkBackgroundColor,
-      // body: Text('Masssað!'),
       body: StreamBuilder<BluetoothState>(
           stream: FlutterBlue.instance.state,
           builder: (context, snapshot) {
@@ -25,7 +24,6 @@ class ConnectElonScreen extends StatelessWidget {
               state: state,
             );
           }),
-      // child: ,
     );
   }
 }

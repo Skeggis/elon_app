@@ -12,7 +12,7 @@ class ElonScreenBody extends StatelessWidget {
         SizedBox(height: 25.0),
         Elon(),
         SizedBox(height: 0.0),
-        Align(alignment: Alignment.bottomCenter, child: SpeedControls())
+        // Align(alignment: Alignment.bottomCenter, child: SpeedControls())
       ],
     );
   }
