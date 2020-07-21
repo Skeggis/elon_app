@@ -82,12 +82,11 @@ class DeviceModel extends Model {
   double _xShotLocation = 0;
   double _yShotLocation = 0;
   Offset get offsetLocation => Offset(_xShotLocation, _yShotLocation);
-  Offset _offsetDevice;
+  Offset _offsetDevice = Offset(0, 0);
   Offset get offsetDevice => _offsetDevice;
   void setOffsetDevice(Offset offset) {
     var appBarHeight = AppBar().preferredSize.height;
     _offsetDevice = Offset(offset.dx, offset.dy - appBarHeight - 35);
-    notifyListeners();
   }
 
   void changeShotLocation(double x, double y) {

@@ -19,11 +19,6 @@ class _Elon extends State<Elon> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      DeviceModel.of(context)
-          .setOffsetDevice(containerKey.globalPaintBounds.center);
-    });
-
     bool start = DeviceModel.of(context, rebuildOnChange: true).start;
 
     double width = 125.0;
@@ -34,6 +29,17 @@ class _Elon extends State<Elon> {
     double elonCenter = screenWidth(context, dividedBy: 2) - width / 2;
     double elonTopMargin = shooterWidth / 2 + 10.0;
     double ballWidth = buttonWidth * 0.65;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (DeviceModel.of(context).offsetDevice.dx !=
+              containerKey.globalPaintBounds.center.dx &&
+          DeviceModel.of(context).offsetDevice.dy !=
+              containerKey.globalPaintBounds.center.dy) {
+        DeviceModel.of(context)
+            .setOffsetDevice(containerKey.globalPaintBounds.center);
+      }
+    });
+
     return Container(
       height: height * 1.5,
       child: Stack(

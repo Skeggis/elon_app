@@ -6,12 +6,12 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>We need bluetooth for optimal performance. Please allow.</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>We need access to Bluetooth for you to control Elon</string>
 	<key>CFBundleName</key>
 	<string>myapp</string>
 	<key>CFBundlePackageType</key>

@@ -119,9 +119,6 @@ class _Square extends State<Square> with TickerProviderStateMixin {
   void _onTapDown(TapDownDetails details, BuildContext context) {
     var x = details.globalPosition.dx;
     var y = details.globalPosition.dy;
-    // or user the local position method to get the offset
-    print(details.localPosition);
-    print("tap down " + x.toString() + ", " + y.toString());
     DeviceModel.of(context).changeShotLocation(x, y);
   }
 

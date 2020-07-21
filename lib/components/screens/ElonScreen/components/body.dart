@@ -23,22 +23,28 @@ class ElonScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("NewPainting");
     Offset offsetEnd =
         DeviceModel.of(context, rebuildOnChange: true).offsetLocation;
     Offset offsetStart =
         DeviceModel.of(context, rebuildOnChange: true).offsetDevice;
-    return CustomPaint(
-      foregroundPainter: ShotPathPainter(
-          theColor: myTheme.secondaryColor,
-          start: 0.0,
-          offsetEnd: offsetEnd,
-          offsetStart: offsetStart),
-      child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [mainThings(context)],
+    return Stack(
+      children: [
+        mainThings(context),
+        RepaintBoundary(
+          //https://www.youtube.com/watch?v=Nuni5VQXARo
+          child: CustomPaint(
+            foregroundPainter: ShotPathPainter(
+                theColor: myTheme.secondaryColor,
+                start: 0.0,
+                offsetEnd: offsetEnd,
+                offsetStart: offsetStart),
+            child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                child: SizedBox.expand()),
+          ),
         ),
-      ),
+      ],
     );
   }
 }
