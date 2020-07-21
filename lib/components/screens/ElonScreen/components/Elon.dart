@@ -31,13 +31,8 @@ class _Elon extends State<Elon> {
     double ballWidth = buttonWidth * 0.65;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (DeviceModel.of(context).offsetDevice.dx !=
-              containerKey.globalPaintBounds.center.dx &&
-          DeviceModel.of(context).offsetDevice.dy !=
-              containerKey.globalPaintBounds.center.dy) {
-        DeviceModel.of(context)
-            .setOffsetDevice(containerKey.globalPaintBounds.center);
-      }
+      DeviceModel.of(context)
+          .setOffsetDevice(containerKey.globalPaintBounds.topCenter);
     });
 
     return Container(
@@ -68,19 +63,6 @@ class _Elon extends State<Elon> {
                   borderRadius: BorderRadius.all(Radius.circular(10))),
             ),
           ),
-          start
-              ? Positioned(
-                  top: elonTopMargin - ballWidth / 2 + height / 2,
-                  left: -ballWidth / 2 + elonCenter + width / 2,
-                  child: Transform.rotate(
-                    angle: 3 * math.pi / 4,
-                    child: Image(
-                        width: ballWidth,
-                        image:
-                            AssetImage('assets/images/badminton_ball_500.png')),
-                  ),
-                )
-              : Container(),
           Move(
             startTop: elonTopMargin - buttonWidth / 2 + height / 2,
             endTop: elonTopMargin - buttonWidth / 2 + height / 2,

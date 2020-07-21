@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import "package:vector_math/vector_math.dart" hide Colors;
 import "package:bezier/bezier.dart";
 
 import 'dart:ui' as ui;
@@ -12,31 +11,27 @@ class ShotPathPainter extends CustomPainter {
   double progress;
   Offset offsetStart;
   Offset offsetEnd;
+  QuadraticBezier curve;
   ShotPathPainter(
       {this.theColor,
       this.start,
       this.progress = 0.0,
       this.offsetStart,
-      this.offsetEnd});
+      this.offsetEnd,
+      this.curve});
 
   @override
   void paint(Canvas canvas, Size size) async {
-    //TODO: change curve depending on type of shot.
-    final curve = new QuadraticBezier([
-      new Vector2(offsetStart.dx, offsetStart.dy),
-      new Vector2(70.0, 95.0),
-      new Vector2(offsetEnd.dx, offsetEnd.dy)
-    ]);
-
     Paint outerCircle = Paint()
       ..strokeWidth = 5
       ..color = theColor != null ? theColor : Colors.black
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
-    Path path = Path()..moveTo(curve.pointAt(0).x, curve.pointAt(0).y);
+    Path path = Path()
+      ..moveTo(this.curve.pointAt(0).x, this.curve.pointAt(0).y);
     for (var i = 1; i < 101; i++) {
-      path.lineTo(curve.pointAt(i / 100).x, curve.pointAt(i / 100).y);
+      path.lineTo(this.curve.pointAt(i / 100).x, this.curve.pointAt(i / 100).y);
     }
     canvas.drawPath(path, outerCircle);
   }

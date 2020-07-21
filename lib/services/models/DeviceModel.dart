@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:collection/collection.dart';
+import "package:bezier/bezier.dart";
 import 'dart:convert';
 
 class DeviceModel extends Model {
@@ -76,17 +77,17 @@ class DeviceModel extends Model {
   int get bpm => _bpm;
   int _shotLocation = -1;
   int get shotLocation => _shotLocation;
-  bool _start = true;
+  bool _start = false;
   bool get start => _start;
 
   double _xShotLocation = 0;
   double _yShotLocation = 0;
   Offset get offsetLocation => Offset(_xShotLocation, _yShotLocation);
-  Offset _offsetDevice = Offset(0, 0);
+  Offset _offsetDevice;
   Offset get offsetDevice => _offsetDevice;
   void setOffsetDevice(Offset offset) {
     var appBarHeight = AppBar().preferredSize.height;
-    _offsetDevice = Offset(offset.dx, offset.dy - appBarHeight - 35);
+    _offsetDevice = Offset(offset.dx, offset.dy - appBarHeight - 5);
   }
 
   void changeShotLocation(double x, double y) {
