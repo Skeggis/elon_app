@@ -2,31 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:myapp/services/helpers.dart';
 import 'package:myapp/styles/theme.dart';
 import 'package:myapp/services/models/DeviceModel.dart';
-// import 'dart:math' as math;
 
-typedef SquareTap = Function(int nr);
-
-class Court extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _Court();
-}
-
-class _Court extends State<Court> {
-  MyTheme myTheme = MyTheme();
-
-  int squarePicked;
-  void initState() {
-    super.initState();
-    setState(() {
-      squarePicked = 0;
-    });
-  }
-
-  void _onSquareTap(int nr) {
-    setState(() {
-      squarePicked = nr;
-    });
-  }
+class Court extends StatelessWidget {
+  final MyTheme myTheme = MyTheme();
 
   @override
   Widget build(BuildContext context) {
@@ -34,40 +12,48 @@ class _Court extends State<Court> {
       padding: EdgeInsets.only(bottom: 10.0),
       margin: EdgeInsets.fromLTRB(10.0, 25.0, 10.0, 0),
       decoration: BoxDecoration(
-          // color: Colors.blue,
           border: Border(
               bottom: BorderSide(
                   color: Colors.black, width: 3.0, style: BorderStyle.solid))),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CourtRow(
-            rowNr: 0,
-            sqrPickedNr: squarePicked,
-            onPressed: _onSquareTap,
-          ),
-          CourtRow(
-            rowNr: 1,
-            sqrPickedNr: squarePicked,
-            onPressed: _onSquareTap,
-          ),
-          CourtRow(
-            rowNr: 2,
-            sqrPickedNr: squarePicked,
-            onPressed: _onSquareTap,
-          )
+          for (var i = 0; i < CourtConfiguration.amountOfRows; i++)
+            CourtRow(
+              rowNr: i,
+            )
         ],
       ),
     );
   }
 }
 
+class CourtRow extends StatelessWidget {
+  CourtRow({@required this.rowNr});
+  final int rowNr;
+
+  @override
+  Widget build(BuildContext context) {
+    int columns = CourtConfiguration.amountOfColumns;
+    const double padding = 3.0 / CourtConfiguration.amountOfColumns;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (var i = 0; i < columns; i++)
+          Padding(
+            padding: const EdgeInsets.all(padding),
+            child: Square(
+              sqrNr: rowNr * columns + i,
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 class Square extends StatefulWidget {
-  Square({@required this.picked, this.hit = false, this.sqrNr, this.onPressed});
-  bool picked;
-  bool hit;
-  int sqrNr;
-  SquareTap onPressed;
+  Square({this.sqrNr});
+  final int sqrNr;
   @override
   State<StatefulWidget> createState() => _Square();
 }
@@ -76,7 +62,6 @@ class _Square extends State<Square> with TickerProviderStateMixin {
   AnimationController animController;
   AnimationController _animController2;
   Animation<double> animation;
-  Animation<double> _animation2;
   void initState() {
     super.initState();
     animController = AnimationController(
@@ -88,13 +73,6 @@ class _Square extends State<Square> with TickerProviderStateMixin {
       duration: Duration(milliseconds: 500),
       vsync: this,
     );
-    _animation2 = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(_animController2)
-      ..addListener(() {
-        setState(() {});
-      });
     animation = Tween<double>(
       begin: 0,
       end: 1,
@@ -108,16 +86,11 @@ class _Square extends State<Square> with TickerProviderStateMixin {
       });
   }
 
-  void _onTap() {
-    widget.onPressed(widget.sqrNr);
-  }
-
-  void _onDoubleTap() {
-    if (!widget.picked) return;
+  void _onTap(BuildContext context) {
+    DeviceModel.of(context).changeLocation(widget.sqrNr);
     animController.reset();
     animController.forward();
-    print(widget.sqrNr);
-    model.sendShot(10, ShotType.drop, widget.sqrNr);
+    DeviceModel.of(context).sendShot(ShotType.drop, widget.sqrNr);
   }
 
   BoxDecoration _getBoxDecoration(BuildContext context) {
@@ -137,46 +110,30 @@ class _Square extends State<Square> with TickerProviderStateMixin {
       animation.value + 0.99
     ]));
 
-    if (animation.value == 1.0) {
-      //Other animation:
-      // pickedBox = BoxDecoration(
-      //     gradient: RadialGradient(colors: [
-      //   Color(0xFF191919),
-      //   Color(0xFF232627),
-      //   Theme.of(context).primaryColor,
-      // ], stops: [
-      //   _animation2.value - 0.4,
-      //   _animation2.value - 0.25,
-      //   _animation2.value + 0.95,
-      // ]));
-      pickedBox = BoxDecoration(
-          gradient: RadialGradient(colors: [
-        Theme.of(context).primaryColor,
-        Color(0xFF191919),
-        Color(0xFF232627),
-        Theme.of(context).primaryColor
-      ], stops: [
-        0.8 - _animation2.value,
-        1.0 - _animation2.value,
-        1.75 - _animation2.value,
-        1.99 - _animation2.value
-      ]));
-    }
+    if (animation.status == AnimationStatus.completed ||
+        animation.status == AnimationStatus.dismissed) pickedBox = normalBox;
 
-    return widget.picked ? pickedBox : normalBox;
+    return pickedBox;
   }
 
-  DeviceModel model;
+  void _onTapDown(TapDownDetails details, BuildContext context) {
+    var x = details.globalPosition.dx;
+    var y = details.globalPosition.dy;
+    DeviceModel.of(context).changeShotLocation(x, y);
+  }
+
   @override
   Widget build(BuildContext context) {
-    model = DeviceModel.of(context);
     return GestureDetector(
-      onTap: _onTap,
-      onDoubleTap: _onDoubleTap,
+      onTap: () => _onTap(context),
+      onTapDown: (TapDownDetails details) => _onTapDown(details, context),
       child: Container(
         decoration: _getBoxDecoration(context),
-        width: screenWidth(context, dividedBy: 4),
-        height: screenWidth(context, dividedBy: 3.75),
+        width: screenWidth(context,
+            dividedBy:
+                (CourtConfiguration.amountOfColumns * (4 / 3)).toDouble()),
+        height: screenWidth(context,
+            dividedBy: (CourtConfiguration.amountOfRows * 1.25).toDouble()),
       ),
     );
   }
@@ -186,48 +143,5 @@ class _Square extends State<Square> with TickerProviderStateMixin {
     animController.dispose();
     _animController2.dispose();
     super.dispose();
-  }
-}
-
-class CourtRow extends StatelessWidget {
-  CourtRow({@required this.rowNr, this.sqrPickedNr = 0, this.onPressed});
-  final int rowNr;
-  final int sqrPickedNr;
-  final SquareTap onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(1.0),
-          child: Square(
-            hit: false,
-            picked: rowNr * 3 + 0 == sqrPickedNr,
-            sqrNr: rowNr * 3 + 0,
-            onPressed: onPressed,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(1.0),
-          child: Square(
-            sqrNr: rowNr * 3 + 1,
-            hit: false,
-            picked: rowNr * 3 + 1 == sqrPickedNr,
-            onPressed: onPressed,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(1.0),
-          child: Square(
-            sqrNr: rowNr * 3 + 2,
-            hit: false,
-            picked: rowNr * 3 + 2 == sqrPickedNr,
-            onPressed: onPressed,
-          ),
-        )
-      ],
-    );
   }
 }

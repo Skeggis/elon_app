@@ -8,12 +8,11 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'dart:async';
 
 class ConnectElonScreenBody extends StatelessWidget {
-  bool bluetoothAvailable;
-  BluetoothState state;
+  final bool bluetoothAvailable;
+  final BluetoothState state;
 
-  ConnectElonScreenBody({this.bluetoothAvailable, this.state}) {
-    FlutterBlue.instance.startScan(timeout: Duration(seconds: 4));
-  }
+  ConnectElonScreenBody(
+      {@required this.bluetoothAvailable, @required this.state});
 
   Widget _deviceRow(BluetoothDevice device) {
     return Padding(
@@ -32,10 +31,9 @@ class ConnectElonScreenBody extends StatelessWidget {
                 return CustomButton(
                   onPressed: () => {
                     if (snapshot.data == BluetoothDeviceState.connected)
-                      device.disconnect()
+                      DeviceModel.of(context).disconnect(device)
                     else
                       DeviceModel.of(context).connect(device)
-                    // device.connect()
                   },
                   title: snapshot.data == BluetoothDeviceState.connected
                       ? 'Disconnect'
@@ -69,53 +67,66 @@ class ConnectElonScreenBody extends StatelessWidget {
     ]);
   }
 
-  Widget _searchDone() {
-    return StreamBuilder<List<BluetoothDevice>>(
-      stream: Stream.periodic(Duration(milliseconds: 500))
-          .asyncMap((event) => FlutterBlue.instance.connectedDevices),
-      initialData: [],
-      builder: (context, snapshot) => DeviceModel.of(context).elon != null
-          ? Padding(
-              padding: EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CustomButton(
-                    onPressed: () => FlutterBlue.instance
-                        .startScan(timeout: Duration(seconds: 4)),
-                    title: 'Search',
-                    isSelected: true,
-                    icon: Icon(Icons.bluetooth_searching, size: 30.0),
-                    padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                  ),
-                  CustomButton(
-                    onPressed: () =>
-                        Navigator.pushReplacementNamed(context, '/elon'),
-                    title: 'Shoot',
-                    isSelected: true,
-                    icon: Icon(Icons.label_important, size: 30.0),
-                    padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                  ),
-                ],
-              ),
-            )
-          : Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+  Widget _searchDone(BuildContext context) {
+    BluetoothDevice elon = DeviceModel.of(context, rebuildOnChange: true).elon;
+    return elon != null
+        ? Padding(
+            padding: EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CustomButton(
                   onPressed: () => FlutterBlue.instance
                       .startScan(timeout: Duration(seconds: 4)),
-                  title: 'Search for device',
+                  title: 'Search',
                   isSelected: true,
                   icon: Icon(Icons.bluetooth_searching, size: 30.0),
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                )
+                ),
+                CustomButton(
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, '/elon'),
+                  title: 'Shoot',
+                  isSelected: true,
+                  icon: Icon(Icons.label_important, size: 30.0),
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                ),
               ],
             ),
-    );
+          )
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomButton(
+                onPressed: () => FlutterBlue.instance
+                    .startScan(timeout: Duration(seconds: 4)),
+                title: 'Search for device',
+                isSelected: true,
+                icon: Icon(Icons.bluetooth_searching, size: 30.0),
+                padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+              )
+            ],
+          );
   }
 
   Widget _bluetooth(BuildContext context) {
+    List<BluetoothDevice> connectedDevices =
+        DeviceModel.of(context, rebuildOnChange: true).connectedDevices;
+    List<BluetoothDevice> foundDevices =
+        DeviceModel.of(context, rebuildOnChange: true).foundDevices;
+
+    if (connectedDevices == null) connectedDevices = [];
+    if (foundDevices == null) foundDevices = [];
+
+    Column toShow = Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        ...connectedDevices.map((d) => _deviceRow(d)).toList(),
+        ...foundDevices.map((d) => _deviceRow(d)).toList()
+      ],
+    );
+
     return Stack(
       children: [
         Container(
@@ -123,35 +134,7 @@ class ConnectElonScreenBody extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.only(top: 25.0),
             child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  StreamBuilder<List<BluetoothDevice>>(
-                    stream: Stream.periodic(Duration(seconds: 2))
-                        .asyncMap((_) => FlutterBlue.instance.connectedDevices),
-                    initialData: [],
-                    builder: (c, snapshot1) {
-                      return StreamBuilder<List<ScanResult>>(
-                          stream: FlutterBlue.instance.scanResults,
-                          initialData: [],
-                          builder: (c, snapshot2) {
-                            var filtered = snapshot2.data.where((r) =>
-                                r.device.name != '' &&
-                                !snapshot1.data.contains(r.device));
-                            return Column(children: [
-                              ...snapshot1.data
-                                  .map((d) => _deviceRow(d))
-                                  .toList(),
-                              ...filtered
-                                  .map((r) => _deviceRow(r.device))
-                                  .toList(),
-                            ]);
-                          });
-                    },
-                  ),
-                ],
-              ),
+              child: toShow,
             ),
           ),
         ),
@@ -161,7 +144,7 @@ class ConnectElonScreenBody extends StatelessWidget {
             stream: FlutterBlue.instance.isScanning,
             initialData: false,
             builder: (context, snapshot) =>
-                snapshot.data ? _bottom(context) : _searchDone(),
+                snapshot.data ? _bottom(context) : _searchDone(context),
           ),
         )
       ],
@@ -189,7 +172,6 @@ class ConnectElonScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DeviceModel.of(context).checkIfAlreadyConnected();
     return GestureDetector(
       child: Container(
         margin: EdgeInsets.fromLTRB(
