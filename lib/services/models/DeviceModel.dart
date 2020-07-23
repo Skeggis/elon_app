@@ -73,7 +73,7 @@ class DeviceModel extends Model {
   //GAME PLAY
 
   //Balls per minute
-  int _bpm = 0;
+  int _bpm = 60;
   int get bpm => _bpm;
   int _shotLocation = -1;
   int get shotLocation => _shotLocation;
@@ -104,13 +104,15 @@ class DeviceModel extends Model {
 
   void changeBPM(int add) {
     _bpm += add;
-    if (_bpm < 0) _bpm = 0;
+    if (_bpm < 1) _bpm = 1;
     if (_bpm > 60) _bpm = 60;
     notifyListeners();
   }
 
   void sendShot(ShotType shotType, int shotLocation) async {
+    print("StartSendShot");
     Shot theShot = Shot(bpm: _bpm, shotLocation: shotLocation, type: shotType);
+    print("THeShot: $theShot");
     _sendCommand(theShot.toString());
   }
 
@@ -137,6 +139,7 @@ class DeviceModel extends Model {
           .characteristics[0]
           .write(utf8.encode(message), withoutResponse: true);
     }
+    print("Command Sent!");
   }
 
   Future<bool> readyForSending() async {
@@ -174,15 +177,19 @@ class Shot {
 
   /// location: 0 - (_amountOfColumns*_amountOfRows - 1)
   Shot({@required this.type, @required this.shotLocation, @required this.bpm}) {
-    this.leftRight = (this.shotLocation % CourtConfiguration.amountOfColumns) *
-        (_maxLeftRight ~/ CourtConfiguration.amountOfColumns);
+    // this.leftRight = (this.shotLocation % CourtConfiguration.amountOfColumns) *
+    //     (_maxLeftRight ~/ CourtConfiguration.amountOfColumns);
+    this.leftRight = this.shotLocation % 3 == 0 ? 0 : 100;
+    this.upDown = this.shotLocation ~/ 3 == 0 ? 100 : 0;
     this.upDown = (CourtConfiguration.amountOfRows -
             this.shotLocation ~/ CourtConfiguration.amountOfRows) *
         (_maxUpDown ~/ CourtConfiguration.amountOfRows);
     this.motorSpeed = ((this.upDown / _maxUpDown) * _maxMotorSpeed).toInt();
 
     const ONE_MINUTE = 60000; //In milliseconds
+    print("Here $bpm");
     this.delay = ONE_MINUTE ~/ this.bpm;
+    print("HEer");
     //Todo: Change configurations depending on type of shot.
     switch (this.type) {
       case ShotType.serve:
