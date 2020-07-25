@@ -4,8 +4,6 @@ import 'package:myapp/styles/theme.dart';
 import 'package:myapp/services/models/DeviceModel.dart';
 
 class Court extends StatelessWidget {
-  final MyTheme myTheme = MyTheme();
-
   @override
   Widget build(BuildContext context) {
     return Container(

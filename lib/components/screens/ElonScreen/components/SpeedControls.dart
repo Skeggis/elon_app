@@ -9,7 +9,6 @@ class SpeedControls extends StatefulWidget {
 }
 
 class _SpeedControls extends State<SpeedControls> {
-  MyTheme myTheme = MyTheme();
   int bpm;
   void initState() {
     super.initState();
@@ -42,7 +41,7 @@ class _SpeedControls extends State<SpeedControls> {
           margin: EdgeInsets.fromLTRB(15, 0, 0, 15),
           child: Image(
               width: ballWidth,
-              image: AssetImage('assets/images/badminton_ball_500.png')),
+              image: AssetImage('assets/images/black_badminton_ball_500.png')),
         ),
         Text(
           '/mín',
@@ -57,7 +56,7 @@ class _SpeedControls extends State<SpeedControls> {
       children: [
         CircularButton(
           onPressed: () => _changeBPM(1),
-          splashColor: myTheme.secondaryColor,
+          splashColor: MyTheme.secondaryColor,
           color: Theme.of(context).primaryColor,
           width: 40,
           icon: Icon(Icons.keyboard_arrow_up,
@@ -65,7 +64,7 @@ class _SpeedControls extends State<SpeedControls> {
         ),
         CircularButton(
           onPressed: () => _changeBPM(-1),
-          splashColor: myTheme.secondaryColor,
+          splashColor: MyTheme.secondaryColor,
           color: Theme.of(context).primaryColor,
           width: 40,
           icon: Icon(Icons.keyboard_arrow_down,

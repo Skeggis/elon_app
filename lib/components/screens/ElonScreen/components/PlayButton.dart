@@ -4,7 +4,6 @@ import 'dart:math' as math;
 
 class PlayButton extends StatefulWidget {
   final double width;
-  final MyTheme myTheme = MyTheme();
   final GestureTapCallback onPressed;
   final bool play;
   PlayButton({this.width = 50.0, this.onPressed, this.play});
@@ -49,7 +48,7 @@ class _PlayButton extends State<PlayButton>
       child: PlayButtonAnimations(
         controller: _animationController,
         child: Icon(widget.play ? Icons.pause : Icons.play_arrow,
-            color: widget.myTheme.secondaryColor, size: widget.width * 0.75),
+            color: MyTheme.secondaryColor, size: widget.width * 0.75),
       ),
     );
   }
@@ -62,7 +61,6 @@ class _PlayButton extends State<PlayButton>
 }
 
 class PlayButtonAnimations extends AnimatedWidget {
-  final MyTheme myTheme = MyTheme();
   PlayButtonAnimations({Key key, AnimationController controller, this.child})
       : super(key: key, listenable: controller);
 
@@ -75,7 +73,7 @@ class PlayButtonAnimations extends AnimatedWidget {
       angle: 2 * math.pi * _progress.value,
       child: CustomPaint(
           painter: MyPainter(
-            theColor: myTheme.secondaryColor,
+            theColor: MyTheme.secondaryColor,
             start: 0.0,
             progress: _progress.value,
           ),

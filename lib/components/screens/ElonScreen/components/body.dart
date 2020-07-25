@@ -11,7 +11,6 @@ import "package:vector_math/vector_math.dart" hide Colors;
 import "package:bezier/bezier.dart";
 
 class ElonScreenBody extends StatelessWidget {
-  final MyTheme myTheme = MyTheme();
   Widget mainThings(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -53,7 +52,7 @@ class ElonScreenBody extends StatelessWidget {
                 //https://www.youtube.com/watch?v=Nuni5VQXARo
                 child: CustomPaint(
                   foregroundPainter: ShotPathPainter(
-                      theColor: myTheme.secondaryColor,
+                      theColor: MyTheme.secondaryColor,
                       curve: curve,
                       start: 0.0,
                       offsetEnd: offsetEnd,

@@ -1,25 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/styles/theme.dart';
-import 'package:myapp/components/screens/ElonScreen/components/body.dart';
-import 'package:myapp/services/models/DeviceModel.dart';
-import 'package:flutter_blue/flutter_blue.dart';
+import 'package:myapp/components/screens/ControllerScreen/components/body.dart';
 
-class ElonScreen extends StatelessWidget {
+class ControllerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    BluetoothDevice elon = DeviceModel.of(context, rebuildOnChange: true).elon;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (elon == null) {
-        Navigator.pushReplacementNamed(context, '/');
-        return SizedBox(height: 100);
-      }
-    });
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
             padding: EdgeInsets.only(left: 25.0),
-            child: Icon(Icons.settings, size: 30.0)),
+            child: Icon(Icons.menu, size: 30.0)),
         backgroundColor: MyTheme.barBackgroundColor,
         elevation: 0.0,
         title: Text('Elon'),
@@ -32,8 +22,8 @@ class ElonScreen extends StatelessWidget {
               padding: EdgeInsets.only(right: 25.0))
         ],
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: ElonScreenBody(),
+      backgroundColor: MyTheme.backgroundColor,
+      body: ControllerScreenBody(),
     );
   }
 }

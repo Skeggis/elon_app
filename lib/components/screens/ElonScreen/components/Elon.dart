@@ -13,7 +13,6 @@ class Elon extends StatefulWidget {
 }
 
 class _Elon extends State<Elon> {
-  MyTheme myTheme = MyTheme();
   final containerKey = GlobalKey();
   Rect get containerRect => containerKey.globalPaintBounds;
 
@@ -55,10 +54,10 @@ class _Elon extends State<Elon> {
               width: width,
               height: height,
               decoration: BoxDecoration(
-                  color: start ? Colors.transparent : myTheme.secondaryColor,
+                  color: start ? Colors.transparent : MyTheme.secondaryColor,
                   border: Border.all(
                     width: 3.0,
-                    color: myTheme.secondaryColor,
+                    color: MyTheme.secondaryColor,
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
             ),
