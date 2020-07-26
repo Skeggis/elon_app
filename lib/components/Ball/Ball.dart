@@ -9,7 +9,7 @@ class BallAnimation extends AnimatedWidget {
       : super(key: key, listenable: controller);
 
   Animation<double> get _progress => listenable;
-  QuadraticBezier curve;
+  Bezier curve;
   final Widget child;
   @override
   Widget build(BuildContext context) {
@@ -24,8 +24,8 @@ class BallAnimation extends AnimatedWidget {
 
 class Ball extends StatefulWidget {
   Duration duration;
-  QuadraticBezier curve;
-  Ball({@required this.duration, this.curve});
+  Bezier curve;
+  Ball({Key key, @required this.duration, this.curve}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _Ball();
 }
@@ -40,11 +40,15 @@ class _Ball extends State<Ball> with SingleTickerProviderStateMixin {
             setState(() => {});
           });
 
-    _animationController.repeat();
+    _animationController.forward();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("Ball! ${widget.key}");
+    if (_animationController.status == AnimationStatus.completed) {
+      DeviceModel.of(context).dequeueAnimateQueue();
+    }
     double ballWidth = 35;
     return BallAnimation(
       controller: _animationController,

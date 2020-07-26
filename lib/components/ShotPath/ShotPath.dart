@@ -11,7 +11,7 @@ class ShotPathPainter extends CustomPainter {
   double progress;
   Offset offsetStart;
   Offset offsetEnd;
-  QuadraticBezier curve;
+  Bezier curve;
   ShotPathPainter(
       {this.theColor,
       this.start,

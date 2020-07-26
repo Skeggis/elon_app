@@ -5,6 +5,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:collection/collection.dart';
 import "package:bezier/bezier.dart";
+import "package:vector_math/vector_math.dart" hide Colors;
 import 'dart:convert';
 import 'package:myapp/services/models/Enums.dart';
 
@@ -72,55 +73,104 @@ class DeviceModel extends Model {
 
   //GAME PLAY
 
-  //Balls per minute
-  int _bpm = 60;
-  int get bpm => _bpm;
-  int _shotLocation = -1;
-  int get shotLocation => _shotLocation;
+  //Shooter motors on/off
   bool _start = false;
   bool get start => _start;
 
   ShotType _shotType = ShotType.serve;
   ShotType get shotType => _shotType;
+
   void changeShotType(ShotType newType) {
     _shotType = newType;
     notifyListeners();
   }
 
-  double _xShotLocation = 0;
-  double _yShotLocation = 0;
-  Offset get offsetLocation => Offset(_xShotLocation, _yShotLocation);
+  //Location of next shot relative to the screen
+  Offset _globalShotLocation;
+  Offset get globalShotLocation => _globalShotLocation;
+
+  //Location of next shot relative to the court
+  Offset _localShotLocation;
+  Offset get localShotLocation => _localShotLocation;
+
+  //Position of Elon, center, on Screen
   Offset _offsetDevice;
   Offset get offsetDevice => _offsetDevice;
+
   void setOffsetDevice(Offset offset) {
     var appBarHeight = AppBar().preferredSize.height;
     _offsetDevice = Offset(offset.dx, offset.dy - appBarHeight - 9);
   }
 
-  void changeShotLocation(double x, double y) {
+  Bezier _curve;
+  Bezier get curve => _curve;
+
+  List<Shot> _animateQueue = [];
+  List<Shot> get animateQueue => _animateQueue;
+
+  void dequeueAnimateQueue() {
+    if (_animateQueue.length == 0) return;
+    _animateQueue.removeAt(0);
+    notifyListeners();
+  }
+
+  void changeShotLocation(
+      Offset newGlobalLocation, Offset newLocalLocation, Size courtSize) {
     var appBarHeight = AppBar().preferredSize.height;
-    _xShotLocation = x;
-    _yShotLocation = y - appBarHeight - 35;
+
+    _globalShotLocation =
+        Offset(newGlobalLocation.dx, newGlobalLocation.dy - appBarHeight - 35);
+    _localShotLocation = newLocalLocation;
     notifyListeners();
   }
 
-  void changeLocation(int loc) {
-    _shotLocation = loc;
-    notifyListeners();
-  }
+  /// delay: the time to wait before shooting next shot in milliseconds.
+  /// upDownProportion: value between 0.0 and 1.0, with 0.0 meaning the top of the court and 1.0 the bottom.
+  /// leftRightProportion: value between 0.0 and 1.0 with 0.0 meaning the leftmost part of the court and 1.0 the rightmost.
+  /// shotType: the type of shot to shoot.
+  void sendShot(
+      {int delay = 0,
+      double upDownProportion = 0,
+      double leftRightProportion = 0,
+      ShotType shotType = ShotType.serve,
+      Offset globalShotPosition}) async {
+    Bezier shotCurve;
+    if (globalShotPosition != null) {
+      var appBarHeight = AppBar().preferredSize.height;
+      _globalShotLocation =
+          Offset(globalShotPosition.dx, globalShotPosition.dy - appBarHeight);
+      shotCurve = new Bezier.fromPoints([
+        new Vector2(offsetDevice.dx, offsetDevice.dy),
+        // new Vector2(70.0, 95.0),
+        new Vector2(
+            (_globalShotLocation.dx - offsetDevice.dx) * 0.5 +
+                _globalShotLocation.dx,
+            (_globalShotLocation.dy - offsetDevice.dy) * 0.5 +
+                _globalShotLocation.dy),
+        new Vector2(_globalShotLocation.dx, _globalShotLocation.dy)
+      ]);
+    }
 
-  void changeBPM(int add) {
-    _bpm += add;
-    if (_bpm < 1) _bpm = 1;
-    if (_bpm > 60) _bpm = 60;
-    notifyListeners();
-  }
+    delay = delay < 0 ? 0 : delay;
+    upDownProportion = upDownProportion > 1.0
+        ? 1.0
+        : (upDownProportion < 0.0 ? 0.0 : upDownProportion);
+    leftRightProportion = leftRightProportion > 1.0
+        ? 1.0
+        : (leftRightProportion < 0.0 ? 0.0 : leftRightProportion);
 
-  void sendShot(int shotLocation) async {
-    print("StartSendShot");
-    Shot theShot = Shot(bpm: _bpm, shotLocation: shotLocation, type: _shotType);
+    Shot theShot = Shot(
+        type: shotType,
+        leftRightProportion: leftRightProportion,
+        upDownProportion: upDownProportion,
+        delay: delay,
+        curve: shotCurve);
     print("THeShot: $theShot");
     _sendCommand(theShot.toString());
+
+    _animateQueue.add(theShot);
+    _curve = shotCurve;
+    notifyListeners();
   }
 
   void flipStart() {
@@ -171,30 +221,29 @@ class Shot {
   int _maxUpDown = 100;
   int _maxMotorSpeed = 100;
 
-  int leftRight; //0-100
-  int upDown; //0-100
+  int leftRight = 0;
+  int upDown = 0;
+
+  Bezier curve;
+
+  double leftRightProportion = 0.5; //0-100
+  double upDownProportion = 0.5; //0-100
   int motorSpeed; //0-100
   int delay; //in milliseconds
 
-  int bpm; //Balls per minute
-  int shotLocation;
   ShotType type;
 
   /// location: 0 - (_amountOfColumns*_amountOfRows - 1)
-  Shot({@required this.type, @required this.shotLocation, @required this.bpm}) {
-    // this.leftRight = (this.shotLocation % CourtConfiguration.amountOfColumns) *
-    //     (_maxLeftRight ~/ CourtConfiguration.amountOfColumns);
-    this.leftRight = this.shotLocation % 3 == 0 ? 0 : 100;
-    this.upDown = this.shotLocation ~/ 3 == 0 ? 100 : 0;
-    this.upDown = (CourtConfiguration.amountOfRows -
-            this.shotLocation ~/ CourtConfiguration.amountOfRows) *
-        (_maxUpDown ~/ CourtConfiguration.amountOfRows);
+  Shot(
+      {@required this.type,
+      @required this.leftRightProportion,
+      @required this.upDownProportion,
+      @required this.delay,
+      this.curve}) {
+    this.leftRight = (_maxLeftRight * this.leftRightProportion).toInt();
+    this.upDown = (_maxUpDown * this.upDownProportion).toInt();
     this.motorSpeed = ((this.upDown / _maxUpDown) * _maxMotorSpeed).toInt();
 
-    const ONE_MINUTE = 60000; //In milliseconds
-    print("Here $bpm");
-    this.delay = ONE_MINUTE ~/ this.bpm;
-    print("HEer");
     //Todo: Change configurations depending on type of shot.
     switch (this.type) {
       case ShotType.serve:
