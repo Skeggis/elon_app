@@ -34,7 +34,8 @@ class MyTheme {
 
 ThemeData appTheme(context) {
   return ThemeData(
-      fontFamily: 'PlayFair_Display',
+      // fontFamily: 'PlayFair_Display',
+      fontFamily: 'Quicksand',
       // buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.accent),
       primaryColor: MyTheme.primaryColor,
       backgroundColor: MyTheme.backgroundColor,

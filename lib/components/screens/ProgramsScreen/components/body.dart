@@ -1,46 +1,33 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
+import 'package:myapp/components/screens/ProgramsScreen/components/ProgramListItem/ProgramListItem.dart';
 import 'package:myapp/services/models/DeviceModel.dart';
 
-class ProgramsScreenBody extends StatefulWidget {
-
-@override
-  State<StatefulWidget> createState() {
-    return _ProgramsScreenBodyState();
-  }
-}
-
-class _ProgramsScreenBodyState extends State<ProgramsScreenBody>{
-
-  Future<Map> items;
-
-  void initState(){
-    super.initState();
-  }
-
-  Future test() async {
-    var response = await http.get('https://elon-server.herokuapp.com/programs');
-    print('her');
-    print(response.body);
-    var data = await json.decode(response.body);
-
-    print(data);
-    return data;
-  }
+class ProgramsScreenBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: test(),
+      future: DeviceModel.of(context).fetchPrograms(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return Container(
-            child: Text('done'),
+            padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
+            child: ListView(
+              children: DeviceModel.of(context, rebuildOnChange: true)
+                  .programs
+                  .map((program) => ProgramListItem(
+                        name: program.name,
+                        description: program.description,
+                        author: program.author,
+                        numShots: program.numShots,
+                        totalTime: program.totalTime,
+                      ))
+                  .toList(),
+            ),
           );
         } else {
-          return CircularProgressIndicator();
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         }
       },
     );

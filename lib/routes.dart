@@ -7,9 +7,9 @@ import 'package:myapp/components/screens/ControllerScreen/ControllerScreen.dart'
 import 'package:myapp/components/WithSideBar/WithSideBar.dart';
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
-  // "/": (BuildContext context) => WithSideBar(child: HomeScreen()),
-  "/": (c) => ProgramsScreen(),
-  //"/controller": (BuildContext context) => ControllerScreen(),
+   "/": (BuildContext context) => WithSideBar(child: HomeScreen()),
+  //"/": (c) => ProgramsScreen(),
+  "/controller": (BuildContext context) => ControllerScreen(),
   // "/elon": (BuildContext context) => ElonScreen(),
   //"/BLE": (BuildContext context) => ConnectElonScreen(),
 

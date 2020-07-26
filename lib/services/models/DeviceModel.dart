@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+import 'package:myapp/services/models/Program.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:collection/collection.dart';
@@ -160,15 +161,16 @@ class DeviceModel extends Model {
   }
 
   //PROGRAMS
-  Map<String, dynamic> _programs;
-  Map<String, dynamic> get programs => _programs;
+  List<Program> _programs;
+  List<Program> get programs => _programs;
 
   Future fetchPrograms() async {
     try {
       var response =
           await http.get('https://elon-server.herokuapp.com/programs');
       if (response.statusCode == 200) {
-        _programs = jsonDecode(response.body);
+        var jsonPrograms = jsonDecode(response.body)['programs'] as List;
+        _programs = jsonPrograms.map((program) => Program.fromJson(program)).toList();
         notifyListeners();
       }
     } catch (e) {
