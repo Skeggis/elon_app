@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -81,6 +80,13 @@ class DeviceModel extends Model {
   bool _start = false;
   bool get start => _start;
 
+  ShotType _shotType = ShotType.serve;
+  ShotType get shotType => _shotType;
+  void changeShotType(ShotType newType) {
+    _shotType = newType;
+    notifyListeners();
+  }
+
   double _xShotLocation = 0;
   double _yShotLocation = 0;
   Offset get offsetLocation => Offset(_xShotLocation, _yShotLocation);
@@ -110,9 +116,9 @@ class DeviceModel extends Model {
     notifyListeners();
   }
 
-  void sendShot(ShotType shotType, int shotLocation) async {
+  void sendShot(int shotLocation) async {
     print("StartSendShot");
-    Shot theShot = Shot(bpm: _bpm, shotLocation: shotLocation, type: shotType);
+    Shot theShot = Shot(bpm: _bpm, shotLocation: shotLocation, type: _shotType);
     print("THeShot: $theShot");
     _sendCommand(theShot.toString());
   }
@@ -154,8 +160,6 @@ class DeviceModel extends Model {
       ScopedModel.of<DeviceModel>(context,
           rebuildOnChange: rebuildOnChange == null ? false : rebuildOnChange);
 }
-
-enum ShotType { serve, clear, smash, drive, drop }
 
 class CourtConfiguration {
   static const int amountOfColumns = 3;

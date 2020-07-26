@@ -88,7 +88,7 @@ class _Square extends State<Square> with TickerProviderStateMixin {
     DeviceModel.of(context).changeLocation(widget.sqrNr);
     animController.reset();
     animController.forward();
-    DeviceModel.of(context).sendShot(ShotType.drop, widget.sqrNr);
+    DeviceModel.of(context).sendShot(widget.sqrNr);
   }
 
   BoxDecoration _getBoxDecoration(BuildContext context) {

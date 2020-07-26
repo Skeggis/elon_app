@@ -4,9 +4,13 @@ import 'package:myapp/styles/theme.dart';
 import 'package:myapp/services/models/Enums.dart';
 import 'package:myapp/components/ShotsPicker/components/ShotType.dart';
 
+import 'package:myapp/services/models/DeviceModel.dart';
+
 class ShotsPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ShotType shotType = DeviceModel.of(context, rebuildOnChange: true).shotType;
+
     return Container(
       padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
       margin: EdgeInsets.only(left: 25, right: 25),
@@ -21,6 +25,8 @@ class ShotsPicker extends StatelessWidget {
             for (ShotType type in ShotType.values) ...[
               ShotTypeWidget(
                 type: type,
+                picked: type == shotType,
+                onClick: () => DeviceModel.of(context).changeShotType(type),
               ),
               SizedBox(width: 10)
             ]

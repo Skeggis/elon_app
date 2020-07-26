@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/styles/theme.dart';
 import 'package:myapp/components/screens/HomeScreen/components/body.dart';
+import 'package:myapp/services/models/UIModel.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -11,7 +12,9 @@ class HomeScreen extends StatelessWidget {
             padding: EdgeInsets.only(left: 25.0),
             child: IconButton(
               icon: Icon(Icons.menu, size: 30.0),
-              onPressed: () {},
+              onPressed: () {
+                UIModel.of(context).toggleSideBarOpen();
+              },
             )),
         backgroundColor: MyTheme.barBackgroundColor,
         elevation: 0.0,
@@ -20,7 +23,7 @@ class HomeScreen extends StatelessWidget {
           Padding(
               child: IconButton(
                 icon: Icon(Icons.bluetooth, size: 30.0),
-                onPressed: () => Navigator.pushReplacementNamed(context, '/'),
+                onPressed: () => Navigator.pushNamed(context, '/BLE'),
               ),
               padding: EdgeInsets.only(right: 25.0))
         ],
