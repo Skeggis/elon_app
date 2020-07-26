@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/styles/theme.dart';
 import 'dart:math' as math;
 
 class CircularButton extends StatelessWidget {
@@ -18,7 +17,6 @@ class CircularButton extends StatelessWidget {
   final Color color;
   final Color borderColor;
   final Color splashColor;
-  final MyTheme myTheme = MyTheme();
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
@@ -61,7 +59,6 @@ class CircularAnimatedButton extends StatefulWidget {
   final Icon endIcon;
   final Color borderColor;
   final Color splashColor;
-  final MyTheme myTheme = MyTheme();
 
   final _CircularAnimatedButton circ = _CircularAnimatedButton();
   @override

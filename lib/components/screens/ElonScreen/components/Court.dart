@@ -4,8 +4,6 @@ import 'package:myapp/styles/theme.dart';
 import 'package:myapp/services/models/DeviceModel.dart';
 
 class Court extends StatelessWidget {
-  final MyTheme myTheme = MyTheme();
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -90,7 +88,7 @@ class _Square extends State<Square> with TickerProviderStateMixin {
     DeviceModel.of(context).changeLocation(widget.sqrNr);
     animController.reset();
     animController.forward();
-    DeviceModel.of(context).sendShot(ShotType.drop, widget.sqrNr);
+    DeviceModel.of(context).sendShot(widget.sqrNr);
   }
 
   BoxDecoration _getBoxDecoration(BuildContext context) {

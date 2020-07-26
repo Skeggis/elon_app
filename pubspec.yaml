@@ -48,7 +48,13 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  fonts: 
+    - family: PlayFair_Display
+      fonts:
+        - asset: assets/fonts/Playfair_Display/PlayfairDisplay-VariableFont_wght.ttf
+
   assets:
+    - assets/images/black_badminton_ball_500.png
     - assets/images/badminton_ball_500.png
 
   # To add assets to your application, add an assets section, like this:

@@ -51,7 +51,7 @@ class _Ball extends State<Ball> with SingleTickerProviderStateMixin {
       curve: widget.curve,
       child: Image(
           width: ballWidth,
-          image: AssetImage('assets/images/badminton_ball_500.png')),
+          image: AssetImage('assets/images/black_badminton_ball_500.png')),
     );
   }
 

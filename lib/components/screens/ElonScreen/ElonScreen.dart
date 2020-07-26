@@ -15,14 +15,12 @@ class ElonScreen extends StatelessWidget {
         return SizedBox(height: 100);
       }
     });
-
-    MyTheme theme = MyTheme(context: context);
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
             padding: EdgeInsets.only(left: 25.0),
             child: Icon(Icons.settings, size: 30.0)),
-        backgroundColor: theme.darkBackgroundColor,
+        backgroundColor: MyTheme.barBackgroundColor,
         elevation: 0.0,
         title: Text('Elon'),
         actions: [

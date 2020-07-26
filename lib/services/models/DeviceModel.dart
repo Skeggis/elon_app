@@ -8,6 +8,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:collection/collection.dart';
 import "package:bezier/bezier.dart";
 import 'dart:convert';
+import 'package:myapp/services/models/Enums.dart';
 
 class DeviceModel extends Model {
   //Connection things
@@ -75,12 +76,19 @@ class DeviceModel extends Model {
   //GAME PLAY
 
   //Balls per minute
-  int _bpm = 0;
+  int _bpm = 60;
   int get bpm => _bpm;
   int _shotLocation = -1;
   int get shotLocation => _shotLocation;
   bool _start = false;
   bool get start => _start;
+
+  ShotType _shotType = ShotType.serve;
+  ShotType get shotType => _shotType;
+  void changeShotType(ShotType newType) {
+    _shotType = newType;
+    notifyListeners();
+  }
 
   double _xShotLocation = 0;
   double _yShotLocation = 0;
@@ -89,7 +97,7 @@ class DeviceModel extends Model {
   Offset get offsetDevice => _offsetDevice;
   void setOffsetDevice(Offset offset) {
     var appBarHeight = AppBar().preferredSize.height;
-    _offsetDevice = Offset(offset.dx, offset.dy - appBarHeight - 5);
+    _offsetDevice = Offset(offset.dx, offset.dy - appBarHeight - 9);
   }
 
   void changeShotLocation(double x, double y) {
@@ -106,13 +114,15 @@ class DeviceModel extends Model {
 
   void changeBPM(int add) {
     _bpm += add;
-    if (_bpm < 0) _bpm = 0;
+    if (_bpm < 1) _bpm = 1;
     if (_bpm > 60) _bpm = 60;
     notifyListeners();
   }
 
-  void sendShot(ShotType shotType, int shotLocation) async {
-    Shot theShot = Shot(bpm: _bpm, shotLocation: shotLocation, type: shotType);
+  void sendShot(int shotLocation) async {
+    print("StartSendShot");
+    Shot theShot = Shot(bpm: _bpm, shotLocation: shotLocation, type: _shotType);
+    print("THeShot: $theShot");
     _sendCommand(theShot.toString());
   }
 
@@ -139,6 +149,7 @@ class DeviceModel extends Model {
           .characteristics[0]
           .write(utf8.encode(message), withoutResponse: true);
     }
+    print("Command Sent!");
   }
 
   Future<bool> readyForSending() async {
@@ -171,8 +182,6 @@ class DeviceModel extends Model {
           rebuildOnChange: rebuildOnChange == null ? false : rebuildOnChange);
 }
 
-enum ShotType { serve, clear, smash, drive, drop }
-
 class CourtConfiguration {
   static const int amountOfColumns = 3;
   static const int amountOfRows = 3;
@@ -194,15 +203,19 @@ class Shot {
 
   /// location: 0 - (_amountOfColumns*_amountOfRows - 1)
   Shot({@required this.type, @required this.shotLocation, @required this.bpm}) {
-    this.leftRight = (this.shotLocation % CourtConfiguration.amountOfColumns) *
-        (_maxLeftRight ~/ CourtConfiguration.amountOfColumns);
+    // this.leftRight = (this.shotLocation % CourtConfiguration.amountOfColumns) *
+    //     (_maxLeftRight ~/ CourtConfiguration.amountOfColumns);
+    this.leftRight = this.shotLocation % 3 == 0 ? 0 : 100;
+    this.upDown = this.shotLocation ~/ 3 == 0 ? 100 : 0;
     this.upDown = (CourtConfiguration.amountOfRows -
             this.shotLocation ~/ CourtConfiguration.amountOfRows) *
         (_maxUpDown ~/ CourtConfiguration.amountOfRows);
     this.motorSpeed = ((this.upDown / _maxUpDown) * _maxMotorSpeed).toInt();
 
     const ONE_MINUTE = 60000; //In milliseconds
+    print("Here $bpm");
     this.delay = ONE_MINUTE ~/ this.bpm;
+    print("HEer");
     //Todo: Change configurations depending on type of shot.
     switch (this.type) {
       case ShotType.serve:
