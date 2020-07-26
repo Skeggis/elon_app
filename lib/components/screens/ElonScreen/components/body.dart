@@ -28,14 +28,14 @@ class ElonScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     print("NewPainting");
     Offset offsetEnd =
-        DeviceModel.of(context, rebuildOnChange: true).offsetLocation;
+        DeviceModel.of(context, rebuildOnChange: true).globalShotLocation;
     Offset offsetStart =
         DeviceModel.of(context, rebuildOnChange: true).offsetDevice;
 
     bool drawCurve = offsetStart != null && offsetEnd != null;
-    QuadraticBezier curve;
+    Bezier curve;
     if (drawCurve) {
-      curve = new QuadraticBezier([
+      curve = new Bezier.fromPoints([
         new Vector2(offsetStart.dx, offsetStart.dy),
         new Vector2(70.0, 95.0),
         new Vector2(offsetEnd.dx, offsetEnd.dy)

@@ -16,10 +16,18 @@ import 'package:myapp/components/Ball/Ball.dart';
 
 class ControllerScreenBody extends StatelessWidget {
   void _onTapDown(TapDownDetails details, BuildContext context) {
-    var x = details.globalPosition.dx;
-    var y = details.globalPosition.dy;
-    print("HEre");
-    DeviceModel.of(context).changeShotLocation(x, y);
+    Size courtSize = Size(
+        screenWidth(context) - 80, (screenWidth(context) - 80) * (6.7 / 6.1));
+    DeviceModel.of(context).changeShotLocation(
+        details.globalPosition, details.localPosition, courtSize);
+
+    double upDownProportion = (details.localPosition.dy / courtSize.height);
+    double leftRighProportion = (details.localPosition.dx / courtSize.width);
+    DeviceModel.of(context).sendShot(
+        leftRightProportion: leftRighProportion,
+        upDownProportion: upDownProportion,
+        shotType: DeviceModel.of(context).shotType,
+        globalShotPosition: details.globalPosition);
   }
 
   Widget mainThings(BuildContext context) {
@@ -53,21 +61,29 @@ class ControllerScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     print("NewPainting");
     Offset offsetEnd =
-        DeviceModel.of(context, rebuildOnChange: true).offsetLocation;
+        DeviceModel.of(context, rebuildOnChange: true).globalShotLocation;
     Offset offsetStart =
         DeviceModel.of(context, rebuildOnChange: true).offsetDevice;
 
     bool drawCurve = offsetStart != null && offsetEnd != null;
-    QuadraticBezier curve;
-    if (drawCurve) {
-      curve = new QuadraticBezier([
-        new Vector2(offsetStart.dx, offsetStart.dy),
-        new Vector2(70.0, 95.0),
-        new Vector2(offsetEnd.dx, offsetEnd.dy)
-      ]);
-    }
 
     bool start = DeviceModel.of(context, rebuildOnChange: true).start;
+    Bezier curve = DeviceModel.of(context).curve;
+
+    List<Shot> animatedQueue =
+        DeviceModel.of(context, rebuildOnChange: true).animateQueue;
+
+    List<Widget> animation = [];
+    if (animatedQueue.length > 0 && start) {
+      var i = 0;
+      for (Shot shot in animatedQueue) {
+        animation.add(Ball(
+          duration: Duration(seconds: 1),
+          curve: shot.curve,
+          key: Key("$i" + shot.toString()),
+        ));
+      }
+    }
     //TODO: change curve depending on type of shot.
     return Container(
       constraints: BoxConstraints.expand(),
@@ -75,7 +91,7 @@ class ControllerScreenBody extends StatelessWidget {
       child: Stack(
         children: [
           mainThings(context),
-          drawCurve
+          drawCurve && !start
               ? RepaintBoundary(
                   //https://www.youtube.com/watch?v=Nuni5VQXARo
                   child: CustomPaint(
@@ -91,12 +107,7 @@ class ControllerScreenBody extends StatelessWidget {
                   ),
                 )
               : Container(),
-          start && drawCurve
-              ? Ball(
-                  duration: Duration(seconds: 1),
-                  curve: curve,
-                )
-              : Container()
+          ...animation
         ],
       ),
     );

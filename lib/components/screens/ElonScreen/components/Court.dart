@@ -85,10 +85,9 @@ class _Square extends State<Square> with TickerProviderStateMixin {
   }
 
   void _onTap(BuildContext context) {
-    DeviceModel.of(context).changeLocation(widget.sqrNr);
     animController.reset();
     animController.forward();
-    DeviceModel.of(context).sendShot(widget.sqrNr);
+    //DeviceModel.of(context).sendShot(widget.sqrNr);
   }
 
   BoxDecoration _getBoxDecoration(BuildContext context) {
@@ -115,9 +114,8 @@ class _Square extends State<Square> with TickerProviderStateMixin {
   }
 
   void _onTapDown(TapDownDetails details, BuildContext context) {
-    var x = details.globalPosition.dx;
-    var y = details.globalPosition.dy;
-    DeviceModel.of(context).changeShotLocation(x, y);
+    DeviceModel.of(context).changeShotLocation(
+        details.globalPosition, details.localPosition, Size(100, 100));
   }
 
   @override
