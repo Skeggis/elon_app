@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../styles/theme.dart';
+import '../../styles/theme.dart';
 import 'dart:math' as math;
 
 class PlayButton extends StatefulWidget {
@@ -43,12 +43,12 @@ class _PlayButton extends State<PlayButton>
       onPressed: _onTap,
       elevation: 0.0,
       constraints: BoxConstraints.tight(Size(widget.width, widget.width)),
-      fillColor: Theme.of(context).backgroundColor,
+      fillColor: MyTheme.onPrimaryColor,
       shape: CircleBorder(),
       child: PlayButtonAnimations(
         controller: _animationController,
         child: Icon(widget.play ? Icons.pause : Icons.play_arrow,
-            color: MyTheme.secondaryColor, size: widget.width * 0.75),
+            color: MyTheme.backgroundColor, size: widget.width * 0.75),
       ),
     );
   }
@@ -73,7 +73,7 @@ class PlayButtonAnimations extends AnimatedWidget {
       angle: 2 * math.pi * _progress.value,
       child: CustomPaint(
           painter: MyPainter(
-            theColor: MyTheme.secondaryColor,
+            theColor: MyTheme.backgroundColor,
             start: 0.0,
             progress: _progress.value,
           ),
@@ -91,8 +91,8 @@ class MyPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint outerCircle = Paint()
-      ..strokeWidth = 5
-      ..color = theColor != null ? theColor : Colors.black
+      ..strokeWidth = 4
+      ..color = MyTheme.backgroundColor
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 

@@ -1,35 +1,104 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/services/helpers.dart';
 import 'package:myapp/services/models/DeviceModel.dart';
 import 'package:myapp/styles/theme.dart';
 
+import 'package:myapp/components/Elon/Elon.dart';
+import 'package:myapp/components/ShotsPicker/ShotsPicker.dart';
+
 import 'dart:math' as math;
 
+import "package:vector_math/vector_math.dart" hide Colors;
+import "package:bezier/bezier.dart";
+
+import 'package:myapp/components/ShotPath/ShotPath.dart';
+import 'package:myapp/components/Ball/Ball.dart';
+
 class ControllerScreenBody extends StatelessWidget {
+  void _onTapDown(TapDownDetails details, BuildContext context) {
+    var x = details.globalPosition.dx;
+    var y = details.globalPosition.dy;
+    print("HEre");
+    DeviceModel.of(context).changeShotLocation(x, y);
+  }
+
   Widget mainThings(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints.expand(),
-      decoration: BoxDecoration(color: MyTheme.courtColor),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          CustomPaint(
-            painter: CourtPainter(),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      //crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SizedBox(height: 15),
+        GestureDetector(
+          onTapDown: (TapDownDetails details) => _onTapDown(details, context),
+          child: Container(
+            child: RepaintBoundary(
+                child: Container(
+              height: (screenWidth(context) - 80) * (6.7 / 6.1),
+              width: screenWidth(context) - 80,
+              child: CustomPaint(
+                painter: CourtPainter(),
+              ),
+            )),
           ),
-          SizedBox(height: 25.0),
-          // Controller(),
-          SizedBox(height: 0.0),
-        ],
-      ),
+        ),
+        SizedBox(height: 10.0),
+        Elon(),
+        SizedBox(height: 10.0),
+        ShotsPicker()
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        mainThings(context),
-      ],
+    print("NewPainting");
+    Offset offsetEnd =
+        DeviceModel.of(context, rebuildOnChange: true).offsetLocation;
+    Offset offsetStart =
+        DeviceModel.of(context, rebuildOnChange: true).offsetDevice;
+
+    bool drawCurve = offsetStart != null && offsetEnd != null;
+    QuadraticBezier curve;
+    if (drawCurve) {
+      curve = new QuadraticBezier([
+        new Vector2(offsetStart.dx, offsetStart.dy),
+        new Vector2(70.0, 95.0),
+        new Vector2(offsetEnd.dx, offsetEnd.dy)
+      ]);
+    }
+
+    bool start = DeviceModel.of(context, rebuildOnChange: true).start;
+    //TODO: change curve depending on type of shot.
+    return Container(
+      constraints: BoxConstraints.expand(),
+      decoration: BoxDecoration(color: MyTheme.courtColor),
+      child: Stack(
+        children: [
+          mainThings(context),
+          drawCurve
+              ? RepaintBoundary(
+                  //https://www.youtube.com/watch?v=Nuni5VQXARo
+                  child: CustomPaint(
+                    foregroundPainter: ShotPathPainter(
+                        theColor: MyTheme.backgroundColor,
+                        curve: curve,
+                        start: 0.0,
+                        offsetEnd: offsetEnd,
+                        offsetStart: offsetStart),
+                    child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        child: SizedBox.expand()),
+                  ),
+                )
+              : Container(),
+          start && drawCurve
+              ? Ball(
+                  duration: Duration(seconds: 1),
+                  curve: curve,
+                )
+              : Container()
+        ],
+      ),
     );
   }
 }
@@ -37,6 +106,7 @@ class ControllerScreenBody extends StatelessWidget {
 class CourtPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
+    print(size.width);
     double strokeWidth = 2;
     Paint line = new Paint()
       ..strokeCap = StrokeCap.round
@@ -52,19 +122,20 @@ class CourtPainter extends CustomPainter {
     double realDropLineLongServiceGap = 3.96; //meters
     double realDoubleSinglePlaySideLineGap = 0.46; //meters
 
-    double margin = 25;
+    double sideMargin = 5;
+    double topMargin = 5;
 
     /* --------Horizontal Lines--------- */
 
-    Offset backBoundryStart = Offset(margin, margin);
-    Offset backBoundryEnd = Offset(size.width - margin, margin);
+    Offset backBoundryStart = Offset(sideMargin, topMargin);
+    Offset backBoundryEnd = Offset(size.width - sideMargin, topMargin);
     double backBoundryLength = backBoundryEnd.dx - backBoundryStart.dx;
     //Back Boundry:
     canvas.drawLine(backBoundryStart, backBoundryEnd, line);
 
     Offset longServiceStart = Offset(
         backBoundryStart.dx,
-        margin +
+        sideMargin +
             backBoundryLength *
                 (realBackBoundryLongServiceGap / realBackBoundryLength));
     Offset longServiceEnd = Offset(backBoundryEnd.dx, longServiceStart.dy);

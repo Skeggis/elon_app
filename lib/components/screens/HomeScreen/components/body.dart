@@ -22,15 +22,30 @@ class HomeScreenBody extends StatelessWidget {
   }
 }
 
+class GenericButtonConfig {
+  Function onPressed;
+  String title;
+  GenericButtonConfig({this.onPressed, this.title});
+}
+
 class HomeButtons extends StatelessWidget {
-  List<String> buttons = ["Controller", "Programs", "Compete", "Stats"];
+  List<GenericButtonConfig> buttons = [
+    GenericButtonConfig(
+        title: "Controller",
+        onPressed: (BuildContext context) =>
+            Navigator.pushNamed(context, '/controller')),
+    GenericButtonConfig(title: "Programs", onPressed: () {}),
+    GenericButtonConfig(title: "Compete", onPressed: () {}),
+    GenericButtonConfig(title: "Stats", onPressed: () {})
+  ];
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
       MainButton(),
       SizedBox(height: 40),
-      for (var title in buttons) ...[
-        NormalButton(title: title, onClick: () {}),
+      for (var config in buttons) ...[
+        NormalButton(
+            title: config.title, onClick: () => config.onPressed(context)),
         SizedBox(height: 20)
       ]
     ]);

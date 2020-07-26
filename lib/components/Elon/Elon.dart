@@ -2,7 +2,7 @@ import 'package:myapp/services/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/styles/theme.dart';
 import 'dart:math' as math;
-import './PlayButton.dart';
+import '../PlayButton/PlayButton.dart';
 
 import 'package:myapp/services/models/DeviceModel.dart';
 import 'package:myapp/services/extensions.dart';
@@ -20,8 +20,8 @@ class _Elon extends State<Elon> {
   Widget build(BuildContext context) {
     bool start = DeviceModel.of(context, rebuildOnChange: true).start;
 
-    double width = 125.0;
-    double height = 125.0 * 0.8;
+    double width = screenWidth(context) * 0.25;
+    double height = width * 0.8;
     double buttonWidth = width * 0.5;
     double shooterWidth = width * 0.4;
 
@@ -54,10 +54,10 @@ class _Elon extends State<Elon> {
               width: width,
               height: height,
               decoration: BoxDecoration(
-                  color: start ? Colors.transparent : MyTheme.secondaryColor,
+                  color: start ? Colors.transparent : MyTheme.backgroundColor,
                   border: Border.all(
                     width: 3.0,
-                    color: MyTheme.secondaryColor,
+                    color: MyTheme.backgroundColor,
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
             ),

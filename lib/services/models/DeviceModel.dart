@@ -7,6 +7,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:collection/collection.dart';
 import "package:bezier/bezier.dart";
 import 'dart:convert';
+import 'package:myapp/services/models/Enums.dart';
 
 class DeviceModel extends Model {
   //Connection things
@@ -87,7 +88,7 @@ class DeviceModel extends Model {
   Offset get offsetDevice => _offsetDevice;
   void setOffsetDevice(Offset offset) {
     var appBarHeight = AppBar().preferredSize.height;
-    _offsetDevice = Offset(offset.dx, offset.dy - appBarHeight - 5);
+    _offsetDevice = Offset(offset.dx, offset.dy - appBarHeight - 9);
   }
 
   void changeShotLocation(double x, double y) {

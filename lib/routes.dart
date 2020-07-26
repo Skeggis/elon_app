@@ -5,8 +5,8 @@ import 'package:myapp/components/screens/HomeScreen/HomeScreen.dart';
 import 'package:myapp/components/screens/ControllerScreen/ControllerScreen.dart';
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
-  "/home": (BuildContext context) => HomeScreen(),
-  "/": (BuildContext context) => ControllerScreen(),
+  "/": (BuildContext context) => HomeScreen(),
+  "/controller": (BuildContext context) => ControllerScreen(),
   // "/elon": (BuildContext context) => ElonScreen(),
   // "/ble": (BuildContext context) => ConnectElonScreen(),
 };

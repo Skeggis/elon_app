@@ -9,7 +9,10 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         leading: Padding(
             padding: EdgeInsets.only(left: 25.0),
-            child: Icon(Icons.menu, size: 30.0)),
+            child: IconButton(
+              icon: Icon(Icons.menu, size: 30.0),
+              onPressed: () {},
+            )),
         backgroundColor: MyTheme.barBackgroundColor,
         elevation: 0.0,
         title: Text('Elon'),
