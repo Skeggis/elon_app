@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ffi';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -20,41 +21,42 @@ class DeviceModel extends Model {
   StreamSubscription<List<ScanResult>> _scanResultStream;
   List<BluetoothDevice> _foundDevices = [];
   List<BluetoothDevice> get foundDevices => _foundDevices;
-  DeviceModel() {
-    Function eq = const ListEquality().equals;
-    // Function deepEq = const DeepCollectionEquality().equals;
-    _connectedDevicesStream = Stream.periodic(Duration(milliseconds: 500))
-        .asyncMap((_) => FlutterBlue.instance.connectedDevices)
-        .listen((newConnectedDevices) async {
-      if (!eq(_connectedDevices, newConnectedDevices)) {
-        _connectedDevices = newConnectedDevices;
-        if (!_connectedDevices.contains(_elon)) {
-          if (_elon != null) {
-            if (_foundDevices == null) {
-              _foundDevices = [];
-            }
-            _foundDevices.insert(0, _elon);
-          }
-          _elon = null;
-          _elonServices = [];
-        }
-        //Todo: find a way to know if one the connectedDevices is elon!
-        if (_elon == null && _connectedDevices.length > 0) {
-          _elon = _connectedDevices[0];
-          _elonServices = await _elon.discoverServices();
-          _foundDevices.remove(_elon);
-        }
-        notifyListeners();
-      }
-    });
-    _scanResultStream = FlutterBlue.instance.scanResults.listen((result) {
-      var filtered =
-          result.where((r) => r.device.name != '' && r.device != _elon);
-      _foundDevices = [...filtered.map((r) => r.device).toList()];
-      notifyListeners();
-    });
-    scanForDevices();
-  }
+
+  // DeviceModel() {
+  //   Function eq = const ListEquality().equals;
+  //   // Function deepEq = const DeepCollectionEquality().equals;
+  //   _connectedDevicesStream = Stream.periodic(Duration(milliseconds: 500))
+  //       .asyncMap((_) => FlutterBlue.instance.connectedDevices)
+  //       .listen((newConnectedDevices) async {
+  //     if (!eq(_connectedDevices, newConnectedDevices)) {
+  //       _connectedDevices = newConnectedDevices;
+  //       if (!_connectedDevices.contains(_elon)) {
+  //         if (_elon != null) {
+  //           if (_foundDevices == null) {
+  //             _foundDevices = [];
+  //           }
+  //           _foundDevices.insert(0, _elon);
+  //         }
+  //         _elon = null;
+  //         _elonServices = [];
+  //       }
+  //       //Todo: find a way to know if one the connectedDevices is elon!
+  //       if (_elon == null && _connectedDevices.length > 0) {
+  //         _elon = _connectedDevices[0];
+  //         _elonServices = await _elon.discoverServices();
+  //         _foundDevices.remove(_elon);
+  //       }
+  //       notifyListeners();
+  //     }
+  //   });
+  //   _scanResultStream = FlutterBlue.instance.scanResults.listen((result) {
+  //     var filtered =
+  //         result.where((r) => r.device.name != '' && r.device != _elon);
+  //     _foundDevices = [...filtered.map((r) => r.device).toList()];
+  //     notifyListeners();
+  //   });
+  //   scanForDevices();
+  // }
 
   void scanForDevices() {
     FlutterBlue.instance.startScan(timeout: Duration(seconds: 4));
@@ -144,6 +146,24 @@ class DeviceModel extends Model {
     if (_elonServices.length == 0)
       _elonServices = await _elon.discoverServices();
     return true;
+  }
+
+  //PROGRAMS
+  Map<String, dynamic> _programs;
+  Map<String, dynamic> get programs => _programs;
+
+  Future fetchPrograms() async {
+    try {
+      var response =
+          await http.get('https://elon-server.herokuapp.com/programs');
+      if (response.statusCode == 200) {
+        _programs = jsonDecode(response.body);
+        notifyListeners();
+      }
+    } catch (e) {
+      print('error fetching programs');
+      print(e);
+    }
   }
 
   static DeviceModel of(BuildContext context, {bool rebuildOnChange = false}) =>

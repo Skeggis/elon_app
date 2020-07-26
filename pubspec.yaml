@@ -24,6 +24,7 @@ dependencies:
   flutter_blue: ^0.7.2
   scoped_model: ^1.0.1
   bezier: ^1.1.5
+  http: ^0.12.2
   flutter:
     sdk: flutter
 
