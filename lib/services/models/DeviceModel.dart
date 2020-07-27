@@ -79,6 +79,34 @@ class DeviceModel extends Model {
   bool _start = false;
   bool get start => _start;
 
+  void flipStart() {
+    if (!_start) {
+      _setupLoading = true;
+      notifyListeners();
+
+      new Timer(Duration(seconds: 5), () {
+        _start = true;
+        _setupLoading = false;
+        String command = "!";
+        _sendCommand(command);
+        notifyListeners();
+        print("Timer!");
+      });
+    } else {
+      _start = false;
+      _setupLoading = false;
+      notifyListeners();
+    }
+  }
+
+  bool _setupLoading = false;
+  bool get setupLoading => _setupLoading;
+
+  void toggleSetupLoading() {
+    _setupLoading = !_setupLoading;
+    notifyListeners();
+  }
+
   ShotType _shotType = ShotType.serve;
   ShotType get shotType => _shotType;
 
@@ -162,13 +190,6 @@ class DeviceModel extends Model {
     _sendCommand(theShot.toString());
 
     _animateQueue.add(theShot);
-    notifyListeners();
-  }
-
-  void flipStart() {
-    _start = !_start;
-    String command = "!";
-    _sendCommand(command);
     notifyListeners();
   }
 

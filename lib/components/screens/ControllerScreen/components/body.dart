@@ -11,6 +11,8 @@ import 'package:myapp/components/CustomRipple/CustomRipple.dart';
 
 import 'package:myapp/components/PlayButton/PlayButton.dart';
 
+import 'package:myapp/components/SetupLoading/SetupLoading.dart';
+
 class ControllerScreenBody extends StatelessWidget {
   void _onTapDown(TapDownDetails details, BuildContext context) {
     Size courtSize = Size(
@@ -41,18 +43,19 @@ class ControllerScreenBody extends StatelessWidget {
   }
 
   Widget _playButton(BuildContext context) {
+    bool setupLoading =
+        DeviceModel.of(context, rebuildOnChange: true).setupLoading;
     return Container(
       decoration:
           BoxDecoration(color: MyTheme.backgroundColor.withOpacity(0.25)),
       child: Center(
-        //     child: IconButton(
-        //   icon: Icon(Icons.play_circle_fill, size: 100),
-        //   onPressed: () => DeviceModel.of(context).flipStart(),
-        // )
-        child: PlayButton(
-            onPressed: () => DeviceModel.of(context).flipStart(),
-            play: false,
-            width: 75),
+        child: !setupLoading
+            ? Elon()
+            // PlayButton(
+            //     onPressed: () => DeviceModel.of(context).flipStart(),
+            //     play: false,
+            //     width: 75)
+            : SetupLoading(text: "Loading..."),
       ),
     );
   }

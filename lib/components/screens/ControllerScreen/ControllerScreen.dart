@@ -7,20 +7,23 @@ class ControllerScreen extends StatelessWidget {
   static const String routeName = '/controller';
   @override
   Widget build(BuildContext context) {
+    bool start = DeviceModel.of(context, rebuildOnChange: true).start;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyTheme.barBackgroundColor,
         elevation: 0.0,
         title: Text('Elon'),
         actions: [
-          Padding(
-              child: IconButton(
-                icon: Icon(Icons.pause, size: 30.0),
-                onPressed: () {
-                  DeviceModel.of(context).flipStart();
-                },
-              ),
-              padding: EdgeInsets.only(right: 25.0))
+          start
+              ? Padding(
+                  child: IconButton(
+                    icon: Icon(Icons.pause, size: 30.0),
+                    onPressed: () {
+                      DeviceModel.of(context).flipStart();
+                    },
+                  ),
+                  padding: EdgeInsets.only(right: 25.0))
+              : SizedBox(width: 5),
         ],
       ),
       backgroundColor: MyTheme.backgroundColor,
