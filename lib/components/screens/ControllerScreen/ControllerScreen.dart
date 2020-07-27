@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/styles/theme.dart';
 import 'package:myapp/components/screens/ControllerScreen/components/body.dart';
+import 'package:myapp/services/models/DeviceModel.dart';
 
 class ControllerScreen extends StatelessWidget {
+  static const String routeName = '/controller';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,8 +15,10 @@ class ControllerScreen extends StatelessWidget {
         actions: [
           Padding(
               child: IconButton(
-                icon: Icon(Icons.bluetooth, size: 30.0),
-                onPressed: () => Navigator.pushReplacementNamed(context, '/'),
+                icon: Icon(Icons.pause, size: 30.0),
+                onPressed: () {
+                  DeviceModel.of(context).flipStart();
+                },
               ),
               padding: EdgeInsets.only(right: 25.0))
         ],

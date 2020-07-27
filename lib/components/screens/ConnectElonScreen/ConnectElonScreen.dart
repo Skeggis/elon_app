@@ -3,18 +3,15 @@ import 'package:myapp/styles/theme.dart';
 import 'package:myapp/components/screens/ConnectElonScreen/components/body.dart';
 
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:myapp/components/AppDrawer/AppDrawer.dart';
 
 class ConnectElonScreen extends StatelessWidget {
+  static const String routeName = 'BLE';
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: MyTheme.barBackgroundColor,
-        elevation: 0.0,
-        title: Text('Elon'),
-      ),
-      backgroundColor: MyTheme.barBackgroundColor,
-      body: StreamBuilder<BluetoothState>(
+    return Container(
+      decoration: BoxDecoration(color: MyTheme.barBackgroundColor),
+      child: StreamBuilder<BluetoothState>(
           stream: FlutterBlue.instance.state,
           builder: (context, snapshot) {
             final state = snapshot.data;
