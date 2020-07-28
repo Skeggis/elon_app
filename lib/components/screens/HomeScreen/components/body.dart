@@ -3,6 +3,8 @@ import 'package:myapp/styles/theme.dart';
 import 'package:myapp/services/helpers.dart';
 import 'package:myapp/components/screens/HomeScreen/components/Logo.dart';
 
+import 'package:myapp/routes/router.dart' as router;
+
 class HomeScreenBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -32,10 +34,9 @@ class HomeButtons extends StatelessWidget {
   List<GenericButtonConfig> buttons = [
     GenericButtonConfig(
         title: "Controller",
-        onPressed: (BuildContext context) =>
-            Navigator.pushNamed(context, '/controller')),
-    GenericButtonConfig(title: "Programs", onPressed: () {}),
-    GenericButtonConfig(title: "Compete", onPressed: () {}),
+        onPressed: (BuildContext context) => router.controller(context)),
+    GenericButtonConfig(title: "Programs", onPressed: (context) => router.programs(context)),
+    GenericButtonConfig(title: "Compete", onPressed: (){}),
     GenericButtonConfig(title: "Stats", onPressed: () {})
   ];
   @override

@@ -13,7 +13,7 @@ class ShotsPicker extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-      margin: EdgeInsets.only(left: 25, right: 25),
+      margin: EdgeInsets.only(left: 10, right: 10),
       decoration: BoxDecoration(
           color: MyTheme.backgroundColor,
           borderRadius: BorderRadius.all(Radius.circular(8))),

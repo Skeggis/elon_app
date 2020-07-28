@@ -6,13 +6,12 @@ import 'package:myapp/styles/theme.dart';
 import 'package:myapp/components/Elon/Elon.dart';
 import 'package:myapp/components/ShotsPicker/ShotsPicker.dart';
 
-import 'dart:math' as math;
-
-import "package:vector_math/vector_math.dart" hide Colors;
-import "package:bezier/bezier.dart";
-
 import 'package:myapp/components/ShotPath/ShotPath.dart';
-import 'package:myapp/components/Ball/Ball.dart';
+import 'package:myapp/components/CustomRipple/CustomRipple.dart';
+
+import 'package:myapp/components/PlayButton/PlayButton.dart';
+
+import 'package:myapp/components/SetupLoading/SetupLoading.dart';
 
 class ControllerScreenBody extends StatelessWidget {
   void _onTapDown(TapDownDetails details, BuildContext context) {
@@ -31,83 +30,76 @@ class ControllerScreenBody extends StatelessWidget {
   }
 
   Widget mainThings(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      //crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SizedBox(height: 15),
-        GestureDetector(
-          onTapDown: (TapDownDetails details) => _onTapDown(details, context),
+    return Container(
+      child: RepaintBoundary(
           child: Container(
-            child: RepaintBoundary(
-                child: Container(
-              height: (screenWidth(context) - 80) * (6.7 / 6.1),
-              width: screenWidth(context) - 80,
-              child: CustomPaint(
-                painter: CourtPainter(),
-              ),
-            )),
-          ),
+        height: (screenWidth(context) - 60) * (6.7 / 6.1),
+        width: screenWidth(context) - 60,
+        child: CustomPaint(
+          painter: CourtPainter(),
         ),
-        SizedBox(height: 10.0),
-        Elon(),
-        SizedBox(height: 10.0),
-        ShotsPicker()
-      ],
+      )),
+    );
+  }
+
+  Widget _playButton(BuildContext context) {
+    bool setupLoading =
+        DeviceModel.of(context, rebuildOnChange: true).setupLoading;
+    return Container(
+      decoration:
+          BoxDecoration(color: MyTheme.backgroundColor.withOpacity(0.25)),
+      child: Center(
+        child: !setupLoading
+            ? Elon()
+            // PlayButton(
+            //     onPressed: () => DeviceModel.of(context).flipStart(),
+            //     play: false,
+            //     width: 75)
+            : SetupLoading(text: "Loading..."),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     print("NewPainting");
-    Offset offsetEnd =
-        DeviceModel.of(context, rebuildOnChange: true).globalShotLocation;
-    Offset offsetStart =
-        DeviceModel.of(context, rebuildOnChange: true).offsetDevice;
-
-    bool drawCurve = offsetStart != null && offsetEnd != null;
 
     bool start = DeviceModel.of(context, rebuildOnChange: true).start;
-    Bezier curve = DeviceModel.of(context).curve;
 
     List<Shot> animatedQueue =
         DeviceModel.of(context, rebuildOnChange: true).animateQueue;
+    print("AS: ${animatedQueue.length}");
 
     List<Widget> animation = [];
     if (animatedQueue.length > 0 && start) {
-      var i = 0;
       for (Shot shot in animatedQueue) {
-        animation.add(Ball(
-          duration: Duration(seconds: 1),
-          curve: shot.curve,
-          key: Key("$i" + shot.toString()),
+        animation.add(CustomRipple(
+          position: shot.globalPosition,
+          key: Key(shot.id),
+          maxDiameter: 100,
         ));
       }
     }
+    print("anim: ${animation.length}");
     //TODO: change curve depending on type of shot.
     return Container(
       constraints: BoxConstraints.expand(),
       decoration: BoxDecoration(color: MyTheme.courtColor),
       child: Stack(
         children: [
-          mainThings(context),
-          drawCurve && !start
-              ? RepaintBoundary(
-                  //https://www.youtube.com/watch?v=Nuni5VQXARo
-                  child: CustomPaint(
-                    foregroundPainter: ShotPathPainter(
-                        theColor: MyTheme.backgroundColor,
-                        curve: curve,
-                        start: 0.0,
-                        offsetEnd: offsetEnd,
-                        offsetStart: offsetStart),
-                    child: GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        child: SizedBox.expand()),
-                  ),
-                )
-              : Container(),
-          ...animation
+          Align(alignment: Alignment(0, -0.9), child: mainThings(context)),
+          ...animation,
+          GestureDetector(
+              onTapDown: (TapDownDetails details) =>
+                  _onTapDown(details, context),
+              child: Container(
+                decoration: BoxDecoration(color: Colors.transparent),
+                height: (screenWidth(context) - 80) * (6.7 / 6.1),
+                width: (screenWidth(context)),
+                margin: EdgeInsets.only(top: 15),
+              )),
+          Align(alignment: Alignment(0, 0.95), child: ShotsPicker()),
+          start ? Container() : Positioned.fill(child: _playButton(context))
         ],
       ),
     );

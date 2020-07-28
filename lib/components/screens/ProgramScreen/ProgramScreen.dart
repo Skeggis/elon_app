@@ -5,7 +5,7 @@ import 'package:myapp/components/screens/ProgramScreen/components/body.dart';
 import 'package:myapp/services/helper.dart';
 
 class ProgramScreen extends StatelessWidget {
-  static const routeName = '/program';
+  static const String routeName = '/program';
 
   @override
   Widget build(BuildContext context) {

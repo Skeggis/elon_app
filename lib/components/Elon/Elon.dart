@@ -54,6 +54,10 @@ class _Elon extends State<Elon> {
               width: width,
               height: height,
               decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                        blurRadius: 50, color: Colors.black.withOpacity(0.45))
+                  ],
                   color: start ? Colors.transparent : MyTheme.backgroundColor,
                   border: Border.all(
                     width: 3.0,

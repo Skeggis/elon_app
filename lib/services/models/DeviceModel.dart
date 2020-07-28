@@ -12,6 +12,8 @@ import "package:vector_math/vector_math.dart" hide Colors;
 import 'dart:convert';
 import 'package:myapp/services/models/Enums.dart';
 
+import 'dart:math' as math;
+
 class DeviceModel extends Model {
   //Connection things
   BluetoothDevice _elon;
@@ -81,6 +83,34 @@ class DeviceModel extends Model {
   bool _start = false;
   bool get start => _start;
 
+  void flipStart() {
+    if (!_start) {
+      _setupLoading = true;
+      notifyListeners();
+
+      new Timer(Duration(seconds: 5), () {
+        _start = true;
+        _setupLoading = false;
+        String command = "!";
+        _sendCommand(command);
+        notifyListeners();
+        print("Timer!");
+      });
+    } else {
+      _start = false;
+      _setupLoading = false;
+      notifyListeners();
+    }
+  }
+
+  bool _setupLoading = false;
+  bool get setupLoading => _setupLoading;
+
+  void toggleSetupLoading() {
+    _setupLoading = !_setupLoading;
+    notifyListeners();
+  }
+
   ShotType _shotType = ShotType.serve;
   ShotType get shotType => _shotType;
 
@@ -123,7 +153,7 @@ class DeviceModel extends Model {
     var appBarHeight = AppBar().preferredSize.height;
 
     _globalShotLocation =
-        Offset(newGlobalLocation.dx, newGlobalLocation.dy - appBarHeight - 35);
+        Offset(newGlobalLocation.dx, newGlobalLocation.dy - appBarHeight);
     _localShotLocation = newLocalLocation;
     notifyListeners();
   }
@@ -138,21 +168,12 @@ class DeviceModel extends Model {
       double leftRightProportion = 0,
       ShotType shotType = ShotType.serve,
       Offset globalShotPosition}) async {
-    Bezier shotCurve;
+    if (!start) return;
+
     if (globalShotPosition != null) {
       var appBarHeight = AppBar().preferredSize.height;
       _globalShotLocation =
           Offset(globalShotPosition.dx, globalShotPosition.dy - appBarHeight);
-      shotCurve = new Bezier.fromPoints([
-        new Vector2(offsetDevice.dx, offsetDevice.dy),
-        // new Vector2(70.0, 95.0),
-        new Vector2(
-            (_globalShotLocation.dx - offsetDevice.dx) * 0.5 +
-                _globalShotLocation.dx,
-            (_globalShotLocation.dy - offsetDevice.dy) * 0.5 +
-                _globalShotLocation.dy),
-        new Vector2(_globalShotLocation.dx, _globalShotLocation.dy)
-      ]);
     }
 
     delay = delay < 0 ? 0 : delay;
@@ -168,19 +189,11 @@ class DeviceModel extends Model {
         leftRightProportion: leftRightProportion,
         upDownProportion: upDownProportion,
         delay: delay,
-        curve: shotCurve);
+        globalPosition: _globalShotLocation);
     print("THeShot: $theShot");
     _sendCommand(theShot.toString());
 
     _animateQueue.add(theShot);
-    _curve = shotCurve;
-    notifyListeners();
-  }
-
-  void flipStart() {
-    _start = !_start;
-    String command = "!";
-    _sendCommand(command);
     notifyListeners();
   }
 
@@ -267,7 +280,7 @@ class Shot {
   int leftRight = 0;
   int upDown = 0;
 
-  Bezier curve;
+  Offset globalPosition;
 
   double leftRightProportion = 0.5; //0-100
   double upDownProportion = 0.5; //0-100
@@ -276,13 +289,16 @@ class Shot {
 
   ShotType type;
 
+  String _shotId;
+  String get id => _shotId;
+
   /// location: 0 - (_amountOfColumns*_amountOfRows - 1)
   Shot(
       {@required this.type,
       @required this.leftRightProportion,
       @required this.upDownProportion,
       @required this.delay,
-      this.curve}) {
+      this.globalPosition}) {
     this.leftRight = (_maxLeftRight * this.leftRightProportion).toInt();
     this.upDown = (_maxUpDown * this.upDownProportion).toInt();
     this.motorSpeed = ((this.upDown / _maxUpDown) * _maxMotorSpeed).toInt();
@@ -301,9 +317,17 @@ class Shot {
         break;
       default:
     }
+
+    _shotId = getRandomString(10);
   }
 
   String toString() {
     return '{${this.delay},${this.leftRight},${this.upDown},${this.motorSpeed}}';
   }
 }
+
+const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+math.Random _rnd = math.Random();
+
+String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
+    length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));

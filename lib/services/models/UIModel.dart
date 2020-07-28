@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class UIModel extends Model {
-  bool _isSideBarOpen = false;
-  bool get isSideBarOpen => _isSideBarOpen;
+import 'package:myapp/routes/Routes.dart';
 
-  void toggleSideBarOpen() {
-    _isSideBarOpen = !_isSideBarOpen;
+class UIModel extends Model {
+  String _route = Routes.home;
+  String get route => _route;
+  void changeRoute(String newRoute) {
+    _route = newRoute;
     notifyListeners();
   }
 
