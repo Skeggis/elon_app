@@ -4,15 +4,15 @@ import 'package:myapp/components/screens/ProgramsScreen/ProgramsScreen.dart';
 import 'package:myapp/components/screens/ProgramScreen/ProgramScreen.dart';
 
 Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
-  ProgramScreen.routeName: (BuildContext context) => new ProgramScreen()
+  ProgramScreen.routeName: (BuildContext context) => new ProgramScreen(),
+  ProgramsScreen.routeName: (BuildContext context) => new ProgramsScreen(),
+  ControllerScreen.routeName: (BuildContext context) => new ControllerScreen(),
 };
 
 void controller(BuildContext context) {
-  Navigator.push(context,
-      new MaterialPageRoute(builder: (context) => new ControllerScreen()));
+  Navigator.pushNamed(context, ControllerScreen.routeName);
 }
 
 void programs(context) {
-  Navigator.push(
-      context, new MaterialPageRoute(builder: (context) => ProgramsScreen()));
+  Navigator.pushNamed(context, ProgramsScreen.routeName);
 }
