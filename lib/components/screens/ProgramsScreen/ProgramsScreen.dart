@@ -5,9 +5,17 @@ import 'package:myapp/styles/theme.dart';
 class ProgramsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    MyTheme theme = MyTheme(context: context);
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: MyTheme.backgroundColor,
+      appBar: AppBar(
+        backgroundColor: MyTheme.barBackgroundColor,
+        title: Text(
+          'Programs',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
       body: ProgramsScreenBody(),
     );
   }

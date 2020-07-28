@@ -226,35 +226,35 @@ class CourtPainter extends CustomPainter {
 
     /* --------Half Circles--------- */
 
-    Paint circles = new Paint()
-      ..strokeCap = StrokeCap.round
-      ..color = MyTheme.onPrimaryColor
-      ..style = PaintingStyle.fill;
+    // Paint circles = new Paint()
+    //   ..strokeCap = StrokeCap.round
+    //   ..color = MyTheme.onPrimaryColor
+    //   ..style = PaintingStyle.fill;
 
-    double circleRadius = 10;
-    Offset leftCircleCenter = Offset(
-        leftDoublePlaySideLineStart.dx + strokeWidth / 2,
-        leftDoublePlaySideLineEnd.dy);
+    // double circleRadius = 10;
+    // Offset leftCircleCenter = Offset(
+    //     leftDoublePlaySideLineStart.dx + strokeWidth / 2,
+    //     leftDoublePlaySideLineEnd.dy);
 
-    //LeftCircle
-    canvas.drawArc(
-        Rect.fromCircle(center: leftCircleCenter, radius: circleRadius),
-        math.pi / 2,
-        math.pi,
-        true,
-        circles);
+    // //LeftCircle
+    // canvas.drawArc(
+    //     Rect.fromCircle(center: leftCircleCenter, radius: circleRadius),
+    //     math.pi / 2,
+    //     math.pi,
+    //     true,
+    //     circles);
 
-    Offset rightCircleCenter = Offset(
-        rightDoublePlaySideLineStart.dx - strokeWidth / 2,
-        rightDoublePlaySideLineEnd.dy);
+    // Offset rightCircleCenter = Offset(
+    //     rightDoublePlaySideLineStart.dx - strokeWidth / 2,
+    //     rightDoublePlaySideLineEnd.dy);
 
-    //RightCircle
-    canvas.drawArc(
-        Rect.fromCircle(center: rightCircleCenter, radius: circleRadius),
-        math.pi / 2,
-        -math.pi,
-        true,
-        circles);
+    // //RightCircle
+    // canvas.drawArc(
+    //     Rect.fromCircle(center: rightCircleCenter, radius: circleRadius),
+    //     math.pi / 2,
+    //     -math.pi,
+    //     true,
+    //     circles);
   }
 
   @override

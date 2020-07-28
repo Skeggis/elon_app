@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class DescriptionText extends StatefulWidget {
   final String text;
-  final double fontSize;
   final int maxLines;
-  DescriptionText({this.text, this.fontSize = 18, this.maxLines = 4});
+  final TextStyle style;
+  DescriptionText({this.text, this.style, this.maxLines = 4});
 
   @override
   State<StatefulWidget> createState() {
@@ -15,14 +15,66 @@ class DescriptionText extends StatefulWidget {
 
 class _DescriptionText extends State<DescriptionText> {
   bool isOpened = false;
+  int visibleLines;
+
+  @override
+  void initState() {
+    super.initState();
+    visibleLines = widget.maxLines;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return AutoSizeText(
-      widget.text,
-      minFontSize: widget.fontSize,
-      maxLines: widget.maxLines,
-      
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AutoSizeText(
+          widget.text,
+          style: widget.style,
+          minFontSize: widget.style.fontSize,
+          maxLines: isOpened ? null : visibleLines,
+          overflowReplacement: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                widget.text,
+                maxLines: widget.maxLines,
+                overflow: TextOverflow.ellipsis,
+                style: widget.style,
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isOpened = !isOpened;
+                  });
+                },
+                child: Text(
+                  'Show more',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: widget.style.fontSize
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        if (isOpened)
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                isOpened = !isOpened;
+              });
+            },
+            child: Text(
+              'Show less',
+              style: TextStyle(
+                color: Colors.blue,
+                fontSize: widget.style.fontSize
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

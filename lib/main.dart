@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
 
-    MyTheme the = MyTheme(isDark: false, context: context);
+    MyTheme the = MyTheme(isDark: true, context: context);
 
     return ScopedModel<DeviceModel>(
       model: DeviceModel(),

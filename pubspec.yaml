@@ -56,6 +56,9 @@ flutter:
     # - family: Quicksand
     #   fonts:
     #     - asset: asstes/fonts/Quicksand/Quicksand-VariableFont_wght.ttf
+    - family: MyCustomIcons
+      fonts:
+        - asset: assets/icons/BadmintonShuttle.ttf
 
   assets:
     - assets/images/black_badminton_ball_500.png

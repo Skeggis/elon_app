@@ -9,7 +9,7 @@ class MyTheme {
   static Color get secondaryColor => const Color(0xFF1F5D2F);
 
   static Color get onPrimaryColor => const Color(0xFFF3F7FB);
-  static Color get backgroundColor => const Color(0xFF25252A);
+  static Color get backgroundColor => const Color(0xFF121212);
   static Color get barBackgroundColor => const Color(0xFF1B1716);
 
   static Color get courtColor => const Color(0xFF428E37);
@@ -19,6 +19,8 @@ class MyTheme {
   static Color get serveColor => const Color(0xFF1F5D2F);
   static Color get clearColor => const Color(0xFF0088A6);
   static Color get driveColor => const Color(0xFFA63C00);
+
+  static Color get cardColor => const Color(0xFF1A1A1A);
 
   /// Default constructor
   MyTheme({@required this.isDark, @required this.context});
@@ -34,18 +36,23 @@ class MyTheme {
 
 ThemeData appTheme(context) {
   return ThemeData(
-      // fontFamily: 'PlayFair_Display',
-      fontFamily: 'Quicksand',
-      // buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.accent),
-      primaryColor: MyTheme.primaryColor,
-      backgroundColor: MyTheme.backgroundColor,
-      buttonColor: MyTheme.primaryColor,
-      splashColor: MyTheme.secondaryColor,
-      iconTheme: IconThemeData(color: Colors.white, opacity: 1.0, size: 33.0),
-      textTheme: TextTheme(
-          bodyText2: TextStyle(
-        color: MyTheme.backgroundColor,
-        fontSize: 20.0,
-      )),
-      visualDensity: VisualDensity.adaptivePlatformDensity);
+    // fontFamily: 'PlayFair_Display',
+    fontFamily: 'Quicksand',
+    // buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.accent),
+    appBarTheme: AppBarTheme(
+      color: MyTheme.barBackgroundColor,
+    ),
+    primaryColor: MyTheme.primaryColor,
+    backgroundColor: MyTheme.backgroundColor,
+    buttonColor: MyTheme.primaryColor,
+    splashColor: MyTheme.secondaryColor,
+    iconTheme: IconThemeData(color: Colors.white, opacity: 1.0, size: 33.0),
+    textTheme: TextTheme(
+        bodyText2: TextStyle(
+      color: Colors.white,
+      fontSize: 20.0,
+    )),
+    visualDensity: VisualDensity.adaptivePlatformDensity,
+    cardColor: MyTheme.cardColor,
+  );
 }

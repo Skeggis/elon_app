@@ -220,11 +220,31 @@ class DeviceModel extends Model {
           await http.get('https://elon-server.herokuapp.com/programs');
       if (response.statusCode == 200) {
         var jsonPrograms = jsonDecode(response.body)['programs'] as List;
-        _programs = jsonPrograms.map((program) => Program.fromJson(program)).toList();
+        _programs =
+            jsonPrograms.map((program) => Program.fromJson(program)).toList();
         notifyListeners();
       }
     } catch (e) {
       print('error fetching programs');
+      print(e);
+    }
+  }
+
+  Program _currentProgram;
+  Program get currentProgram => _currentProgram;
+
+  Future fetchProgram(id) async {
+    try {
+      print(id);
+      var response =
+          await http.get('https://elon-server.herokuapp.com/programs/$id');
+      if (response.statusCode == 200) {
+        var jsonProgram = jsonDecode(response.body)['result'];
+        _currentProgram = Program.fromJson(jsonProgram);
+        notifyListeners();
+      }
+    } catch (e) {
+      print('error fetching program');
       print(e);
     }
   }

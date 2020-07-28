@@ -36,6 +36,8 @@ class Program {
         timeout: json['timeout'] as int,
       );
     } else {
+      print('her');
+      print(json['name']);
       var jsonRoutines = json['routines'] as List;
       List<Routine> _routines =
           jsonRoutines.map((routine) => Routine.fromJson(routine)).toList();
