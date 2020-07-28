@@ -6,7 +6,7 @@ import 'package:myapp/services/models/UIModel.dart';
 import 'package:myapp/components/AppDrawer/AppDrawer.dart';
 
 class HomeScreen extends StatelessWidget {
-  static const String routeName = '/';
+  static const String routeName = '/home';
   @override
   Widget build(BuildContext context) {
     return Container(

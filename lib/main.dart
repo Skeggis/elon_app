@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:myapp/routes/router.dart';
+import 'package:myapp/routes/router.dart' as router;
 import 'package:myapp/styles/theme.dart';
 
 import 'package:myapp/services/models/DeviceModel.dart';
@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             // showSemanticsDebugger: true,
             theme: the.themeData,
+            routes: router.routes,
             home: Root(),
           ),
         ));

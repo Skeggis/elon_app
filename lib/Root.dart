@@ -13,6 +13,7 @@ import 'package:myapp/routes/Routes.dart';
 import 'package:myapp/services/models/UIModel.dart';
 
 class Root extends StatelessWidget {
+  static const String routeName = '/';
   @override
   Widget build(BuildContext context) {
     String route = UIModel.of(context, rebuildOnChange: true).route;
@@ -36,7 +37,6 @@ class Root extends StatelessWidget {
       default:
         screen = Container();
         screenTitle = "Not Found";
-        
     }
     return Scaffold(
       drawer: AppDrawer(),
