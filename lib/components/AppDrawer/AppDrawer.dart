@@ -74,6 +74,19 @@ class AppDrawer extends StatelessWidget {
             _createDrawerItem(
               icon: Icons.list,
               text: 'Programs',
+              onTap: () {
+                Navigator.pop(context);
+                UIModel.of(context).changeRoute(Routes.programs);
+              },
+            ),
+            _divider(),
+            _createDrawerItem(
+              icon: Icons.sports,
+              text: 'Compete',
+              onTap: () {
+                Navigator.pop(context);
+                UIModel.of(context).changeRoute(Routes.compete);
+              },
             ),
             _divider(),
             _createDrawerItem(

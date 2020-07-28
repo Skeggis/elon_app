@@ -6,6 +6,8 @@ import 'package:myapp/services/models/DeviceModel.dart';
 
 import 'package:flutter_blue/flutter_blue.dart';
 import 'dart:async';
+import 'package:myapp/routes/router.dart' as router;
+import 'package:myapp/routes/Routes.dart';
 
 class ConnectElonScreenBody extends StatelessWidget {
   final bool bluetoothAvailable;
@@ -84,8 +86,7 @@ class ConnectElonScreenBody extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
                 ),
                 CustomButton(
-                  onPressed: () =>
-                      Navigator.pushReplacementNamed(context, '/elon'),
+                  onPressed: () => router.controller(context),
                   title: 'Shoot',
                   isSelected: true,
                   icon: Icon(Icons.label_important, size: 30.0),

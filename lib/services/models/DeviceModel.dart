@@ -27,41 +27,42 @@ class DeviceModel extends Model {
   List<BluetoothDevice> _foundDevices = [];
   List<BluetoothDevice> get foundDevices => _foundDevices;
 
-  // DeviceModel() {
-  //   Function eq = const ListEquality().equals;
-  //   // Function deepEq = const DeepCollectionEquality().equals;
-  //   _connectedDevicesStream = Stream.periodic(Duration(milliseconds: 500))
-  //       .asyncMap((_) => FlutterBlue.instance.connectedDevices)
-  //       .listen((newConnectedDevices) async {
-  //     if (!eq(_connectedDevices, newConnectedDevices)) {
-  //       _connectedDevices = newConnectedDevices;
-  //       if (!_connectedDevices.contains(_elon)) {
-  //         if (_elon != null) {
-  //           if (_foundDevices == null) {
-  //             _foundDevices = [];
-  //           }
-  //           _foundDevices.insert(0, _elon);
-  //         }
-  //         _elon = null;
-  //         _elonServices = [];
-  //       }
-  //       //Todo: find a way to know if one the connectedDevices is elon!
-  //       if (_elon == null && _connectedDevices.length > 0) {
-  //         _elon = _connectedDevices[0];
-  //         _elonServices = await _elon.discoverServices();
-  //         _foundDevices.remove(_elon);
-  //       }
-  //       notifyListeners();
-  //     }
-  //   });
-  //   _scanResultStream = FlutterBlue.instance.scanResults.listen((result) {
-  //     var filtered =
-  //         result.where((r) => r.device.name != '' && r.device != _elon);
-  //     _foundDevices = [...filtered.map((r) => r.device).toList()];
-  //     notifyListeners();
-  //   });
-  //   scanForDevices();
-  // }
+  //TODO: find a way so that _connectedDevicesStream does not have to be periodic (Now it is called every .5 sec)
+  DeviceModel() {
+    Function eq = const ListEquality().equals;
+    // Function deepEq = const DeepCollectionEquality().equals;
+    _connectedDevicesStream = Stream.periodic(Duration(milliseconds: 500))
+        .asyncMap((_) => FlutterBlue.instance.connectedDevices)
+        .listen((newConnectedDevices) async {
+      if (!eq(_connectedDevices, newConnectedDevices)) {
+        _connectedDevices = newConnectedDevices;
+        if (!_connectedDevices.contains(_elon)) {
+          if (_elon != null) {
+            if (_foundDevices == null) {
+              _foundDevices = [];
+            }
+            _foundDevices.insert(0, _elon);
+          }
+          _elon = null;
+          _elonServices = [];
+        }
+        //Todo: find a way to know if one of the connectedDevices is elon!
+        if (_elon == null && _connectedDevices.length > 0) {
+          _elon = _connectedDevices[0];
+          _elonServices = await _elon.discoverServices();
+          _foundDevices.remove(_elon);
+        }
+        notifyListeners();
+      }
+    });
+    _scanResultStream = FlutterBlue.instance.scanResults.listen((result) {
+      var filtered =
+          result.where((r) => r.device.name != '' && r.device != _elon);
+      _foundDevices = [...filtered.map((r) => r.device).toList()];
+      notifyListeners();
+    });
+    scanForDevices();
+  }
 
   void scanForDevices() {
     FlutterBlue.instance.startScan(timeout: Duration(seconds: 4));

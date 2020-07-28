@@ -8,6 +8,8 @@ import 'package:myapp/components/screens/ConnectElonScreen/ConnectElonScreen.dar
 import 'package:myapp/components/screens/HomeScreen/HomeScreen.dart';
 import 'package:myapp/components/screens/ControllerScreen/ControllerScreen.dart';
 
+import 'package:myapp/components/screens/CompeteScreen/CompeteScreen.dart';
+
 import 'package:myapp/routes/Routes.dart';
 
 import 'package:myapp/services/models/UIModel.dart';
@@ -33,6 +35,10 @@ class Root extends StatelessWidget {
         break;
       case Routes.program:
         screen = ProgramScreen();
+        break;
+      case Routes.compete:
+        screen = new CompeteScreen();
+        screenTitle = 'Compete';
         break;
       default:
         screen = Container();
