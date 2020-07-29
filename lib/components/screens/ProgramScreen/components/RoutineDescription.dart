@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:myapp/components/screens/ProgramScreen/components/ShotDescription.dart';
-import 'package:myapp/services/models/RoutineDesc.dart';
+import 'package:myapp/services/models/Shot.dart';
 
 class RoutineDescription extends StatelessWidget {
-  final List<RoutineDesc> routineDescs;
+  final List<Shot> routineDesc;
 
-  RoutineDescription({this.routineDescs});
+  RoutineDescription({this.routineDesc});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +19,8 @@ class RoutineDescription extends StatelessWidget {
             padding: EdgeInsets.only(right: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: routineDescs
-                  .map((e) => ShotDescription(shot: e.shot, timeout: e.timeout))
+              children: routineDesc
+                  .map((shot) => ShotDescription(shot: shot))
                   .toList(),
             ),
           ),

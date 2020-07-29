@@ -84,7 +84,7 @@ class ControllerScreenBody extends StatelessWidget {
     //TODO: change curve depending on type of shot.
     return Container(
       constraints: BoxConstraints.expand(),
-      decoration: BoxDecoration(color: MyTheme.courtColor),
+      decoration: BoxDecoration(color: MyTheme.backgroundColor),
       child: Stack(
         children: [
           Align(alignment: Alignment(0, -0.9), child: mainThings(context)),
@@ -205,16 +205,16 @@ class CourtPainter extends CustomPainter {
 
 /* --------Net, DASHED, Line--------- */
 
-    //Net:
-    double dashWidth = 9, dashSpace = 5, startX = backBoundryStart.dx;
-    final netLine = Paint()
-      ..color = MyTheme.secondaryColor
-      ..strokeWidth = strokeWidth * 2;
-    while (startX < backBoundryEnd.dx) {
-      canvas.drawLine(Offset(startX, rightDoublePlaySideLineEnd.dy),
-          Offset(startX + dashWidth, rightDoublePlaySideLineEnd.dy), netLine);
-      startX += dashWidth + dashSpace;
-    }
+    // //Net:
+    // double dashWidth = 9, dashSpace = 5, startX = backBoundryStart.dx;
+    // final netLine = Paint()
+    //   ..color = MyTheme.secondaryColor
+    //   ..strokeWidth = strokeWidth * 2;
+    // while (startX < backBoundryEnd.dx) {
+    //   canvas.drawLine(Offset(startX, rightDoublePlaySideLineEnd.dy),
+    //       Offset(startX + dashWidth, rightDoublePlaySideLineEnd.dy), netLine);
+    //   startX += dashWidth + dashSpace;
+    // }
 
     /* --------Half Circles--------- */
 
