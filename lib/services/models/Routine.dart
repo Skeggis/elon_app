@@ -1,26 +1,23 @@
-import 'package:myapp/services/models/RoutineDesc.dart';
+import 'package:myapp/services/models/Shot.dart';
 
 class Routine {
-  int id;
   int rounds;
   int timeout;
-  List<RoutineDesc> routineDescs;
+  List<Shot> routineDesc;
 
   Routine({
-    this.id,
     this.rounds,
     this.timeout,
-    this.routineDescs
+    this.routineDesc
   });
 
   factory Routine.fromJson(dynamic json){
     var routineDescJson = json['routineDesc'] as List;
-    List<RoutineDesc> _routineDescs = routineDescJson.map((routineDesc) => RoutineDesc.fromJson(routineDesc)).toList();
+    List<Shot> _routineDescs = routineDescJson.map((routineDesc) => Shot.fromJson(routineDesc)).toList();
     return Routine(
-      id: json['id'] as int,
       rounds: json['rounds'] as int,
       timeout: json['timeout'] as int,
-      routineDescs: _routineDescs
+      routineDesc: _routineDescs
     );
   }
 

@@ -81,7 +81,8 @@ class AppDrawer extends StatelessWidget {
             ),
             _divider(),
             _createDrawerItem(
-              icon: Icons.sports,
+              // icon: Icons.sports, hmm virkar ekki hjá mér
+              icon: Icons.ac_unit,
               text: 'Compete',
               onTap: () {
                 Navigator.pop(context);

@@ -1,25 +1,31 @@
 class Shot {
-  String name;
+  String typeName;
+  String locationName;
+  int locationId;
+  int timeout;
   int horizontal;
   int vertical;
   int power;
-  String imageUrl;
 
   Shot({
-    this.name,
+    this.typeName,
+    this.locationName,
+    this.locationId,
+    this.timeout,
     this.horizontal,
     this.vertical,
     this.power,
-    this.imageUrl,
   });
 
   factory Shot.fromJson(dynamic json) {
     return Shot(
-      name: json['name'] as String,
+      typeName: json['typeName'] as String,
+      locationName: json['locationName'] as String,
+      locationId: json['locationId'] as int,
+      timeout: json['timeout'] as int,
       horizontal: json['horizontal'] as int,
       vertical: json['vertical'] as int,
       power: json['power'] as int,
-      imageUrl: json['image'] as String,
     );
   }
 }

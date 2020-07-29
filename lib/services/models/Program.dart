@@ -37,7 +37,7 @@ class Program {
       );
     } else {
       print('her');
-      print(json['name']);
+      print(json['name']);print(json['routines']);
       var jsonRoutines = json['routines'] as List;
       List<Routine> _routines =
           jsonRoutines.map((routine) => Routine.fromJson(routine)).toList();

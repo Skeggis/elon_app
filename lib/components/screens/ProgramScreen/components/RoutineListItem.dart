@@ -43,16 +43,20 @@ class RoutineListItem extends StatelessWidget {
                   elevation: 12,
                   color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(4),
-                  child: RoutineDescription(routineDescs: routine.routineDescs),
+                  child: RoutineDescription(routineDesc: routine.routineDesc),
                 ),
               ),
             ),
           ],
         ),
         Container(
-          margin: EdgeInsets.only(top: 10),
-          child: Text(secondsToMinutes(routine.timeout)),
-        )
+            margin: EdgeInsets.only(top: 20),
+            child: RichText(
+              text: TextSpan(children: [
+                TextSpan(text: '${secondsToMinutes(routine.timeout)}', style: TextStyle(fontSize: 24)),
+                TextSpan(text: ' rest', style: TextStyle(fontSize: 16))
+              ]),
+            ))
       ],
     );
   }
