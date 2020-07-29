@@ -47,8 +47,8 @@ class _SetupLoading extends State<SetupLoading>
                         : 0.25,
                     child: Image(
                         width: ballWidth,
-                        image: AssetImage(
-                            'assets/images/black_badminton_ball_500.png')),
+                        image:
+                            AssetImage('assets/images/badminton_ball_500.png')),
                   ),
                 ),
             ],

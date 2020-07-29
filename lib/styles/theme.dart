@@ -24,6 +24,8 @@ class MyTheme {
   static Color get cardColor => const Color(0xFF1A1A1A);
   static Color get surfaceColor => const Color(0xFF1A1A1A);
 
+  static Color get searchBarColor => const Color(0xFF262120);
+
   /// Default constructor
   MyTheme({@required this.isDark, @required this.context});
 

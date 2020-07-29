@@ -5,6 +5,8 @@ import 'package:myapp/styles/theme.dart';
 
 import 'package:myapp/services/helpers.dart';
 
+import 'package:myapp/routes/router.dart' as router;
+
 class CompeteScreenBody extends StatelessWidget {
   Widget button(bool clicked, String title, Function onPressed) {
     return MaterialButton(
@@ -18,7 +20,7 @@ class CompeteScreenBody extends StatelessWidget {
         child: Text(title, style: TextStyle(fontSize: 20)));
   }
 
-  Widget playerButton(String title) {
+  Widget playerButton(BuildContext context, String title) {
     double borderRadius = 5;
     return Container(
       decoration: BoxDecoration(
@@ -37,7 +39,7 @@ class CompeteScreenBody extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             highlightColor: Colors.transparent,
-            onTap: () {},
+            onTap: () => router.playersModal(context),
             child: Center(
                 child: Row(
               children: [
@@ -63,9 +65,9 @@ class CompeteScreenBody extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        playerButton("Player 1"),
+        playerButton(context, "Player 1"),
         SizedBox(height: 15),
-        playerButton("Player 2")
+        playerButton(context, "Player 2")
       ],
     );
   }
@@ -147,7 +149,7 @@ class CompeteScreenBody extends StatelessWidget {
               SizedBox(height: 20),
               Column(
                 children: [
-                  playerButton("Player 1"),
+                  playerButton(context, "Player 1"),
                 ],
               ),
               SizedBox(height: 25),
@@ -159,7 +161,7 @@ class CompeteScreenBody extends StatelessWidget {
               SizedBox(height: 25),
               Column(
                 children: [
-                  playerButton("Player 2"),
+                  playerButton(context, "Player 2"),
                 ],
               ),
               SizedBox(height: 150),
