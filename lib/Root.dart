@@ -45,6 +45,7 @@ class Root extends StatelessWidget {
         screenTitle = "Not Found";
     }
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       drawer: AppDrawer(),
       appBar: AppBar(
         backgroundColor: MyTheme.barBackgroundColor,

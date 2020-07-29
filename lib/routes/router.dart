@@ -5,6 +5,7 @@ import 'package:myapp/components/screens/ProgramScreen/ProgramScreen.dart';
 import 'package:myapp/components/screens/CompeteScreen/CompeteScreen.dart';
 
 import 'package:myapp/components/screens/CompeteScreen/components/PlayersModal/PlayersModal.dart';
+import 'package:myapp/components/screens/CompeteScreen/components/PlayersModal/components/AddPlayerModal.dart';
 
 import 'package:myapp/services/models/UIModel.dart';
 
@@ -29,4 +30,8 @@ void compete(context) {
 
 void playersModal(context) {
   Navigator.of(context).push(new PlayersModal());
+}
+
+void addPlayerModal(context) {
+  Navigator.of(context).push(new AddPlayerModal());
 }
