@@ -137,18 +137,6 @@ class DeviceModel extends Model {
     _offsetDevice = Offset(offset.dx, offset.dy - appBarHeight - 9);
   }
 
-  Bezier _curve;
-  Bezier get curve => _curve;
-
-  List<Shot> _animateQueue = [];
-  List<Shot> get animateQueue => _animateQueue;
-
-  void dequeueAnimateQueue() {
-    if (_animateQueue.length == 0) return;
-    _animateQueue.removeAt(0);
-    notifyListeners();
-  }
-
   void changeShotLocation(
       Offset newGlobalLocation, Offset newLocalLocation, Size courtSize) {
     var appBarHeight = AppBar().preferredSize.height;
@@ -194,7 +182,6 @@ class DeviceModel extends Model {
     print("THeShot: $theShot");
     _sendCommand(theShot.toString());
 
-    _animateQueue.add(theShot);
     notifyListeners();
   }
 
@@ -266,11 +253,6 @@ class DeviceModel extends Model {
   static DeviceModel of(BuildContext context, {bool rebuildOnChange = false}) =>
       ScopedModel.of<DeviceModel>(context,
           rebuildOnChange: rebuildOnChange == null ? false : rebuildOnChange);
-}
-
-class CourtConfiguration {
-  static const int amountOfColumns = 3;
-  static const int amountOfRows = 3;
 }
 
 class Shot {
