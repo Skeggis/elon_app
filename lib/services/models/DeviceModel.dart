@@ -100,6 +100,7 @@ class DeviceModel extends Model {
     } else {
       _start = false;
       _setupLoading = false;
+      _sendCommand('?');
       notifyListeners();
     }
   }
