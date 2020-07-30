@@ -4,21 +4,9 @@ import 'package:myapp/styles/theme.dart';
 
 class ProgramsScreen extends StatelessWidget {
   static const String routeName = '/programs';
-  
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyTheme.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: MyTheme.barBackgroundColor,
-        title: Text(
-          'Programs',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ),
-      body: ProgramsScreenBody(),
-    );
+    return ProgramsScreenBody();
   }
 }

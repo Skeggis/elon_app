@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/components/screens/ControllerScreen/ControllerScreen.dart';
+import 'package:myapp/components/screens/CreateRoutineScreen/CreateRoutineScreen.dart';
+import 'package:myapp/components/screens/ProgramScreen/ProgramScreenCreate.dart';
 import 'package:myapp/components/screens/ProgramsScreen/ProgramsScreen.dart';
 import 'package:myapp/components/screens/ProgramScreen/ProgramScreen.dart';
 import 'package:myapp/components/screens/CompeteScreen/CompeteScreen.dart';
@@ -13,6 +15,8 @@ Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   ProgramsScreen.routeName: (BuildContext context) => new ProgramsScreen(),
   ControllerScreen.routeName: (BuildContext context) => new ControllerScreen(),
   CompeteScreen.routeName: (BuildContext context) => new CompeteScreen(),
+  ProgramScreenCreate.routeName: (BuildContext context) => new ProgramScreenCreate(),
+  CreateRoutineScreen.routeName: (BuildContext context) => new CreateRoutineScreen()
 };
 
 void controller(BuildContext context) {
@@ -20,7 +24,7 @@ void controller(BuildContext context) {
 }
 
 void programs(context) {
-  Navigator.pushNamed(context, ProgramsScreen.routeName);
+  UIModel.of(context).changeRoute(ProgramsScreen.routeName);
 }
 
 void compete(context) {

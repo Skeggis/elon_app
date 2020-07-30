@@ -12,52 +12,57 @@ class RoutineListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(right: 10),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: 50,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      '${routine.rounds}',
-                      style: TextStyle(fontSize: 24),
-                    ),
-                    Icon(
-                      Icons.clear,
-                      size: 20,
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                child: Material(
-                  elevation: 12,
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(4),
-                  child: RoutineDescription(routineDesc: routine.routineDesc),
+    return Container(
+      margin: EdgeInsets.only(top: index == 0 ? 20 : 0),
+      child: Column(
+        children: [
+          Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 10),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: 50,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        '${routine.rounds}',
+                        style: TextStyle(fontSize: 24),
+                      ),
+                      Icon(
+                        Icons.clear,
+                        size: 20,
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        Container(
-            margin: EdgeInsets.only(top: 20),
-            child: RichText(
-              text: TextSpan(children: [
-                TextSpan(text: '${secondsToMinutes(routine.timeout)}', style: TextStyle(fontSize: 24)),
-                TextSpan(text: ' rest', style: TextStyle(fontSize: 16))
-              ]),
-            ))
-      ],
+              Expanded(
+                child: Container(
+                  child: Material(
+                    elevation: 12,
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(4),
+                    child: RoutineDescription(routineDesc: routine.routineDesc),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Container(
+              margin: EdgeInsets.only(top: 20),
+              child: RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: '${secondsToMinutes(routine.timeout)}',
+                      style: TextStyle(fontSize: 24)),
+                  TextSpan(text: ' rest', style: TextStyle(fontSize: 16))
+                ]),
+              ))
+        ],
+      ),
     );
   }
 }
