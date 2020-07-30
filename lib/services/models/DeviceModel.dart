@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:myapp/services/models/Program.dart';
+import 'package:myapp/services/models/Routine.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:collection/collection.dart';
@@ -235,6 +236,8 @@ class DeviceModel extends Model {
   Program _currentProgram;
   Program get currentProgram => _currentProgram;
 
+
+
   Future fetchProgram(id) async {
     try {
       print(id);
@@ -250,6 +253,25 @@ class DeviceModel extends Model {
       print(e);
     }
   }
+
+  Program _createProgram = new Program(sets: 3, timeout: 59, routines: List<Routine>());
+  Program get createProgram => _createProgram;
+
+  void setSets(int sets){
+    _createProgram.sets = sets;
+    notifyListeners();
+  }  
+
+  void setSetsTimeout(int timeout){
+    _createProgram.timeout = timeout;
+    notifyListeners();
+  }
+
+  void addCreateRoutine(){
+    
+  }
+
+  
 
   static DeviceModel of(BuildContext context, {bool rebuildOnChange = false}) =>
       ScopedModel.of<DeviceModel>(context,

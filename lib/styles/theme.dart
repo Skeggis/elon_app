@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MyTheme {
@@ -58,5 +59,25 @@ ThemeData appTheme(context) {
     )),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     cardColor: MyTheme.cardColor,
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: MyTheme.secondaryColor,
+    ),
+    buttonTheme: ButtonThemeData(
+      buttonColor: MyTheme.secondaryColor,
+    ),
+    dialogTheme: DialogTheme(
+      backgroundColor: MyTheme.backgroundColor,
+      titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+    ),
+    cupertinoOverrideTheme: CupertinoThemeData(
+      textTheme: CupertinoTextThemeData(
+        dateTimePickerTextStyle: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      primaryColor: Colors.white,
+    ),
+    cursorColor: MyTheme.secondaryColor,
+    scaffoldBackgroundColor: MyTheme.backgroundColor
   );
 }

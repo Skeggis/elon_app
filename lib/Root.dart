@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/components/screens/ProgramScreen/ProgramScreen.dart';
+import 'package:myapp/components/screens/ProgramScreen/ProgramScreenCreate.dart';
 import 'package:myapp/components/screens/ProgramsScreen/ProgramsScreen.dart';
+import 'package:myapp/services/models/DeviceModel.dart';
+import 'package:myapp/services/models/Program.dart';
 import 'package:myapp/styles/theme.dart';
 import 'package:myapp/components/AppDrawer/AppDrawer.dart';
 
@@ -20,6 +23,7 @@ class Root extends StatelessWidget {
   Widget build(BuildContext context) {
     String route = UIModel.of(context, rebuildOnChange: true).route;
     Widget screen;
+    Widget fab;
     String screenTitle = "Elon";
     switch (route) {
       case Routes.home:
@@ -32,9 +36,13 @@ class Root extends StatelessWidget {
         break;
       case Routes.programs:
         screen = ProgramsScreen();
-        break;
-      case Routes.program:
-        screen = ProgramScreen();
+        screenTitle = 'Programs';
+        fab = FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, ProgramScreenCreate.routeName);
+          },
+          child: Icon(Icons.add),
+        );
         break;
       case Routes.compete:
         screen = new CompeteScreen();
@@ -47,11 +55,13 @@ class Root extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       drawer: AppDrawer(),
+      floatingActionButton: fab,
       appBar: AppBar(
         backgroundColor: MyTheme.barBackgroundColor,
         elevation: 0.0,
         title: Text(screenTitle),
       ),
+      backgroundColor: MyTheme.backgroundColor,
       body: screen,
     );
   }

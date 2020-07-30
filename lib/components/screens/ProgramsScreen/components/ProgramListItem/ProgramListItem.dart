@@ -37,7 +37,7 @@ class ProgramListItem extends StatelessWidget {
             ),
           ),
           child: Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -25,9 +25,13 @@ class MyApp extends StatelessWidget {
     MyTheme the = MyTheme(isDark: true, context: context);
 
     return ScopedModel<DeviceModel>(
-        model: DeviceModel(),
-        child: ScopedModel<UIModel>(
-          model: UIModel(),
+      model: DeviceModel(),
+      child: ScopedModel<UIModel>(
+        model: UIModel(),
+        child: GestureDetector(
+          onTap: () {
+            WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
+          },
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             // showSemanticsDebugger: true,
@@ -35,6 +39,8 @@ class MyApp extends StatelessWidget {
             routes: router.routes,
             home: Root(),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

@@ -9,15 +9,13 @@ class ProgramScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(secondsToFormattedTime(10));
-    print(secondsToFormattedTime(60));
-    print(secondsToFormattedTime(170));
 
     final ProgramScreenArguments args =
         ModalRoute.of(context).settings.arguments;
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Theme.of(context).appBarTheme.color,
         title: Text(args.name),
       ),
