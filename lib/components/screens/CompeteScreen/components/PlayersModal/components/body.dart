@@ -1,49 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/components/screens/CompeteScreen/components/PlayersModal/components/SearchBar.dart';
 import 'package:myapp/styles/theme.dart';
+import 'package:myapp/services/models/Player.dart';
+import 'package:myapp/services/models/PlayersModel.dart';
 
 class PlayersModalBody extends StatelessWidget {
-  Organization tbr = new Organization(
-    name: 'Tennis og Badmintonfélag Reykjavíkur',
-  );
-  List<Player> players = [
-    new Player(
-      name: 'Þórður Ágústsson',
-      organization: new Organization(
-        name: 'Badmintonfélag Hafnarfjarðar',
-      ),
-    ),
-    new Player(
-      name: 'Róbert Ingi Huldarsson',
-      organization: new Organization(
-        name: 'Badmintonfélag Hafnarfjarðar',
-      ),
-    ),
-    new Player(
-      name: 'Þórður Ágústsson',
-      organization: new Organization(
-        name: 'Badmintonfélag Hafnarfjarðar',
-      ),
-    ),
-    new Player(
-      name: 'Róbert Ingi Huldarsson',
-      organization: new Organization(
-        name: 'Badmintonfélag Hafnarfjarðar',
-      ),
-    ),
-    new Player(
-      name: 'Þórður Ágústsson',
-      organization: new Organization(
-        name: 'Badmintonfélag Hafnarfjarðar',
-      ),
-    ),
-    new Player(
-      name: 'Róbert Ingi Huldarsson',
-      organization: new Organization(
-        name: 'Badmintonfélag Hafnarfjarðar',
-      ),
-    )
-  ];
+  double searchBarHeight = 50;
 
   Widget playerItem(BuildContext context, Player player) {
     double borderRadius = 10;
@@ -120,20 +82,26 @@ class PlayersModalBody extends StatelessWidget {
         ));
   }
 
+  TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    controller.addListener(() {
+      PlayersModel.of(context).newSearch(controller.text);
+    });
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         SizedBox(height: 20),
-        SearchBar(),
+        SearchBar(height: searchBarHeight, controller: controller),
         SizedBox(height: 20),
         Expanded(
           flex: 1,
-          child: ListView(
-            children: [
-              for (Player player in players) playerItem(context, player),
-            ],
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onPanDown: (_) {
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+            child: playersList(context),
           ),
         ),
         cancelButton(context),
@@ -141,19 +109,41 @@ class PlayersModalBody extends StatelessWidget {
       ],
     );
   }
-}
 
-class Player {
-  String id;
-  String name;
-  String imageUrl;
-  Organization organization;
-  Player({this.name, this.imageUrl, this.organization, this.id});
-}
-
-class Organization {
-  String id;
-  String name;
-  String imageUrl;
-  Organization({this.name, this.imageUrl, this.id});
+  Widget playersList(BuildContext context) {
+    return FutureBuilder(
+      future: PlayersModel.of(context).fetchAllPlayers(),
+      builder: (context, snapshot) {
+        if (snapshot.data != null) {
+          List<Player> players =
+              PlayersModel.of(context, rebuildOnChange: true).playersInSearch;
+          if (players == null || players.length == 0) {
+            return Center(
+              child: Text(
+                'No players found',
+              ),
+            );
+          } else {
+            return RefreshIndicator(
+              color: Theme.of(context).splashColor,
+              onRefresh: PlayersModel.of(context).fetchAllPlayers,
+              child: Container(
+                child: ListView(
+                  children: [
+                    SizedBox(height: 20),
+                    for (Player player in players) playerItem(context, player),
+                    SizedBox(height: 35),
+                  ],
+                ),
+              ),
+            );
+          }
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
 }

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:myapp/components/screens/CompeteScreen/components/PlayersModal/components/body.dart';
 import 'package:myapp/styles/theme.dart';
 
+import 'package:myapp/services/models/PlayersModel.dart';
+import 'package:scoped_model/scoped_model.dart';
+
 class PlayersModal extends ModalRoute<void> {
   @override
   Duration get transitionDuration => Duration(milliseconds: 500);
@@ -30,7 +33,6 @@ class PlayersModal extends ModalRoute<void> {
     // This makes sure that text and other content follows the material style
     return Material(
       type: MaterialType.transparency,
-      // make sure that the overlay content is not cut off
       child: SafeArea(
         child: _buildOverlayContent(context),
       ),
@@ -41,7 +43,8 @@ class PlayersModal extends ModalRoute<void> {
     return Container(
       constraints: BoxConstraints.expand(),
       decoration: BoxDecoration(color: MyTheme.backgroundColor),
-      child: PlayersModalBody(),
+      child: ScopedModel<PlayersModel>(
+          model: PlayersModel(), child: PlayersModalBody()),
     );
   }
 

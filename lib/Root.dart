@@ -53,6 +53,7 @@ class Root extends StatelessWidget {
         screenTitle = "Not Found";
     }
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       drawer: AppDrawer(),
       floatingActionButton: fab,
       appBar: AppBar(
