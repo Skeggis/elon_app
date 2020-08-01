@@ -88,13 +88,17 @@ class ControllerScreenBody extends StatelessWidget {
 }
 
 class CourtPainter extends CustomPainter {
+  final Color testColor;
+
+  CourtPainter({this.testColor = Colors.white});
+
   @override
   void paint(Canvas canvas, Size size) {
     print(size.width);
     double strokeWidth = 2;
     Paint line = new Paint()
       ..strokeCap = StrokeCap.round
-      ..color = MyTheme.onPrimaryColor
+      ..color = testColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth;
 

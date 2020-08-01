@@ -5,14 +5,13 @@ import 'package:myapp/services/models/Program.dart';
 
 class RoutinesList extends StatelessWidget {
   final bool creating;
+  final Program program;
 
-  RoutinesList({this.creating = false});
+  RoutinesList({this.creating = false, this.program});
 
   @override
   Widget build(BuildContext context) {
-    Program program = creating
-        ? DeviceModel.of(context, rebuildOnChange: true).createProgram
-        : DeviceModel.of(context, rebuildOnChange: true).currentProgram;
+
     return Expanded(
       child: program.routines.length == 0
           ? Center(

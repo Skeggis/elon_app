@@ -53,10 +53,11 @@ ThemeData appTheme(context) {
     splashColor: MyTheme.secondaryColor,
     iconTheme: IconThemeData(color: Colors.white, opacity: 1.0, size: 33.0),
     textTheme: TextTheme(
+        subtitle1: TextStyle(color: Colors.white),
         bodyText2: TextStyle(
-      color: Colors.white,
-      fontSize: 20.0,
-    )),
+          color: Colors.white,
+          fontSize: 20.0,
+        )),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     cardColor: MyTheme.cardColor,
     floatingActionButtonTheme: FloatingActionButtonThemeData(
@@ -78,6 +79,26 @@ ThemeData appTheme(context) {
       primaryColor: Colors.white,
     ),
     cursorColor: MyTheme.secondaryColor,
-    scaffoldBackgroundColor: MyTheme.backgroundColor
+    scaffoldBackgroundColor: MyTheme.backgroundColor,
+    inputDecorationTheme: InputDecorationTheme(
+      contentPadding: EdgeInsets.all(0),
+      border: UnderlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.white,
+        ),
+      ),
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.white,
+        ),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.white,
+        ),
+      ),
+    ),
+    canvasColor: MyTheme.backgroundColor,
+    dialogBackgroundColor: MyTheme.backgroundColor,
   );
 }

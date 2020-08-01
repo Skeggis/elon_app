@@ -4,23 +4,23 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:myapp/services/helper.dart';
 import 'package:myapp/services/models/DeviceModel.dart';
 import 'package:myapp/services/models/Program.dart';
+import 'package:myapp/services/models/ProgramsModel.dart';
 import 'package:myapp/styles/theme.dart';
 
 class ProgramInfoBar extends StatelessWidget {
   final bool creating;
+  final Program program;
 
-  ProgramInfoBar({this.creating = false});
+  ProgramInfoBar({this.creating = false, this.program});
 
   @override
   Widget build(BuildContext context) {
-    Program currentProgram = creating
-        ? DeviceModel.of(context, rebuildOnChange: true).createProgram
-        : DeviceModel.of(context, rebuildOnChange: true).currentProgram;
+    Function setSetsTimeout = ProgramsModel.of(context).setSetsTimeout;
 
     Widget sets = creating
         ? SetInputField()
         : Text(
-            currentProgram.sets.toString(),
+            program.sets.toString(),
             style: TextStyle(fontSize: 24),
           );
 
@@ -37,10 +37,9 @@ class ProgramInfoBar extends StatelessWidget {
                 child: CupertinoTimerPicker(
                   mode: CupertinoTimerPickerMode.ms,
                   onTimerDurationChanged: (Duration duration) {
-                    DeviceModel.of(context).setSetsTimeout(duration.inSeconds);
+                    setSetsTimeout(duration.inSeconds);
                   },
-                  initialTimerDuration:
-                      Duration(seconds: currentProgram.timeout),
+                  initialTimerDuration: Duration(seconds: program.timeout),
                 ),
               ),
             ],
@@ -59,12 +58,12 @@ class ProgramInfoBar extends StatelessWidget {
         ? FlatButton(
             onPressed: () => showTimeDialog(),
             child: Text(
-              secondsToFormattedTime(currentProgram.timeout),
+              secondsToFormattedTime(program.timeout),
               style: TextStyle(fontSize: 24, color: Colors.white),
             ),
           )
         : Text(
-            secondsToMinutes(currentProgram.timeout),
+            secondsToMinutes(program.timeout),
             style: TextStyle(fontSize: 24),
           );
 
@@ -116,7 +115,7 @@ class _SetInputField extends State<SetInputField> {
   @override
   void initState() {
     super.initState();
-    Program program = DeviceModel.of(context).createProgram;
+    Program program = ProgramsModel.of(context).createProgram;
 
     textController.text = program.sets.toString();
 
@@ -149,8 +148,10 @@ class _SetInputField extends State<SetInputField> {
         controller: textController,
         focusNode: _focusNode,
         decoration: InputDecoration(
-          border: InputBorder.none,
-        ),
+            border: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: MyTheme.secondaryColor))),
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         style: TextStyle(

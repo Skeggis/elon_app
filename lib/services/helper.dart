@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 String secondsToMinutes(int seconds) {
   if (seconds <= 60) {
     return '${seconds}s';
@@ -22,3 +24,8 @@ String secondsToFormattedTime(int seconds) {
     return "${duration.inHours}h ${twoDigits(duration.inMinutes.remainder(60))}m ${twoDigits(duration.inSeconds.remainder(60))}s";
   }
 }
+
+double degToRad(double deg){  
+  return deg * (math.pi / 180);
+}
+
