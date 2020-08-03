@@ -41,43 +41,42 @@ class MyTheme {
 
 ThemeData appTheme(context) {
   return ThemeData(
-    // fontFamily: 'PlayFair_Display',
-    fontFamily: 'Quicksand',
-    // buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.accent),
-    appBarTheme: AppBarTheme(
-      color: MyTheme.barBackgroundColor,
-    ),
-    primaryColor: MyTheme.primaryColor,
-    backgroundColor: MyTheme.backgroundColor,
-    buttonColor: MyTheme.primaryColor,
-    splashColor: MyTheme.secondaryColor,
-    iconTheme: IconThemeData(color: Colors.white, opacity: 1.0, size: 33.0),
-    textTheme: TextTheme(
-        bodyText2: TextStyle(
-      color: Colors.white,
-      fontSize: 20.0,
-    )),
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-    cardColor: MyTheme.cardColor,
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: MyTheme.secondaryColor,
-    ),
-    buttonTheme: ButtonThemeData(
-      buttonColor: MyTheme.secondaryColor,
-    ),
-    dialogTheme: DialogTheme(
-      backgroundColor: MyTheme.backgroundColor,
-      titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
-    ),
-    cupertinoOverrideTheme: CupertinoThemeData(
-      textTheme: CupertinoTextThemeData(
-        dateTimePickerTextStyle: TextStyle(
-          color: Colors.white,
-        ),
+      // fontFamily: 'PlayFair_Display',
+      fontFamily: 'Quicksand',
+      // buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.accent),
+      appBarTheme: AppBarTheme(
+        color: MyTheme.barBackgroundColor,
       ),
-      primaryColor: Colors.white,
-    ),
-    cursorColor: MyTheme.secondaryColor,
-    scaffoldBackgroundColor: MyTheme.backgroundColor
-  );
+      primaryColor: MyTheme.primaryColor,
+      backgroundColor: MyTheme.backgroundColor,
+      buttonColor: MyTheme.primaryColor,
+      splashColor: MyTheme.secondaryColor,
+      iconTheme: IconThemeData(color: Colors.white, opacity: 1.0, size: 33.0),
+      textTheme: TextTheme(
+          bodyText2: TextStyle(
+        color: Colors.white,
+        fontSize: 20.0,
+      )),
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+      cardColor: MyTheme.cardColor,
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: MyTheme.secondaryColor,
+      ),
+      buttonTheme: ButtonThemeData(
+        buttonColor: MyTheme.secondaryColor,
+      ),
+      dialogTheme: DialogTheme(
+        backgroundColor: MyTheme.backgroundColor,
+        titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+      ),
+      cupertinoOverrideTheme: CupertinoThemeData(
+        textTheme: CupertinoTextThemeData(
+          dateTimePickerTextStyle: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        primaryColor: Colors.white,
+      ),
+      cursorColor: MyTheme.secondaryColor,
+      scaffoldBackgroundColor: MyTheme.backgroundColor);
 }
