@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:myapp/services/models/CompeteModel.dart';
+import 'package:myapp/services/models/scopedModels/CompeteModel.dart';
 import 'package:myapp/styles/theme.dart';
 
 import 'package:myapp/services/helpers.dart';

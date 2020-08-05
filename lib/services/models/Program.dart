@@ -53,4 +53,19 @@ class Program {
           routines: _routines);
     }
   }
+
+
+
+  Map<String, dynamic> toJson() {
+    List<Map<String, dynamic>> _routines = routines.map((e) => e.toJson()).toList();
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'author': 'Temp author',
+      'sets': sets,
+      'timeout': timeout,
+      'routines': _routines
+    };
+  }
 }

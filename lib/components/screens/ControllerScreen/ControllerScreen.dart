@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/styles/theme.dart';
 import 'package:myapp/components/screens/ControllerScreen/components/body.dart';
-import 'package:myapp/services/models/DeviceModel.dart';
+import 'package:myapp/services/models/scopedModels/DeviceModel.dart';
 
 class ControllerScreen extends StatelessWidget {
   static const String routeName = '/controller';

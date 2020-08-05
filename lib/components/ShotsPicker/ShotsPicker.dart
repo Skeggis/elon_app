@@ -4,7 +4,7 @@ import 'package:myapp/styles/theme.dart';
 import 'package:myapp/services/models/Enums.dart';
 import 'package:myapp/components/ShotsPicker/components/ShotType.dart';
 
-import 'package:myapp/services/models/DeviceModel.dart';
+import 'package:myapp/services/models/scopedModels/DeviceModel.dart';
 
 class ShotsPicker extends StatelessWidget {
   @override

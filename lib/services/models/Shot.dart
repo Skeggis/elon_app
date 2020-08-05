@@ -1,5 +1,8 @@
+import 'package:myapp/services/models/ShotType.dart';
+
 class Shot {
-  String typeName;
+  int id;
+  ShotType shotType;
   String locationName;
   int locationId;
   int timeout;
@@ -8,7 +11,8 @@ class Shot {
   int power;
 
   Shot({
-    this.typeName,
+    this.id,
+    this.shotType,
     this.locationName,
     this.locationId,
     this.timeout,
@@ -18,8 +22,10 @@ class Shot {
   });
 
   factory Shot.fromJson(dynamic json) {
+    var shotType = ShotType.fromJson(json['shotType']);
     return Shot(
-      typeName: json['typeName'] as String,
+      id: json['id'] as int,
+      shotType: shotType,
       locationName: json['locationName'] as String,
       locationId: json['locationId'] as int,
       timeout: json['timeout'] as int,
@@ -28,4 +34,15 @@ class Shot {
       power: json['power'] as int,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'shotType': shotType.toJson(),
+    'locationName': locationName,
+    'locationId': locationId,
+    'timeout': timeout,
+    'horizontal': horizontal,
+    'vertical': vertical,
+    'power': power,
+  };
 }

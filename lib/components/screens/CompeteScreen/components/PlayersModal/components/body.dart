@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/components/screens/CompeteScreen/components/PlayersModal/components/SearchBar.dart';
 import 'package:myapp/styles/theme.dart';
 import 'package:myapp/services/models/Player.dart';
-import 'package:myapp/services/models/PlayersModel.dart';
+import 'package:myapp/services/models/scopedModels/PlayersModel.dart';
 
 class PlayersModalBody extends StatelessWidget {
   double searchBarHeight = 50;

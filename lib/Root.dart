@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/components/screens/ProgramScreen/ProgramScreen.dart';
 import 'package:myapp/components/screens/ProgramScreen/ProgramScreenCreate.dart';
 import 'package:myapp/components/screens/ProgramsScreen/ProgramsScreen.dart';
-import 'package:myapp/services/models/DeviceModel.dart';
+import 'package:myapp/services/models/scopedModels/DeviceModel.dart';
 import 'package:myapp/services/models/Program.dart';
 import 'package:myapp/styles/theme.dart';
 import 'package:myapp/components/AppDrawer/AppDrawer.dart';

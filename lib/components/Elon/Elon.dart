@@ -4,7 +4,7 @@ import 'package:myapp/styles/theme.dart';
 import 'dart:math' as math;
 import '../PlayButton/PlayButton.dart';
 
-import 'package:myapp/services/models/DeviceModel.dart';
+import 'package:myapp/services/models/scopedModels/DeviceModel.dart';
 import 'package:myapp/services/extensions.dart';
 
 class Elon extends StatefulWidget {

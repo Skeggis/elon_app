@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/components/CustomButton/CustomButton.dart';
 import 'package:myapp/services/helpers.dart';
 
-import 'package:myapp/services/models/DeviceModel.dart';
+import 'package:myapp/services/models/scopedModels/DeviceModel.dart';
 
 import 'package:flutter_blue/flutter_blue.dart';
 import 'dart:async';

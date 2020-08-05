@@ -22,13 +22,13 @@ class ShotDescription extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               shot.locationId == 5
-                  ? Icon(Icons.adjust)
+                  ? Icon(Icons.radio_button_unchecked)
                   : Transform.rotate(
                       angle:
                           angleForLocationId(shot.locationId) * (math.pi / 180),
                       child: Icon(Icons.arrow_upward),
                     ),
-              Text(shot.typeName),
+              Text(shot.shotType.name),
             ],
           ),
           Container(

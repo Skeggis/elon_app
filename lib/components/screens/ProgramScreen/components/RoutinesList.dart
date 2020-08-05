@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:myapp/components/screens/ProgramScreen/components/RoutineListItem.dart';
-import 'package:myapp/services/models/DeviceModel.dart';
+import 'package:myapp/services/models/scopedModels/DeviceModel.dart';
 import 'package:myapp/services/models/Program.dart';
 
 class RoutinesList extends StatelessWidget {
@@ -30,6 +30,7 @@ class RoutinesList extends StatelessWidget {
                         child: RoutineListItem(
                           routine: program.routines[index],
                           index: index,
+                          creating: creating
                         ),
                       ),
                     ),

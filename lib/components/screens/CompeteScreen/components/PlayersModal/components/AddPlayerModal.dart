@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/services/helpers.dart';
 import 'package:myapp/styles/theme.dart';
 
-import 'package:myapp/services/models/PlayersModel.dart';
+import 'package:myapp/services/models/scopedModels/PlayersModel.dart';
 
 class AddPlayerModal extends ModalRoute<void> {
   @override

@@ -1,187 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:myapp/components/screens/ControllerScreen/components/body.dart';
+import 'package:myapp/components/screens/CreateRoutineScreen/CreateShotDialog.dart';
+import 'package:myapp/components/screens/ProgramScreen/components/RoutineDescription.dart';
 import 'package:myapp/services/helper.dart';
 import 'package:myapp/services/helpers.dart';
+import 'package:myapp/services/models/Routine.dart';
+import 'package:myapp/services/models/Shot.dart';
+import 'package:myapp/services/models/scopedModels/CreateRoutineModel.dart';
 import 'package:myapp/styles/theme.dart';
 
-class CreateRoutineBody extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return _CreateRoutineBody();
-  }
-}
-
-class _CreateRoutineBody extends State<CreateRoutineBody> {
-  TextEditingController _controller;
-  FocusNode _focusNode;
-
-  List<Map<String, dynamic>> shotLocations;
-  int numShot = 1;
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController();
-    _focusNode = FocusNode();
-    shotLocations = [
-      {
-        'location': 'left',
-        'shots': [],
-        'icon': Transform.rotate(
-          angle: degToRad(-45),
-          child: Icon(Icons.arrow_upward),
-        ),
-        'alignment': Alignment.topLeft
-      },
-      {
-        'location': 'center',
-        'shots': [],
-        'icon': Transform.rotate(
-          angle: degToRad(0),
-          child: Icon(Icons.arrow_upward),
-        ),
-        'alignment': Alignment.topCenter
-      },
-      {
-        'location': 'right',
-        'shots': [],
-        'icon': Transform.rotate(
-          angle: degToRad(45),
-          child: Icon(Icons.arrow_upward),
-        ),
-        'alignment': Alignment.topRight
-      },
-      {
-        'location': 'left',
-        'shots': [],
-        'icon': Transform.rotate(
-          angle: degToRad(-90),
-          child: Icon(Icons.arrow_upward),
-        ),
-        'alignment': Alignment.centerLeft
-      },
-      {
-        'location': 'center',
-        'shots': [],
-        'icon': Icon(Icons.radio_button_unchecked),
-        'alignment': Alignment.center
-      },
-      {
-        'location': 'right',
-        'shots': [],
-        'icon': Transform.rotate(
-          angle: degToRad(90),
-          child: Icon(Icons.arrow_upward),
-        ),
-        'alignment': Alignment.centerRight
-      },
-      {
-        'location': 'left',
-        'shots': [],
-        'icon': Transform.rotate(
-          angle: degToRad(-135),
-          child: Icon(Icons.arrow_upward),
-        ),
-        'alignment': Alignment.bottomLeft
-      },
-      {
-        'location': 'center',
-        'shots': [],
-        'icon': Transform.rotate(
-          angle: degToRad(180),
-          child: Icon(Icons.arrow_upward),
-        ),
-        'alignment': Alignment.bottomCenter
-      },
-      {
-        'location': 'right',
-        'shots': [],
-        'icon': Transform.rotate(
-          angle: degToRad(135),
-          child: Icon(Icons.arrow_upward),
-        ),
-        'alignment': Alignment.bottomRight
-      },
-    ];
-
-    _controller.text = '1';
-    _focusNode.addListener(() {
-      // if(!_focusNode.hasFocus){
-      //   if()
-      // }
-    });
+class CreateRoutineBody extends StatelessWidget {
+  Future<void> createShotDialog(
+    int index,
+    List<Shot> shots,
+    BuildContext myContext,
+  ) async {
+    CreateRoutineModel.of(myContext).initializeShotDialog();
+    return showDialog(
+        barrierDismissible: false,
+        context: myContext,
+        builder: (context) => CreateShotDialog(myContext, index));
   }
 
-  void shotAdded(int index) async {
-    await createShotDialog();
-
-    List<dynamic> l = shotLocations[index]['shots'];
-    l.add({'numShot': numShot});
-    setState(() {
-      shotLocations[index]['shots'] = l;
-      numShot += 1;
-    });
-  }
-
-  Future<void> createShotDialog() async {
-    Widget inputShotTimeout = Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
-        Container(
-          width: 30,
-          height: 32,
-          child: TextField(
-            keyboardType: TextInputType.number,
-            textAlign: TextAlign.center,
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(bottom: 10),
-            ),
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-            ),
-            controller: _controller,
-          ),
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        Text('s'),
-      ],
-    );
-
-    Widget chooseShotType = DropdownButton(
-      onChanged: (value) {},
-      items: [
-        DropdownMenuItem(
-          child: Text('Smash'),
-        ),
-        DropdownMenuItem(
-          child: Text('Drop'),
-        )
-      ],
-    );
-
+  createAlertDialog(BuildContext context, title, message) {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Create shot'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [chooseShotType, inputShotTimeout],
-            )
-          ],
-        ),
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('OK',
+                style: TextStyle(color: MyTheme.secondaryColor, fontSize: 18)),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    print((screenWidth(context) - 30) * (6.7 / 6.1));
     Widget court = Container(
       child: RepaintBoundary(
         child: Container(
@@ -194,33 +54,92 @@ class _CreateRoutineBody extends State<CreateRoutineBody> {
       ),
     );
 
-    return Center(
-      child: SingleChildScrollView(
-        child: Container(
-          height: (screenWidth(context) - 30) * (6.7 / 6.1),
-          child: Stack(
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Align(
-                child: court,
-                alignment: Alignment(0, -0.95),
+              Container(
+                height: (screenWidth(context) - 30) * (6.7 / 6.1),
+                child: Stack(
+                  children: <Widget>[
+                    Align(
+                      child: court,
+                      alignment: Alignment(0, -0.95),
+                    ),
+                    Align(
+                      alignment: Alignment(0, -1.2),
+                      child: Container(
+                        height: (screenWidth(context) - 30) * (6.7 / 6.1),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 30, horizontal: 40),
+                        child: Stack(
+                          children: CreateRoutineModel.of(context)
+                              .shotLocations
+                              .asMap()
+                              .entries
+                              .map<Widget>(
+                                (entry) => Container(
+                                  alignment:
+                                      mapLocationIdToAlignment(entry.value.id),
+                                  child: IconButton(
+                                    icon: mapLocationIdToIcon(entry.value.id),
+                                    onPressed: () async =>
+                                        await createShotDialog(entry.value.id,
+                                            entry.value.shots, context),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                        alignment: Alignment(0, 0.95),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              Align(
-                child: Container(
-                  height: (screenWidth(context) - 30) * (6.7 / 6.1),
-                  padding: EdgeInsets.symmetric(vertical: 30, horizontal: 40),
-                  child: Stack(
-                    children: shotLocations
-                        .asMap()
-                        .entries
-                        .map((entry) => Container(
-                              alignment: entry.value['alignment'],
-                              child: ShotList(
-                                  shotLocation: entry.value,
-                                  handlePress: () => shotAdded(entry.key)),
-                            ))
-                        .toList(),
-                  ),
-                  alignment: Alignment(0, 0.95),
+              Container(
+                margin: EdgeInsets.only(bottom: 30),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child:
+                          CreateRoutineModel.of(context, rebuildOnChange: true)
+                                      .shots
+                                      .length ==
+                                  0
+                              ? Container()
+                              : Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 20),
+                                  child: RoutineDescription(
+                                    routineDesc: CreateRoutineModel.of(context,
+                                            rebuildOnChange: true)
+                                        .shots,
+                                    create: true,
+                                  ),
+                                ),
+                    ),
+                    Container(
+                      child: FloatingActionButton(
+                          child: Icon(Icons.save),
+                          onPressed: () {
+                            CreateRoutineModel model =
+                                CreateRoutineModel.of(context);
+                            if (model.shots.length == 0) {
+                              createAlertDialog(context, 'Routine empty',
+                                  'You can not create a empty routine. Try adding a shot');
+                            } else {
+                              Routine routine = model.createRoutine();
+                              Navigator.of(context).pop(routine);
+                            }
+                          }),
+                      margin: EdgeInsets.only(right: 20),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -231,58 +150,94 @@ class _CreateRoutineBody extends State<CreateRoutineBody> {
   }
 }
 
-class ShotList extends StatelessWidget {
-  final dynamic shotLocation;
-  final Function handlePress;
-  ShotList({this.shotLocation, this.handlePress});
+AlignmentGeometry mapLocationIdToAlignment(int id) {
+  switch (id) {
+    case 1:
+      return Alignment.topLeft;
+      break;
+    case 2:
+      return Alignment.topCenter;
+      break;
+    case 3:
+      return Alignment.topRight;
+      break;
+    case 4:
+      return Alignment.centerLeft;
+      break;
+    case 5:
+      return Alignment.center;
+      break;
+    case 6:
+      return Alignment.centerRight;
+      break;
+    case 7:
+      return Alignment.bottomLeft;
+      break;
+    case 8:
+      return Alignment.bottomCenter;
+      break;
+    case 9:
+      return Alignment.bottomRight;
+      break;
+    default:
+      return Alignment.center;
+  }
+}
 
-  @override
-  Widget build(BuildContext context) {
-    String location = shotLocation['location'];
-    CrossAxisAlignment crossAlignment;
-    MainAxisAlignment mainAxisAlignment;
-    if (location == 'left') {
-      crossAlignment = CrossAxisAlignment.start;
-      mainAxisAlignment = MainAxisAlignment.start;
-    } else if (location == 'center') {
-      crossAlignment = CrossAxisAlignment.center;
-      mainAxisAlignment = MainAxisAlignment.center;
-    } else {
-      crossAlignment = CrossAxisAlignment.end;
-      mainAxisAlignment = MainAxisAlignment.end;
-    }
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: crossAlignment,
-      children: <Widget>[
-        IconButton(
-          iconSize: 30,
-          onPressed: handlePress,
-          icon: shotLocation['icon'],
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: mainAxisAlignment,
-          children: shotLocation['shots']
-              .map<Widget>(
-                (shot) => Container(
-                  margin: EdgeInsets.symmetric(horizontal: 2),
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.white,
-                      style: BorderStyle.solid,
-                    ),
-                  ),
-                  child: Text(
-                    shot['numShot'].toString(),
-                  ),
-                ),
-              )
-              .toList(),
-        )
-      ],
-    );
+Widget mapLocationIdToIcon(int id) {
+  switch (id) {
+    case 1:
+      return Transform.rotate(
+        angle: degToRad(-45),
+        child: Icon(Icons.arrow_upward),
+      );
+      break;
+    case 2:
+      return Transform.rotate(
+        angle: degToRad(0),
+        child: Icon(Icons.arrow_upward),
+      );
+      break;
+    case 3:
+      return Transform.rotate(
+        angle: degToRad(45),
+        child: Icon(Icons.arrow_upward),
+      );
+      break;
+    case 4:
+      return Transform.rotate(
+        angle: degToRad(-90),
+        child: Icon(Icons.arrow_upward),
+      );
+      break;
+    case 5:
+      return Icon(Icons.radio_button_unchecked);
+      break;
+    case 6:
+      return Transform.rotate(
+        angle: degToRad(90),
+        child: Icon(Icons.arrow_upward),
+      );
+      break;
+    case 7:
+      return Transform.rotate(
+        angle: degToRad(-135),
+        child: Icon(Icons.arrow_upward),
+      );
+      break;
+    case 8:
+      return Transform.rotate(
+        angle: degToRad(180),
+        child: Icon(Icons.arrow_upward),
+      );
+      break;
+    case 9:
+      return Transform.rotate(
+        angle: degToRad(135),
+        child: Icon(Icons.arrow_upward),
+      );
+      break;
+    default:
+      return Icon(Icons.error_outline);
   }
 }

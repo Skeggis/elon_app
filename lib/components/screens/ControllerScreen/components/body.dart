@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/services/helpers.dart';
-import 'package:myapp/services/models/DeviceModel.dart';
+import 'package:myapp/services/models/scopedModels/DeviceModel.dart';
 import 'package:myapp/styles/theme.dart';
 
 import 'package:myapp/components/Elon/Elon.dart';
@@ -146,7 +146,8 @@ class CourtPainter extends CustomPainter {
     Offset leftDoublePlaySideLineEnd = Offset(
         leftDoublePlaySideLineStart.dx,
         backBoundryLength *
-            (realDoublePlaySideLineLength / realBackBoundryLength));
+                (realDoublePlaySideLineLength / realBackBoundryLength) +
+            0);
     //Left Side Line for double play:
     canvas.drawLine(
         leftDoublePlaySideLineStart, leftDoublePlaySideLineEnd, line);
@@ -155,7 +156,7 @@ class CourtPainter extends CustomPainter {
     Offset rightDoublePlaySideLineEnd = Offset(
         rightDoublePlaySideLineStart.dx,
         backBoundryLength *
-            (realDoublePlaySideLineLength / realBackBoundryLength));
+                (realDoublePlaySideLineLength / realBackBoundryLength) );
     //Right Side Line for double play:
     canvas.drawLine(
         rightDoublePlaySideLineStart, rightDoublePlaySideLineEnd, line);
@@ -191,15 +192,28 @@ class CourtPainter extends CustomPainter {
 /* --------Net, DASHED, Line--------- */
 
     //Net:
-    // double dashWidth = 9, dashSpace = 5, startX = backBoundryStart.dx;
+    double dashWidth = 9, dashSpace = 5, startX = backBoundryStart.dx;
     // final netLine = Paint()
     //   ..color = MyTheme.secondaryColor
-    //   ..strokeWidth = strokeWidth * 2;
-    // while (startX < backBoundryEnd.dx) {
-    //   canvas.drawLine(Offset(startX, rightDoublePlaySideLineEnd.dy),
-    //       Offset(startX + dashWidth, rightDoublePlaySideLineEnd.dy), netLine);
-    //   startX += dashWidth + dashSpace;
-    // }
+    //   ..strokeWidth = strokeWidth * 1;
+    while (startX < backBoundryEnd.dx-3) {
+      canvas.drawLine(Offset(startX, rightDoublePlaySideLineEnd.dy),
+          Offset(startX + dashWidth, rightDoublePlaySideLineEnd.dy), line);
+      startX += dashWidth + dashSpace;
+    }
+
+    // canvas.drawLine(
+    //     Offset(backBoundryStart.dx, rightDoublePlaySideLineEnd.dy),
+    //     Offset(backBoundryEnd.dx, rightDoublePlaySideLineEnd.dy),
+    //     line);
+
+    int additionalLength = 70;
+
+        canvas.drawLine(Offset(leftDoublePlaySideLineEnd.dx, leftDoublePlaySideLineEnd.dy), Offset(leftDoublePlaySideLineEnd.dx, leftDoublePlaySideLineEnd.dy + additionalLength), line);
+        canvas.drawLine(Offset(leftSinglePlaySideLineEnd.dx, leftSinglePlaySideLineEnd.dy), Offset(leftSinglePlaySideLineEnd.dx, leftSinglePlaySideLineEnd.dy + additionalLength), line);
+        canvas.drawLine(Offset(rightSinglePlaySideLineEnd.dx, rightSinglePlaySideLineEnd.dy), Offset(rightSinglePlaySideLineEnd.dx, rightSinglePlaySideLineEnd.dy + additionalLength), line);
+        canvas.drawLine(Offset(rightDoublePlaySideLineEnd.dx, rightDoublePlaySideLineEnd.dy), Offset(rightDoublePlaySideLineEnd.dx, rightDoublePlaySideLineEnd.dy + additionalLength), line);
+
   }
 
   @override

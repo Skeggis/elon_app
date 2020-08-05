@@ -2,20 +2,18 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:myapp/services/models/Program.dart';
-import 'package:myapp/services/models/Routine.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
 
-class ProgramsModel extends Model{
+class ProgramsModel extends Model {
+  final String url = 'https://elon-server.herokuapp.com/programs';
 
-
- List<Program> _programs;
+  List<Program> _programs;
   List<Program> get programs => _programs;
 
-  Future fetchPrograms() async {
+  Future<void> fetchPrograms() async {
     try {
-      var response =
-          await http.get('https://elon-server.herokuapp.com/programs');
+      var response = await http.get(url);
       if (response.statusCode == 200) {
         var jsonPrograms = jsonDecode(response.body)['programs'] as List;
         _programs =
@@ -26,18 +24,16 @@ class ProgramsModel extends Model{
       print('error fetching programs');
       print(e);
     }
+    return null;
   }
 
   Program _currentProgram;
   Program get currentProgram => _currentProgram;
 
-
-
   Future fetchProgram(id) async {
     try {
       print(id);
-      var response =
-          await http.get('https://elon-server.herokuapp.com/programs/$id');
+      var response = await http.get('$url/$id');
       if (response.statusCode == 200) {
         var jsonProgram = jsonDecode(response.body)['result'];
         _currentProgram = Program.fromJson(jsonProgram);
@@ -50,24 +46,11 @@ class ProgramsModel extends Model{
     }
   }
 
-  Program _createProgram = new Program(sets: 3, timeout: 59, routines: List<Routine>());
-  Program get createProgram => _createProgram;
 
-  void setSets(int sets){
-    _createProgram.sets = sets;
-    notifyListeners();
-  }  
 
-  void setSetsTimeout(int timeout){
-    _createProgram.timeout = timeout;
-    notifyListeners();
-  }
 
-  void addCreateRoutine(){
-    
-  } 
 
-    static ProgramsModel of(BuildContext context,
+  static ProgramsModel of(BuildContext context,
           {bool rebuildOnChange = false}) =>
       ScopedModel.of<ProgramsModel>(context,
           rebuildOnChange: rebuildOnChange == null ? false : rebuildOnChange);

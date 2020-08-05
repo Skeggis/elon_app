@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:myapp/routes/router.dart' as router;
 import 'package:myapp/styles/theme.dart';
 
-import 'package:myapp/services/models/DeviceModel.dart';
+import 'package:myapp/services/models/scopedModels/DeviceModel.dart';
 import 'package:myapp/services/models/UIModel.dart';
 import 'package:scoped_model/scoped_model.dart';
 

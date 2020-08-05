@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/components/screens/CompeteScreen/components/PlayersModal/components/body.dart';
 import 'package:myapp/styles/theme.dart';
 
-import 'package:myapp/services/models/PlayersModel.dart';
+import 'package:myapp/services/models/scopedModels/PlayersModel.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class PlayersModal extends ModalRoute<void> {
