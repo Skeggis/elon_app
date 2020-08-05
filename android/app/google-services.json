@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "975647154897",
+    "firebase_url": "https://elonapp.firebaseio.com",
+    "project_id": "elonapp",
+    "storage_bucket": "elonapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975647154897:android:2e65c209442c5dec375bf0",
+        "android_client_info": {
+          "package_name": "com.example.myapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "975647154897-b72hk8oue8ekpj6hefch0ip3olnvihg7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myapp",
+            "certificate_hash": "fe3a0afa39026fc063afd535d27e10ff30922188"
+          }
+        },
+        {
+          "client_id": "975647154897-dhp1m46bdqfbkue4l323npge14mjmlkj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDU_h3RVYIu0j7q8tgrFgC1or_KcBvoC2o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "975647154897-dhp1m46bdqfbkue4l323npge14mjmlkj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

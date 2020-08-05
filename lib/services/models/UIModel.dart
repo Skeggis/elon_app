@@ -4,6 +4,14 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:myapp/routes/Routes.dart';
 
 class UIModel extends Model {
+  bool _loading = false;
+  bool get loading => _loading;
+
+  void setLoading(bool isLoading) {
+    _loading = isLoading;
+    notifyListeners();
+  }
+
   String _route = Routes.home;
   String get route => _route;
   void changeRoute(String newRoute) {

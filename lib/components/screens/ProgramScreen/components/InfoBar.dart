@@ -1,13 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:myapp/components/CustomInput/CustomInput.dart';
 import 'package:myapp/components/CustomTimePicker/CustomTimePicker.dart';
 import 'package:myapp/services/helper.dart';
 import 'package:myapp/services/models/scopedModels/CreateProgramModel.dart';
-import 'package:myapp/services/models/scopedModels/DeviceModel.dart';
 import 'package:myapp/services/models/Program.dart';
-import 'package:myapp/services/models/scopedModels/ProgramsModel.dart';
 import 'package:myapp/styles/theme.dart';
 
 class ProgramInfoBar extends StatelessWidget {

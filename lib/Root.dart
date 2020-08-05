@@ -17,14 +17,29 @@ import 'package:myapp/routes/Routes.dart';
 
 import 'package:myapp/services/models/UIModel.dart';
 
+import 'package:myapp/services/models/UserModel.dart';
+import 'package:myapp/components/screens/LoginSignUpScreen/LoginScreen.dart';
+
+import 'package:myapp/services/UsersPreferences.dart';
+
 class Root extends StatelessWidget {
-  static const String routeName = '/';
+  static const String routeName = '/root';
   @override
   Widget build(BuildContext context) {
+    // bool isLoggedIn = UserModel.of(context, rebuildOnChange: true).isLoggedIn;
+
+    // if (!isLoggedIn) {
+    //   return LoginScreen();
+    // }
+
     String route = UIModel.of(context, rebuildOnChange: true).route;
+    print("Rebuilding!: ${route}");
     Widget screen;
     Widget fab;
     String screenTitle = "Elon";
+    if (route == Routes.login) {
+      return new LoginScreen();
+    }
     switch (route) {
       case Routes.home:
         screen = HomeScreen();
@@ -49,20 +64,33 @@ class Root extends StatelessWidget {
         screenTitle = 'Compete';
         break;
       default:
-        screen = Container();
+        screen = LoginScreen();
         screenTitle = "Not Found";
     }
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      drawer: AppDrawer(),
-      floatingActionButton: fab,
-      appBar: AppBar(
-        backgroundColor: MyTheme.barBackgroundColor,
-        elevation: 0.0,
-        title: Text(screenTitle),
-      ),
-      backgroundColor: MyTheme.backgroundColor,
-      body: screen,
-    );
+
+    bool loading = UIModel.of(context, rebuildOnChange: true).loading;
+    return FutureBuilder<bool>(
+        future: UsersPreferences.isLoggedIn(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.hasData && snapshot.data) {
+            return Stack(children: [
+              Scaffold(
+                resizeToAvoidBottomInset: true,
+                drawer: AppDrawer(),
+                floatingActionButton: fab,
+                appBar: AppBar(
+                  backgroundColor: MyTheme.barBackgroundColor,
+                  elevation: 0.0,
+                  title: Text(screenTitle),
+                ),
+                backgroundColor: MyTheme.backgroundColor,
+                body: screen,
+              ),
+              loading ? Center(child: CircularProgressIndicator()) : Container()
+            ]);
+          } else {
+            return LoginScreen();
+          }
+        });
   }
 }

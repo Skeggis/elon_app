@@ -5,7 +5,7 @@ import 'package:myapp/services/models/Player.dart';
 import 'package:myapp/services/models/scopedModels/PlayersModel.dart';
 
 class PlayersModalBody extends StatelessWidget {
-  double searchBarHeight = 50;
+  // double searchBarHeight = 50;
 
   Widget playerItem(BuildContext context, Player player) {
     double borderRadius = 10;
@@ -88,24 +88,23 @@ class PlayersModalBody extends StatelessWidget {
     controller.addListener(() {
       PlayersModel.of(context).newSearch(controller.text);
     });
+    // return Container(
+    //   height: 200,
+    //   decoration: BoxDecoration(color: Colors.blue),
+    // );
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        SizedBox(height: 20),
-        SearchBar(height: searchBarHeight, controller: controller),
-        SizedBox(height: 20),
-        Expanded(
-          flex: 1,
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onPanDown: (_) {
-              FocusScope.of(context).requestFocus(FocusNode());
-            },
-            child: playersList(context),
-          ),
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onPanDown: (_) {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: playersList(context),
         ),
-        cancelButton(context),
-        SizedBox(height: 20),
+        // cancelButton(context),
+        // SizedBox(height: 20),
       ],
     );
   }
@@ -127,14 +126,13 @@ class PlayersModalBody extends StatelessWidget {
             return RefreshIndicator(
               color: Theme.of(context).splashColor,
               onRefresh: PlayersModel.of(context).fetchAllPlayers,
-              child: Container(
-                child: ListView(
-                  children: [
-                    SizedBox(height: 20),
-                    for (Player player in players) playerItem(context, player),
-                    SizedBox(height: 35),
-                  ],
-                ),
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  // SizedBox(height: 20),
+                  // for (Player player in players) playerItem(context, player),
+                  // SizedBox(height: 35),
+                ],
               ),
             );
           }

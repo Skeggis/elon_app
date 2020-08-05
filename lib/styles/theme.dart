@@ -78,6 +78,7 @@ ThemeData appTheme(context) {
       ),
       primaryColor: Colors.white,
     ),
+
     cursorColor: MyTheme.secondaryColor,
     scaffoldBackgroundColor: MyTheme.backgroundColor,
     inputDecorationTheme: InputDecorationTheme(

@@ -4,6 +4,7 @@ import 'package:myapp/routes/Routes.dart';
 import 'package:myapp/services/models/UIModel.dart';
 
 import 'package:myapp/styles/theme.dart';
+import 'package:myapp/services/models/UserModel.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -108,6 +109,16 @@ class AppDrawer extends StatelessWidget {
               icon: Icons.settings,
               text: 'Settings',
             ),
+            _divider(),
+            _createDrawerItem(
+                icon: Icons.exit_to_app,
+                text: 'Logout',
+                onTap: () {
+                  Navigator.pop(context);
+
+                  UserModel.of(context).logout();
+                  UIModel.of(context).changeRoute(Routes.login);
+                }),
             _divider(),
             ListTile(
               title: Text('v. 1.0.1',
