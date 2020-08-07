@@ -20,6 +20,7 @@ class RoutineListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     Future<void> showTimeoutDialog(BuildContext myContext) {
       return showDialog(
         context: context,
@@ -119,7 +120,9 @@ class RoutineListItem extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: RoutineDescription(routineDesc: routine.routineDesc),
+                child: RoutineDescription(routineDesc: routine.routineDesc, 
+                  handleDelete: creating ? () => CreateProgramModel.of(context).removeRoutine(index) : null,
+                ),
               ),
             ],
           ),

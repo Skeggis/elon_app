@@ -53,8 +53,8 @@ class Root extends StatelessWidget {
         screen = ProgramsScreen();
         screenTitle = 'Programs';
         fab = FloatingActionButton(
-          onPressed: () {
-            Navigator.pushNamed(context, ProgramScreenCreate.routeName);
+          onPressed: () async {
+            await Navigator.pushNamed(context, ProgramScreenCreate.routeName);
           },
           child: Icon(Icons.add),
         );
@@ -79,11 +79,11 @@ class Root extends StatelessWidget {
                 drawer: AppDrawer(),
                 floatingActionButton: fab,
                 appBar: AppBar(
-                  backgroundColor: MyTheme.barBackgroundColor,
+                  // backgroundColor: MyTheme.barBackgroundColor,
                   elevation: 0.0,
                   title: Text(screenTitle),
                 ),
-                backgroundColor: MyTheme.backgroundColor,
+                // backgroundColor: MyTheme.backgroundColor,
                 body: screen,
               ),
               loading ? Center(child: CircularProgressIndicator()) : Container()

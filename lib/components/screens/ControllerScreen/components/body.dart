@@ -38,7 +38,7 @@ class ControllerScreenBody extends StatelessWidget {
                   child: Material(
                     color: Colors.transparent,
                     child: InkWell(
-                        splashColor: MyTheme.primaryColor,
+                        splashColor: Theme.of(context).primaryColor,
                         splashFactory: CustomSplashFactory(),
                         highlightColor: Colors.transparent,
                         onTap: () {},
@@ -54,7 +54,7 @@ class ControllerScreenBody extends StatelessWidget {
         DeviceModel.of(context, rebuildOnChange: true).setupLoading;
     return Container(
       decoration:
-          BoxDecoration(color: MyTheme.backgroundColor.withOpacity(0.25)),
+          BoxDecoration(color: Theme.of(context).backgroundColor.withOpacity(0.25)),
       child: Center(
         child: !setupLoading
             ? Elon()
@@ -75,7 +75,7 @@ class ControllerScreenBody extends StatelessWidget {
     //TODO: change curve depending on type of shot.
     return Container(
       constraints: BoxConstraints.expand(),
-      decoration: BoxDecoration(color: MyTheme.backgroundColor),
+      decoration: BoxDecoration(color: Theme.of(context).backgroundColor),
       child: Stack(
         children: [
           Align(alignment: Alignment(0, -0.95), child: mainThings(context)),

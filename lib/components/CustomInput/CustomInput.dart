@@ -59,7 +59,7 @@ class _CustomInput extends State<CustomInput> {
         border: InputBorder.none,
         enabledBorder: InputBorder.none,
         focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: MyTheme.secondaryColor),
+          borderSide: BorderSide(color: Theme.of(context).splashColor),
         ),
       ),
       keyboardType: widget.keyboardType,

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:myapp/components/CustomSnackBar/CustomSnackBar.dart';
 import 'package:myapp/components/screens/CreateRoutineScreen/arguments/CreateRoutineArguments.dart';
 import 'package:myapp/components/screens/ProgramScreen/components/body.dart';
 import 'package:myapp/components/screens/ProgramsScreen/ProgramsScreen.dart';
@@ -18,8 +19,9 @@ class ProgramScreenCreate extends StatelessWidget {
   Widget build(BuildContext context) {
     final CreateProgramModel myModel = CreateProgramModel();
 
-    Future<void> createFinalDialog(CreateProgramModel model, myContext) {
-      return showDialog(
+    Future<Map<String, dynamic>> createFinalDialog(
+        CreateProgramModel model, myContext) async {
+      Map test = await  showDialog<Map<String, dynamic>>(
         context: context,
         builder: (dialogContext) => AlertDialog(
           title: Text('Insert information'),
@@ -51,6 +53,7 @@ class ProgramScreenCreate extends StatelessWidget {
                       model.setName('');
                       model.setDescription('');
                       Navigator.pop(dialogContext);
+                      return {'success': true};
                     },
               child: Text(
                 'Cancel',
@@ -61,15 +64,29 @@ class ProgramScreenCreate extends StatelessWidget {
               onPressed: model.createProgramLoading
                   ? null
                   : () async {
-                      Navigator.pop(dialogContext);
-                      await model.createProgram();
-                      Navigator.pop(myContext);
+                      bool success = await model.validate(context);
+                      print(success);
+                      if (success) {
+                        print('ble');
+                        Navigator.pop(dialogContext);
+                        Map<String, dynamic> create =
+                            await model.createProgram(myContext);
+                        if (create['success']) {
+                          Navigator.pop(myContext);
+                        }
+                      } else {
+                        print('her');
+                 
+                        
+                      }
+                      
                     },
               child: Text('Save'),
             )
           ],
         ),
       );
+      return test;
     }
 
     return ScopedModel<CreateProgramModel>(
@@ -82,49 +99,52 @@ class ProgramScreenCreate extends StatelessWidget {
         ),
         body: ProgramScreenBodyCreate(),
         floatingActionButton: ScopedModelDescendant<CreateProgramModel>(
-          builder: (scopedContext, child, model) =>
-              model.program.routines.length == 0
-                  ? FloatingActionButton(
-                      onPressed: () async {
-                        var createdRoutine = await Navigator.pushNamed(
-                          context,
-                          '/createRoutine',
-                          arguments:
-                              CreateRoutineArguments(model.shotLocations),
-                        );
-                        model.addRoutine(createdRoutine);
-                      },
-                      child: Icon(Icons.add),
-                      heroTag: null,
-                    )
-                  : Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        FloatingActionButton(
-                          onPressed: () async {
-                            await createFinalDialog(model, scopedContext);
-                          },
-                          child: model.createProgramLoading
-                              ? CircularProgressIndicator()
-                              : Icon(Icons.save),
-                          heroTag: null,
-                        ),
-                        SizedBox(height: 10),
-                        FloatingActionButton(
-                          onPressed: () async {
-                            var createdRoutine = await Navigator.pushNamed(
-                              context,
-                              '/createRoutine',
-                              arguments:
-                                  CreateRoutineArguments(model.shotLocations),
-                            );
-                            model.addRoutine(createdRoutine);
-                          },
-                          child: Icon(Icons.add),
-                          heroTag: null,
-                        )
-                      ],
-                    ),
+          builder: (scopedContext, child, model) => Builder(
+            builder: (context) => model.program.routines.length == 0
+                ? FloatingActionButton(
+                    onPressed: () async {
+                      var createdRoutine = await Navigator.pushNamed(
+                        context,
+                        '/createRoutine',
+                        arguments: CreateRoutineArguments(model.shotLocations),
+                      );
+                      model.addRoutine(createdRoutine);
+                    },
+                    child: Icon(Icons.add),
+                    heroTag: null,
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      FloatingActionButton(
+                        onPressed: () async {
+                          
+                              await createFinalDialog(model, scopedContext);
+ 
+                        },
+                        child: model.createProgramLoading
+                            ? CircularProgressIndicator()
+                            : Icon(Icons.save),
+                        heroTag: null,
+                      ),
+                      SizedBox(width: 10),
+                      FloatingActionButton(
+                        onPressed: () async {
+                          var createdRoutine = await Navigator.pushNamed(
+                            context,
+                            '/createRoutine',
+                            arguments:
+                                CreateRoutineArguments(model.shotLocations),
+                          );
+                          model.addRoutine(createdRoutine);
+                        },
+                        child: Icon(Icons.add),
+                        heroTag: null,
+                      )
+                    ],
+                  ),
+          ),
         ),
       ),
     );

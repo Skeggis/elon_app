@@ -13,11 +13,9 @@ class SignUpScreen extends StatelessWidget {
         Scaffold(
             resizeToAvoidBottomInset: true,
             appBar: AppBar(
-              backgroundColor: MyTheme.barBackgroundColor,
               elevation: 0.0,
               title: Text('Sign Up'),
             ),
-            backgroundColor: MyTheme.backgroundColor,
             body: SignUpBody()),
         loading ? Center(child: CircularProgressIndicator()) : Container()
       ],

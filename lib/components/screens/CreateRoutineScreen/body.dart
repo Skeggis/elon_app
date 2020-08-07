@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:myapp/components/Dialogs/MessageDialog.dart';
 import 'package:myapp/components/screens/ControllerScreen/components/body.dart';
 import 'package:myapp/components/screens/CreateRoutineScreen/CreateShotDialog.dart';
 import 'package:myapp/components/screens/ProgramScreen/components/RoutineDescription.dart';
@@ -25,30 +26,26 @@ class CreateRoutineBody extends StatelessWidget {
 
   createAlertDialog(BuildContext context, title, message) {
     return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('OK',
-                style: TextStyle(color: MyTheme.secondaryColor, fontSize: 18)),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
-      ),
-    );
+        context: context,
+        builder: (context) => MessageDialog(
+              title: title,
+              message: message,
+              handleClose: () => Navigator.pop(context),
+            ));
   }
 
   @override
   Widget build(BuildContext context) {
+    CreateRoutineModel model =
+        CreateRoutineModel.of(context, rebuildOnChange: true);
+
     Widget court = Container(
       child: RepaintBoundary(
         child: Container(
           height: (screenWidth(context) - 30) * (6.7 / 6.1),
           width: screenWidth(context) - 30,
           child: CustomPaint(
-            painter: CourtPainter(testColor: Colors.grey[700]),
+            painter: CourtPainter(testColor: Colors.grey[800]),
           ),
         ),
       ),
@@ -86,6 +83,7 @@ class CreateRoutineBody extends StatelessWidget {
                                   alignment:
                                       mapLocationIdToAlignment(entry.value.id),
                                   child: IconButton(
+                                    iconSize: 28,
                                     icon: mapLocationIdToIcon(entry.value.id),
                                     onPressed: () async =>
                                         await createShotDialog(entry.value.id,
@@ -116,10 +114,7 @@ class CreateRoutineBody extends StatelessWidget {
                               : Container(
                                   margin: EdgeInsets.symmetric(horizontal: 20),
                                   child: RoutineDescription(
-                                    routineDesc: CreateRoutineModel.of(context,
-                                            rebuildOnChange: true)
-                                        .shots,
-                                    create: true,
+                                    routineDesc: model.shots,
                                   ),
                                 ),
                     ),

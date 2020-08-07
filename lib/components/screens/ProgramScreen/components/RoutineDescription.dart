@@ -6,16 +6,17 @@ import 'package:myapp/services/models/scopedModels/CreateRoutineModel.dart';
 
 class RoutineDescription extends StatelessWidget {
   final List<Shot> routineDesc;
-  final bool create;
+  final ScrollController scrollController;
+  final Function handleDelete;
 
-  RoutineDescription({this.routineDesc, this.create = false});
+  RoutineDescription({
+    this.routineDesc,
+    this.scrollController,
+    this.handleDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
-    ScrollController controller = create
-        ? CreateRoutineModel.of(context).scrollController
-        : new ScrollController();
-
     return Container(
       child: Material(
         elevation: 12,
@@ -25,24 +26,44 @@ class RoutineDescription extends StatelessWidget {
             ? Center(
                 child: Container(
                   padding: EdgeInsets.all(20),
-                  child: Text('Create a shot...', style: TextStyle(fontSize: 18),),
+                  child: Text(
+                    'Create a shot...',
+                    style: TextStyle(fontSize: 18),
+                  ),
                 ),
               )
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+            : Stack(
                 children: [
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    controller: controller,
-                    child: Container(
-                      padding: EdgeInsets.only(right: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: routineDesc
-                            .map((shot) => ShotDescription(shot: shot))
-                            .toList(),
-                      ),
+                  handleDelete != null
+                      ? Align(
+                          alignment: Alignment.topRight,
+                          child: IconButton(
+                            onPressed: handleDelete,
+                            icon: Icon(Icons.close),
+                          ),
+                        )
+                      : Container(),
+                  Container(
+                    padding:
+                        EdgeInsets.only(top: handleDelete != null ? 15 : 0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          controller: scrollController,
+                          child: Container(
+                            padding: EdgeInsets.only(right: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: routineDesc
+                                  .map((shot) => ShotDescription(shot: shot))
+                                  .toList(),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

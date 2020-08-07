@@ -16,13 +16,13 @@ class ProgramScreen extends StatelessWidget {
     return ScopedModel<ProgramsModel>(
       model: ProgramsModel(),
       child: Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
+        // backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Theme.of(context).appBarTheme.color,
           title: Text(args.name),
         ),
         body: ProgramScreenBody(args),
+        
       ),
     );
   }

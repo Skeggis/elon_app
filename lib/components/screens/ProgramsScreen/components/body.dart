@@ -11,6 +11,7 @@ class ProgramsScreenBody extends StatelessWidget {
     Future fetchPrograms = ProgramsModel.of(context).fetchPrograms();
 
     return RefreshIndicator(
+      
       color: Theme.of(context).splashColor,
       onRefresh: () {
         return ProgramsModel.of(context).fetchPrograms();

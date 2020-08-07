@@ -10,7 +10,6 @@ class ConnectElonScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: MyTheme.barBackgroundColor),
       child: StreamBuilder<BluetoothState>(
           stream: FlutterBlue.instance.state,
           builder: (context, snapshot) {

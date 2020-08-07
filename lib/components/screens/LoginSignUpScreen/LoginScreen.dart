@@ -15,7 +15,7 @@ class LoginScreen extends StatelessWidget {
       children: [
         Scaffold(
             resizeToAvoidBottomInset: true,
-            backgroundColor: MyTheme.backgroundColor,
+            backgroundColor: Theme.of(context).backgroundColor,
             body: LoginBody()),
         loading ? Center(child: CircularProgressIndicator()) : Container()
       ],

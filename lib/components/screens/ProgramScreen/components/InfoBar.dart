@@ -58,7 +58,7 @@ class ProgramInfoBar extends StatelessWidget {
 
     return Material(
       elevation: 12,
-      color: MyTheme.backgroundColor,
+      color: Theme.of(context).appBarTheme.color,
       child: Container(
         padding: EdgeInsets.only(bottom: 20, top: 20),
         child: Row(

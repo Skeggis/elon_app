@@ -62,9 +62,9 @@ class MainButton extends StatelessWidget {
       onPressed: () {},
       child: Text(
         "Quick Play",
-        style: TextStyle(fontSize: 24),
+        style: TextStyle(fontSize: 24, color: Colors.black),
       ),
-      color: MyTheme.secondaryColor,
+      color: Theme.of(context).accentColor,
       padding: EdgeInsets.all(15),
       minWidth: screenWidth(context) * 0.7,
       shape: StadiumBorder(),
@@ -84,7 +84,7 @@ class NormalButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: this.onClick,
-      color: MyTheme.primaryColor,
+      color: Theme.of(context).primaryColor,
       child: Text(this.title == null ? 'Click me!' : this.title,
           style: TextStyle(fontSize: 20)),
       colorBrightness: Brightness.dark,
