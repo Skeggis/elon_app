@@ -10,6 +10,8 @@ class Shot {
   int vertical;
   int power;
 
+  int displayTimeout;
+
   Shot({
     this.id,
     this.shotType,
@@ -19,7 +21,15 @@ class Shot {
     this.horizontal,
     this.vertical,
     this.power,
-  });
+  }) {
+    displayTimeout = timeout;
+  }
+
+  void resetDisplay() {
+    displayTimeout = timeout;
+  }
+
+
 
   factory Shot.fromJson(dynamic json) {
     var shotType = ShotType.fromJson(json['shotType']);
@@ -36,13 +46,17 @@ class Shot {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'shotType': shotType.toJson(),
-    'locationName': locationName,
-    'locationId': locationId,
-    'timeout': timeout,
-    'horizontal': horizontal,
-    'vertical': vertical,
-    'power': power,
-  };
+        'id': id,
+        'shotType': shotType.toJson(),
+        'locationName': locationName,
+        'locationId': locationId,
+        'timeout': timeout,
+        'horizontal': horizontal,
+        'vertical': vertical,
+        'power': power,
+      };
+
+      String toString(){
+        return '{${this.timeout},${this.horizontal},${this.vertical},${this.power}}';
+      }
 }

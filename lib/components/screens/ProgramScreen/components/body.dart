@@ -4,9 +4,8 @@ import 'package:myapp/components/screens/ProgramScreen/arguments/ProgramScreenAr
 import 'package:myapp/components/screens/ProgramScreen/components/InfoBar.dart';
 import 'package:myapp/components/screens/ProgramScreen/components/RoutinesList.dart';
 import 'package:myapp/services/models/scopedModels/CreateProgramModel.dart';
-import 'package:myapp/services/models/scopedModels/DeviceModel.dart';
 import 'package:myapp/services/models/Program.dart';
-import 'package:myapp/services/models/scopedModels/ProgramsModel.dart';
+import 'package:myapp/services/models/scopedModels/ProgramModel.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ProgramScreenBody extends StatelessWidget {
@@ -17,10 +16,10 @@ class ProgramScreenBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ProgramsModel.of(context).fetchProgram(args.id),
+      future: ProgramModel.of(context).fetchProgram(args.id),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          Program program = ProgramsModel.of(context).currentProgram;
+          Program program = ProgramModel.of(context).program;
 
           return Container(
             child: Column(
@@ -50,6 +49,7 @@ class ProgramScreenBodyCreate extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return ScopedModelDescendant<CreateProgramModel>(
+            rebuildOnChange: true,
             builder: (context, child, model) => Container(
               child: Column(
                 children: <Widget>[

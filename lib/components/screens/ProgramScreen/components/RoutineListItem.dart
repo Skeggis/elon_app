@@ -4,8 +4,10 @@ import 'package:myapp/components/CustomInput/CustomInput.dart';
 import 'package:myapp/components/CustomTimePicker/CustomTimePicker.dart';
 import 'package:myapp/components/screens/ProgramScreen/components/RoutineDescription.dart';
 import 'package:myapp/services/helper.dart';
+import 'package:myapp/services/models/Program.dart';
 import 'package:myapp/services/models/Routine.dart';
 import 'package:myapp/services/models/scopedModels/CreateProgramModel.dart';
+import 'package:myapp/services/models/scopedModels/ProgramModel.dart';
 
 class RoutineListItem extends StatelessWidget {
   final Routine routine;
@@ -20,7 +22,6 @@ class RoutineListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     Future<void> showTimeoutDialog(BuildContext myContext) {
       return showDialog(
         context: context,
@@ -36,24 +37,76 @@ class RoutineListItem extends StatelessWidget {
       );
     }
 
-    Widget numRounds = creating
-        ? Column(
-            mainAxisSize: MainAxisSize.min,
+    String getPlayingRoundText() {
+      ProgramModel model = ProgramModel.of(context, rebuildOnChange: true);
+      if (index < model.currentRoutine) {
+        return routine.rounds.toString();
+      } else if (index == model.currentRoutine) {
+        return (model.currentRoutineRound + 1).toString();
+      } else {
+        return '0';
+      }
+    }
+
+    Widget leading = creating
+        ? Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              SizedBox(
-                width: 40,
-                child: CustomInput(
-                  initialText: routine.rounds.toString(),
-                  onFocusLost: (controller) => CreateProgramModel.of(context)
-                      .onRoundsFocusLost(controller, index),
-                ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: 40,
+                    child: CustomInput(
+                      initialText: routine.rounds.toString(),
+                      onFocusLost: (controller) =>
+                          CreateProgramModel.of(context)
+                              .onRoundsFocusLost(controller, index),
+                    ),
+                  )
+                ],
+              ),
+              Icon(
+                Icons.clear,
+                size: 20,
               )
             ],
           )
-        : Text(
-            '${routine.rounds}',
-            style: TextStyle(fontSize: 24),
-          );
+        : ProgramModel.of(context, rebuildOnChange: true).playing
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: getPlayingRoundText(),
+                          style: TextStyle(fontSize: 24)),
+                      TextSpan(
+                          text: '/${routine.rounds}',
+                          style: TextStyle(fontSize: 16))
+                    ]),
+                  ),
+                  Text(
+                    'Rounds',
+                    style: TextStyle(fontSize: 12),
+                  )
+                ],
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                    Text(
+                      '${routine.rounds}',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                    Text(
+                      'Rounds',
+                      style: TextStyle(fontSize: 12),
+                    )
+                  ]);
 
     Widget roundTimeout = creating
         ? Row(
@@ -83,15 +136,34 @@ class RoutineListItem extends StatelessWidget {
                   ),
                 ),
               ])
-        : RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                    text: '${secondsToMinutes(routine.timeout)}',
-                    style: TextStyle(fontSize: 24)),
-                TextSpan(text: ' rest', style: TextStyle(fontSize: 16))
-              ],
-            ),
+        : Stack(
+            children: [
+              Container(
+                padding: EdgeInsets.all(8),
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text:
+                              '${secondsToMinutes(ProgramModel.of(context, rebuildOnChange: true).program.routines[index].displayTimeout)}',
+                          style: TextStyle(fontSize: 24)),
+                      TextSpan(text: ' rest', style: TextStyle(fontSize: 16))
+                    ],
+                  ),
+                ),
+              ),
+              ProgramModel.of(context, rebuildOnChange: true).isRoutineResting(index)
+                  ? Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Icon(
+                        Icons.brightness_1,
+                        size: 8,
+                        color: Theme.of(context).accentColor,
+                      ),
+                    )
+                  : SizedBox.shrink()
+            ],
           );
 
     return Container(
@@ -103,25 +175,21 @@ class RoutineListItem extends StatelessWidget {
               Container(
                 margin: EdgeInsets.only(right: 10),
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minWidth: 50,
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      numRounds,
-                      Icon(
-                        Icons.clear,
-                        size: 20,
-                      )
-                    ],
-                  ),
-                ),
+                    constraints: BoxConstraints(
+                      minWidth: 50,
+                    ),
+                    child: leading),
               ),
               Expanded(
-                child: RoutineDescription(routineDesc: routine.routineDesc, 
-                  handleDelete: creating ? () => CreateProgramModel.of(context).removeRoutine(index) : null,
+                child: RoutineDescription(
+                  creating: creating,
+                  index: index,
+                  routineDesc: routine.routineDesc,
+                  scrollController: creating ? null : ProgramModel.of(context).scrollControllers[index],
+                  handleDelete: creating
+                      ? () =>
+                          CreateProgramModel.of(context).removeRoutine(index)
+                      : null,
                 ),
               ),
             ],

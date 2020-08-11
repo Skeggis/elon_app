@@ -114,7 +114,9 @@ class CreateRoutineBody extends StatelessWidget {
                               : Container(
                                   margin: EdgeInsets.symmetric(horizontal: 20),
                                   child: RoutineDescription(
+                                    creating: true,
                                     routineDesc: model.shots,
+                                    scrollController: CreateRoutineModel.of(context).scrollController,
                                   ),
                                 ),
                     ),

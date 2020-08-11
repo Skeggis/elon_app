@@ -11,6 +11,8 @@ class Program {
   int numShots;
   List<Routine> routines = new List<Routine>();
 
+  int displayTimeout;
+
   Program({
     this.id,
     this.name,
@@ -21,7 +23,13 @@ class Program {
     this.totalTime,
     this.timeout,
     this.routines,
-  });
+  }){
+    displayTimeout = timeout;
+  }
+
+  void resetDisplay(){
+    displayTimeout = timeout;
+  }
 
   factory Program.fromJson(dynamic json) {
     if (json['routines'] == null) {

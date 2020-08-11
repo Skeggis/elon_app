@@ -5,30 +5,49 @@ import 'package:myapp/components/CustomTimePicker/CustomTimePicker.dart';
 import 'package:myapp/services/helper.dart';
 import 'package:myapp/services/models/scopedModels/CreateProgramModel.dart';
 import 'package:myapp/services/models/Program.dart';
+import 'package:myapp/services/models/scopedModels/ProgramModel.dart';
 import 'package:myapp/styles/theme.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class ProgramInfoBar extends StatelessWidget {
   final bool creating;
   final Program program;
 
-  ProgramInfoBar({this.creating = false, this.program});
+  ProgramInfoBar({
+    this.creating = false,
+    this.program,
+  });
 
   @override
   Widget build(BuildContext context) {
-  
-
     Widget sets = creating
         ? SizedBox(
             width: 50,
             height: 50,
             child: CustomInput(
-              initialText: CreateProgramModel.of(context).program.sets.toString(),
-              onFocusLost: (controller) => CreateProgramModel.of(context).onSetsFocusLost(controller),
+              initialText:
+                  CreateProgramModel.of(context).program.sets.toString(),
+              onFocusLost: (controller) =>
+                  CreateProgramModel.of(context).onSetsFocusLost(controller),
             ),
           )
-        : Text(
-            program.sets.toString(),
-            style: TextStyle(fontSize: 24),
+        : ScopedModelDescendant<ProgramModel>(
+            rebuildOnChange: true,
+            builder: (context, child, model) => model.playing
+                ? RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: '${model.currentSet + 1}',
+                          style: TextStyle(fontSize: 24)),
+                      TextSpan(
+                          text: '/${program.sets}',
+                          style: TextStyle(fontSize: 16))
+                    ]),
+                  )
+                : Text(
+                    program.sets.toString(),
+                    style: TextStyle(fontSize: 24),
+                  ),
           );
 
     Future<void> showTimeDialog(BuildContext myContext) async {
@@ -37,7 +56,8 @@ class ProgramInfoBar extends StatelessWidget {
         builder: (context) => CustomTimePicker(
           timerMode: CupertinoTimerPickerMode.ms,
           handleTimerDurationChange: (Duration duration) =>
-              CreateProgramModel.of(myContext).setSetsTimeout(duration.inSeconds),
+              CreateProgramModel.of(myContext)
+                  .setSetsTimeout(duration.inSeconds),
           initialDuration: Duration(seconds: program.timeout),
         ),
       );
@@ -51,9 +71,28 @@ class ProgramInfoBar extends StatelessWidget {
               style: TextStyle(fontSize: 24, color: Colors.white),
             ),
           )
-        : Text(
-            secondsToMinutes(program.timeout),
-            style: TextStyle(fontSize: 24),
+        : Stack(
+            children: [
+              Container(
+                padding: EdgeInsets.only(right: 8, left: 8, top: 8),
+                child: Text(
+                  secondsToMinutes(
+                      ProgramModel.of(context, rebuildOnChange: true)
+                          .program
+                          .displayTimeout),
+                  style: TextStyle(fontSize: 24),
+                ),
+              ),ProgramModel.of(context, rebuildOnChange: true).setResting ? 
+              Positioned(
+                top: 0,
+                right: 0,
+                child: Icon(
+                  Icons.brightness_1,
+                  color: Theme.of(context).accentColor,
+                  size: 8,
+                ),
+              ) :SizedBox.shrink()
+            ],
           );
 
     return Material(

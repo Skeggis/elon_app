@@ -94,14 +94,14 @@ class DeviceModel extends Model {
         _start = true;
         _setupLoading = false;
         String command = "!";
-        _sendCommand(command);
+        sendCommand(command);
         notifyListeners();
         print("Timer!");
       });
     } else {
       _start = false;
       _setupLoading = false;
-      _sendCommand('?');
+      sendCommand('?');
       notifyListeners();
     }
   }
@@ -182,15 +182,17 @@ class DeviceModel extends Model {
         delay: delay,
         globalPosition: _globalShotLocation);
     print("THeShot: $theShot");
-    _sendCommand(theShot.toString());
+    sendCommand(theShot.toString());
 
     notifyListeners();
   }
 
 //Todo: Now the command writes to ALL characteristics of the connected device. Only send to the one with the correct id?
-  void _sendCommand(String command) async {
+  Future sendCommand(String command) async {
     if (!(await readyForSending())) return;
     print("Sending command: $command");
+
+    Function write = _writeToElon();
 
     int maxMessageLength = 70; //75 brings OK+Lost.
     for (var i = 0; i < command.length; i += maxMessageLength) {
@@ -199,9 +201,7 @@ class DeviceModel extends Model {
           i + maxMessageLength > command.length
               ? command.length
               : i + maxMessageLength);
-      _elonServices[0]
-          .characteristics[0]
-          .write(utf8.encode(message), withoutResponse: true);
+      await write(message);
     }
     print("Command Sent!");
   }
@@ -213,9 +213,42 @@ class DeviceModel extends Model {
     return true;
   }
 
-  
+  Function _writeToElon() {
+    for (int i = 0; i < _elonServices.length; i++) {
+      for (int j = 0; j < _elonServices[i].characteristics.length; j++) {
+        if (_elonServices[i]
+            .characteristics[j]
+            .properties
+            .writeWithoutResponse) {
+          return (String message) {
+            _elonServices[i]
+                .characteristics[j]
+                .write(utf8.encode(message), withoutResponse: true);
+          };
+        }
+      }
+    }
+    return (String message) => print('Error: writing charactaristic not found');
+  }
 
-  
+  BluetoothCharacteristic char;
+  Future test() async {
+    for (int i = 0; i < _elonServices.length; i++) {
+      for (int j = 0; j < _elonServices[i].characteristics.length; j++) {
+        if (_elonServices[i].characteristics[j].properties.read) {
+          char = _elonServices[i].characteristics[j];
+          var sub = char.value.listen((event) {
+            print('GOT BLUETOOTH MESSAGE');
+            print(event);
+            print(utf8.decode(event));
+          });
+
+          await char.read();
+          sub.cancel();
+        }
+      }
+    }
+  }
 
   static DeviceModel of(BuildContext context, {bool rebuildOnChange = false}) =>
       ScopedModel.of<DeviceModel>(context,

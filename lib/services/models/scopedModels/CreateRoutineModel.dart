@@ -3,6 +3,7 @@ import 'package:myapp/services/models/Routine.dart';
 import 'package:myapp/services/models/Shot.dart';
 import 'package:myapp/services/models/ShotLocation.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class CreateRoutineModel extends Model {
   final int _initialTimeout = 1;
@@ -49,10 +50,10 @@ class CreateRoutineModel extends Model {
 
     _shots.add(myShot);
 
-    if (_scrollController.hasClients) {
+    if (_scrollController.isAttached) {
       Future.delayed(Duration(milliseconds: 100), () {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
+        _scrollController.scrollTo(
+          index: shots.length -1,
           duration: Duration(milliseconds: 500),
           curve: Curves.easeOut,
         );
@@ -66,8 +67,8 @@ class CreateRoutineModel extends Model {
     return new Routine(routineDesc: shots);
   }
 
-  ScrollController _scrollController = ScrollController();
-  ScrollController get scrollController => _scrollController;
+  ItemScrollController _scrollController = ItemScrollController();
+  ItemScrollController get scrollController => _scrollController;
 
   static CreateRoutineModel of(BuildContext context,
           {bool rebuildOnChange = false}) =>
