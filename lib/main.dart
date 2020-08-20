@@ -9,6 +9,7 @@ import 'package:scoped_model/scoped_model.dart';
 
 import 'package:myapp/Root.dart';
 import 'package:myapp/services/models/UserModel.dart';
+import 'package:myapp/services/models/scopedModels/OrganizationModel.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,16 +32,19 @@ class MyApp extends StatelessWidget {
         model: UIModel(),
         child: ScopedModel<UserModel>(
           model: UserModel(),
-          child: GestureDetector(
-            onTap: () {
-              WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
-            },
-            child: MaterialApp(
-                debugShowCheckedModeBanner: false,
-                // showSemanticsDebugger: true,
-                theme: the.themeData,
-                routes: router.routes,
-                initialRoute: Root.routeName),
+          child: ScopedModel<OrganizationModel>(
+            model: OrganizationModel(),
+            child: GestureDetector(
+              onTap: () {
+                WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
+              },
+              child: MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  // showSemanticsDebugger: true,
+                  theme: the.themeData,
+                  routes: router.routes,
+                  initialRoute: Root.routeName),
+            ),
           ),
         ),
       ),

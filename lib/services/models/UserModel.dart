@@ -168,14 +168,15 @@ class UserModel extends Model {
     if (_isLoggedIn) notifyListeners();
   }
 
-  Future<bool> signUp(
-      String email, String password, String confirmPassword) async {
+  Future<bool> signUp(String email, String name, String password,
+      String confirmPassword) async {
     print("Sending in SignUp: $email $password $confirmPassword");
     try {
       var url = 'https://elon-server.herokuapp.com/users/signUp';
 
       Map data = {
         'email': email,
+        'name': name,
         'password': password,
         'confirmPassword': confirmPassword
       };

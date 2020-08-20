@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/components/screens/LoginSignUpScreen/components/LoginBody.dart';
+import 'package:myapp/components/screens/LoginSignUpScreen/components/InitialBody.dart';
 import 'package:myapp/styles/theme.dart';
 import 'package:myapp/services/models/UserModel.dart';
 import 'package:myapp/services/models/UIModel.dart';
 
-class LoginScreen extends StatelessWidget {
-  static const String routeName = '/Login';
+class InitialScreen extends StatelessWidget {
+  static const String routeName = '/Initial';
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +14,9 @@ class LoginScreen extends StatelessWidget {
     return Stack(
       children: [
         Scaffold(
-            appBar: AppBar(
-              backgroundColor: MyTheme.barBackgroundColor,
-              elevation: 0.0,
-              title: Text('Login'),
-            ),
             resizeToAvoidBottomInset: true,
             backgroundColor: MyTheme.backgroundColor,
-            body: LoginBody()),
+            body: InitialBody()),
         loading ? Center(child: CircularProgressIndicator()) : Container()
       ],
     );

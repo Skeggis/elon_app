@@ -48,9 +48,11 @@ ThemeData appTheme(context) {
       color: MyTheme.barBackgroundColor,
     ),
     primaryColor: MyTheme.primaryColor,
+    accentColor: MyTheme.secondaryColor,
     backgroundColor: MyTheme.backgroundColor,
     buttonColor: MyTheme.primaryColor,
     splashColor: MyTheme.secondaryColor,
+
     iconTheme: IconThemeData(color: Colors.white, opacity: 1.0, size: 33.0),
     textTheme: TextTheme(
         subtitle1: TextStyle(color: Colors.white),
@@ -65,7 +67,11 @@ ThemeData appTheme(context) {
     ),
     buttonTheme: ButtonThemeData(
       buttonColor: MyTheme.secondaryColor,
+      padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      textTheme: ButtonTextTheme.primary,
     ),
+
     dialogTheme: DialogTheme(
       backgroundColor: MyTheme.backgroundColor,
       titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
@@ -83,21 +89,12 @@ ThemeData appTheme(context) {
     scaffoldBackgroundColor: MyTheme.backgroundColor,
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: EdgeInsets.all(0),
-      border: UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Colors.white,
-        ),
-      ),
-      enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Colors.white,
-        ),
-      ),
-      focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Colors.white,
-        ),
-      ),
+      fillColor: const Color(0xFF272120),
+      filled: true,
+      border: OutlineInputBorder(
+          borderSide: BorderSide.none, borderRadius: BorderRadius.circular(5)),
+      hintStyle: TextStyle(
+          fontSize: 17, color: MyTheme.onPrimaryColor.withOpacity(0.5)),
     ),
     canvasColor: MyTheme.backgroundColor,
     dialogBackgroundColor: MyTheme.backgroundColor,

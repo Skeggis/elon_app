@@ -5,6 +5,8 @@ import 'package:myapp/components/screens/LoginSignUpScreen/components/TheForm.da
 
 import 'package:myapp/components/screens/LoginSignUpScreen/components/GoogleButton.dart';
 
+import 'package:myapp/routes/router.dart' as router;
+
 class SignUpBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -13,15 +15,23 @@ class SignUpBody extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            SizedBox(height: screenHeight(context) * 0.1),
+            SizedBox(height: screenHeight(context) * 0.075),
             GoogleButton(
               isSignUp: true,
+              onSuccessfulSubmit: () {
+                Navigator.of(context).pop();
+                router.home(context);
+              },
             ),
             SizedBox(height: screenHeight(context) * 0.05),
             Text('Or',
                 style: TextStyle(color: MyTheme.onPrimaryColor, fontSize: 25)),
-            SizedBox(height: screenHeight(context) * 0.075),
+            SizedBox(height: screenHeight(context) * 0.06),
             TheForm(
+              onSuccessfulSubmit: () {
+                Navigator.of(context).pop();
+                router.home(context);
+              },
               isSignUp: true,
             )
           ],

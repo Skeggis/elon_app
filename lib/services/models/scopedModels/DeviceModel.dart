@@ -189,6 +189,7 @@ class DeviceModel extends Model {
 
 //Todo: Now the command writes to ALL characteristics of the connected device. Only send to the one with the correct id?
   void _sendCommand(String command) async {
+    print("Should send?");
     if (!(await readyForSending())) return;
     print("Sending command: $command");
 
@@ -212,10 +213,6 @@ class DeviceModel extends Model {
       _elonServices = await _elon.discoverServices();
     return true;
   }
-
-  
-
-  
 
   static DeviceModel of(BuildContext context, {bool rebuildOnChange = false}) =>
       ScopedModel.of<DeviceModel>(context,

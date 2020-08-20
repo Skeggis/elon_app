@@ -156,7 +156,7 @@ class CourtPainter extends CustomPainter {
     Offset rightDoublePlaySideLineEnd = Offset(
         rightDoublePlaySideLineStart.dx,
         backBoundryLength *
-                (realDoublePlaySideLineLength / realBackBoundryLength) );
+            (realDoublePlaySideLineLength / realBackBoundryLength));
     //Right Side Line for double play:
     canvas.drawLine(
         rightDoublePlaySideLineStart, rightDoublePlaySideLineEnd, line);
@@ -196,7 +196,7 @@ class CourtPainter extends CustomPainter {
     // final netLine = Paint()
     //   ..color = MyTheme.secondaryColor
     //   ..strokeWidth = strokeWidth * 1;
-    while (startX < backBoundryEnd.dx-3) {
+    while (startX < backBoundryEnd.dx - 3) {
       canvas.drawLine(Offset(startX, rightDoublePlaySideLineEnd.dy),
           Offset(startX + dashWidth, rightDoublePlaySideLineEnd.dy), line);
       startX += dashWidth + dashSpace;
@@ -209,11 +209,26 @@ class CourtPainter extends CustomPainter {
 
     int additionalLength = 70;
 
-        canvas.drawLine(Offset(leftDoublePlaySideLineEnd.dx, leftDoublePlaySideLineEnd.dy), Offset(leftDoublePlaySideLineEnd.dx, leftDoublePlaySideLineEnd.dy + additionalLength), line);
-        canvas.drawLine(Offset(leftSinglePlaySideLineEnd.dx, leftSinglePlaySideLineEnd.dy), Offset(leftSinglePlaySideLineEnd.dx, leftSinglePlaySideLineEnd.dy + additionalLength), line);
-        canvas.drawLine(Offset(rightSinglePlaySideLineEnd.dx, rightSinglePlaySideLineEnd.dy), Offset(rightSinglePlaySideLineEnd.dx, rightSinglePlaySideLineEnd.dy + additionalLength), line);
-        canvas.drawLine(Offset(rightDoublePlaySideLineEnd.dx, rightDoublePlaySideLineEnd.dy), Offset(rightDoublePlaySideLineEnd.dx, rightDoublePlaySideLineEnd.dy + additionalLength), line);
-
+    canvas.drawLine(
+        Offset(leftDoublePlaySideLineEnd.dx, leftDoublePlaySideLineEnd.dy),
+        Offset(leftDoublePlaySideLineEnd.dx,
+            leftDoublePlaySideLineEnd.dy + additionalLength),
+        line);
+    canvas.drawLine(
+        Offset(leftSinglePlaySideLineEnd.dx, leftSinglePlaySideLineEnd.dy),
+        Offset(leftSinglePlaySideLineEnd.dx,
+            leftSinglePlaySideLineEnd.dy + additionalLength),
+        line);
+    canvas.drawLine(
+        Offset(rightSinglePlaySideLineEnd.dx, rightSinglePlaySideLineEnd.dy),
+        Offset(rightSinglePlaySideLineEnd.dx,
+            rightSinglePlaySideLineEnd.dy + additionalLength),
+        line);
+    canvas.drawLine(
+        Offset(rightDoublePlaySideLineEnd.dx, rightDoublePlaySideLineEnd.dy),
+        Offset(rightDoublePlaySideLineEnd.dx,
+            rightDoublePlaySideLineEnd.dy + additionalLength),
+        line);
   }
 
   @override
