@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:myapp/components/CustomSnackBar/CustomSnackBar.dart';
+import 'package:myapp/components/Dialogs/MessageDialog.dart';
 import 'package:myapp/routes/router.dart';
 import 'package:myapp/services/helper.dart';
 import 'package:myapp/services/models/Program.dart';
@@ -69,7 +71,7 @@ class CreateProgramModel extends Model {
   }
 
   bool createProgramLoading = false;
-  Future<void> createProgram() async {
+  Future<Map<String, dynamic>> createProgram(BuildContext context) async {
     createProgramLoading = true;
     notifyListeners();
     try {
@@ -79,13 +81,38 @@ class CreateProgramModel extends Model {
       if (response.statusCode == 201) {
         createProgramLoading = false;
         notifyListeners();
-        return;
+        return {'success': true};
       }
     } catch (e) {
       createProgramLoading = false;
       notifyListeners();
       print(e);
+      return {'success': false, 'message': 'Error creating'};
     }
+    return {'success': false, 'message': 'Error creating'};
+  }
+
+  Future<bool> validate(BuildContext context) async {
+    if (program.name == null || program.name == '') {
+      await showDialog(
+        context: context,
+        builder: (context) => MessageDialog(
+            title: 'Alert',
+            message: 'Insert a valid name',
+            handleClose: () => Navigator.pop(context)),
+      );
+      return false;
+    } else if (program.description == null || program.description == '') {
+      await showDialog(
+        context: context,
+        builder: (context) => MessageDialog(
+            title: 'Alert',
+            message: 'Insert a valid description',
+            handleClose: () => Navigator.pop(context)),
+      );
+      return false;
+    }
+    return true;
   }
 
   String name = '';
@@ -120,6 +147,12 @@ class CreateProgramModel extends Model {
     routine.rounds = _initialRounds;
     routine.timeout = _initialRoundTimeout;
     program.routines.add(routine);
+    notifyListeners();
+  }
+
+  void removeRoutine(int index) {
+    program.routines.removeAt(index);
+    print(index);
     notifyListeners();
   }
 

@@ -15,14 +15,14 @@ class AppDrawer extends StatelessWidget {
         child: DrawerHeader(
             margin: EdgeInsets.zero,
             padding: EdgeInsets.zero,
-            decoration: BoxDecoration(color: MyTheme.barBackgroundColor),
+            // decoration: BoxDecoration(color: MyTheme.barBackgroundColor),
             child: Stack(children: <Widget>[
               Positioned(
                   bottom: 12.0,
                   left: 16.0,
                   child: Text("Elon maskínan",
                       style: TextStyle(
-                          color: MyTheme.onPrimaryColor,
+                          // color: MyTheme.onPrimaryColor,
                           fontSize: 20.0,
                           fontWeight: FontWeight.w500))),
             ])),
@@ -38,8 +38,12 @@ class AppDrawer extends StatelessWidget {
             Icon(icon, size: 25),
             Padding(
               padding: EdgeInsets.only(left: 8.0),
-              child:
-                  Text(text, style: TextStyle(color: MyTheme.onPrimaryColor)),
+              child: Text(
+                text,
+                style: TextStyle(
+                    // color: MyTheme.onPrimaryColor,
+                    ),
+              ),
             )
           ],
         ),
@@ -50,7 +54,7 @@ class AppDrawer extends StatelessWidget {
     Widget _divider() {
       return Divider(
           indent: 40,
-          color: MyTheme.barBackgroundColor,
+          // color: MyTheme.barBackgroundColor,
           thickness: 1,
           height: 1);
     }
@@ -58,7 +62,7 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       child: Container(
         constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(color: MyTheme.backgroundColor),
+        // decoration: BoxDecoration(color: MyTheme.backgroundColor),
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
@@ -131,8 +135,10 @@ class AppDrawer extends StatelessWidget {
                 }),
             _divider(),
             ListTile(
-              title: Text('v. 1.0.1',
-                  style: TextStyle(color: MyTheme.onPrimaryColor)),
+              title: Text(
+                'v. 1.0.1',
+                // style: TextStyle(color: MyTheme.onPrimaryColor),
+              ),
               onTap: () {},
             ),
           ],

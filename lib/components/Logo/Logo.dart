@@ -37,7 +37,7 @@ class Logo extends StatelessWidget {
                     BoxShadow(
                         blurRadius: 50, color: Colors.white.withOpacity(0.1))
                   ],
-                  color: MyTheme.backgroundColor,
+                  color: Theme.of(context).backgroundColor,
                   borderRadius: BorderRadius.all(Radius.circular(10))),
             ),
           ),

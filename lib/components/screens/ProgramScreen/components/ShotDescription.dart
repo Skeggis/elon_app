@@ -4,37 +4,99 @@ import 'package:myapp/services/helper.dart';
 import 'package:myapp/services/models/Shot.dart';
 import 'dart:math' as math;
 
+import 'package:myapp/services/models/scopedModels/ProgramModel.dart';
+
 class ShotDescription extends StatelessWidget {
   final Shot shot;
+  final bool creating;
+  final int shotIndex;
+  final int routineIndex;
 
-  ShotDescription({this.shot});
+  ShotDescription({
+    this.shot,
+    this.creating,
+    this.shotIndex,
+    this.routineIndex,
+  });
 
   @override
   Widget build(BuildContext context) {
+    bool highlight = creating
+        ? false
+        : ProgramModel.of(context, rebuildOnChange: true).playing &&
+            ProgramModel.of(context, rebuildOnChange: true).currentRoutine ==
+                routineIndex &&
+            ProgramModel.of(context, rebuildOnChange: true).currentShot ==
+                shotIndex;
+    bool shotHighlight = !highlight
+        ? false
+        : ProgramModel.of(context, rebuildOnChange: true).shooting;
+    bool restHighLight = !highlight
+        ? false
+        : !ProgramModel.of(context, rebuildOnChange: true).shooting;
+
     return Container(
-      margin: EdgeInsets.only(left: 20, top: 15, bottom: 15),
+      margin: EdgeInsets.only(left: 20, top: 8, bottom: 8),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          Stack(
             children: <Widget>[
-              shot.locationId == 5
-                  ? Icon(Icons.radio_button_unchecked)
-                  : Transform.rotate(
-                      angle:
-                          angleForLocationId(shot.locationId) * (math.pi / 180),
-                      child: Icon(Icons.arrow_upward),
-                    ),
-              Text(shot.shotType.name),
+              Container(
+                padding: EdgeInsets.all(8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    shot.locationId == 5
+                        ? Icon(Icons.radio_button_unchecked)
+                        : Transform.rotate(
+                            angle: angleForLocationId(shot.locationId) *
+                                (math.pi / 180),
+                            child: Icon(Icons.arrow_upward),
+                          ),
+                    Text(shot.shotType.name),
+                  ],
+                ),
+              ),
+              shotHighlight
+                  ? Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Icon(
+                        Icons.brightness_1,
+                        size: 8,
+                        color: Theme.of(context).accentColor,
+                      ),
+                    )
+                  : SizedBox.shrink(),
             ],
           ),
           Container(
+            // decoration: BoxDecoration(color: Colors.red),
             margin: EdgeInsets.only(left: 20),
-            child: Text(secondsToMinutes(shot.timeout)),
-          ),
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(8),
+                  child: Text(secondsToMinutes(creating ? shot.timeout : shot.displayTimeout)),
+                ),
+                restHighLight
+                    ? Positioned(
+
+                        top: 0,
+                        right: 0,
+                        child: Icon(
+                          Icons.brightness_1,
+                          size: 8,
+                          color: Theme.of(context).accentColor,
+                        ),
+                      )
+                    : SizedBox.shrink(),
+              ],
+            ),
+          )
         ],
       ),
     );

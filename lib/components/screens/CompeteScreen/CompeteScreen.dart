@@ -10,7 +10,6 @@ class CompeteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyTheme.backgroundColor,
       body: ScopedModel<CompeteModel>(
           model: CompeteModel(), child: CompeteScreenBody()),
     );

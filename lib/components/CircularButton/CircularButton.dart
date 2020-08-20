@@ -80,7 +80,7 @@ class _CircularAnimatedButton extends State<CircularAnimatedButton>
     setState(() => {});
 
     _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+        AnimationController(duration: Duration(milliseconds: 300));
     _animation =
         Tween<double>(begin: 0.0, end: 100).animate(_animationController)
           ..addListener(() {

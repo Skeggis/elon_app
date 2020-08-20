@@ -15,6 +15,9 @@ String secondsToFormattedTime(int seconds) {
 
   if (duration.inHours == 0) {
     if(duration.inMinutes == 0){
+      if(duration.inSeconds < 10){
+        return '${duration.inSeconds}s';
+      }
       return '${twoDigits(duration.inSeconds)}s';
     } else {
       return '${duration.inMinutes}m ${twoDigits(duration.inSeconds.remainder(60))}s';

@@ -10,7 +10,6 @@ class ControllerScreen extends StatelessWidget {
     bool start = DeviceModel.of(context, rebuildOnChange: true).start;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: MyTheme.barBackgroundColor,
         elevation: 0.0,
         title: Text('Elon'),
         actions: [
@@ -26,7 +25,6 @@ class ControllerScreen extends StatelessWidget {
               : SizedBox(width: 5),
         ],
       ),
-      backgroundColor: MyTheme.backgroundColor,
       body: ControllerScreenBody(),
     );
   }

@@ -48,7 +48,8 @@ class _PlayButton extends State<PlayButton>
       child: PlayButtonAnimations(
         controller: _animationController,
         child: Icon(widget.play ? Icons.pause : Icons.play_arrow,
-            color: MyTheme.backgroundColor, size: widget.width * 0.75),
+            color: Theme.of(context).backgroundColor,
+            size: widget.width * 0.75),
       ),
     );
   }
@@ -73,7 +74,7 @@ class PlayButtonAnimations extends AnimatedWidget {
       angle: 2 * math.pi * _progress.value,
       child: CustomPaint(
           painter: MyPainter(
-            theColor: MyTheme.backgroundColor,
+            theColor: Theme.of(context).backgroundColor,
             start: 0.0,
             progress: _progress.value,
           ),

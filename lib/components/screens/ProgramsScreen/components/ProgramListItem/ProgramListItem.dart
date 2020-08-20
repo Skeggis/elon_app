@@ -25,7 +25,7 @@ class ProgramListItem extends StatelessWidget {
       child: Material(
         elevation: 12,
         borderRadius: BorderRadius.all(Radius.circular(5)),
-        color: Theme.of(context).cardColor,
+        
         child: InkWell(
           borderRadius: BorderRadius.circular(5),
           onTap: () => Navigator.pushNamed(

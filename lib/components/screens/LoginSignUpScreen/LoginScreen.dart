@@ -20,7 +20,7 @@ class LoginScreen extends StatelessWidget {
               title: Text('Login'),
             ),
             resizeToAvoidBottomInset: true,
-            backgroundColor: MyTheme.backgroundColor,
+            backgroundColor: Theme.of(context).backgroundColor,
             body: LoginBody()),
         loading ? Center(child: CircularProgressIndicator()) : Container()
       ],

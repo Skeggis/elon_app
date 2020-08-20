@@ -4,8 +4,15 @@ class Routine {
   int rounds;
   int timeout;
   List<Shot> routineDesc;
+  int displayTimeout;
 
-  Routine({this.rounds, this.timeout, this.routineDesc});
+  Routine({this.rounds, this.timeout, this.routineDesc}) {
+    displayTimeout = timeout;
+  }
+
+  void resetDisplay(){
+    displayTimeout = timeout;
+  }
 
   factory Routine.fromJson(dynamic json) {
     var routineDescJson = json['routineDesc'] as List;
@@ -22,11 +29,7 @@ class Routine {
     List<Map<String, dynamic>> desc = routineDesc != null
         ? routineDesc.map((d) => d.toJson()).toList()
         : null;
-        
-    return {
-      'rounds': rounds,
-      'timeout': timeout,
-      'routineDesc': desc
-    };
+
+    return {'rounds': rounds, 'timeout': timeout, 'routineDesc': desc};
   }
 }

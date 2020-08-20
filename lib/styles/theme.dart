@@ -40,42 +40,7 @@ class MyTheme {
 }
 
 ThemeData appTheme(context) {
-  return ThemeData(
-    // fontFamily: 'PlayFair_Display',
-    fontFamily: 'Quicksand',
-    // buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.accent),
-    appBarTheme: AppBarTheme(
-      color: MyTheme.barBackgroundColor,
-    ),
-    primaryColor: MyTheme.primaryColor,
-    accentColor: MyTheme.secondaryColor,
-    backgroundColor: MyTheme.backgroundColor,
-    buttonColor: MyTheme.primaryColor,
-    splashColor: MyTheme.secondaryColor,
-
-    iconTheme: IconThemeData(color: Colors.white, opacity: 1.0, size: 33.0),
-    textTheme: TextTheme(
-        subtitle1: TextStyle(color: Colors.white),
-        bodyText2: TextStyle(
-          color: Colors.white,
-          fontSize: 20.0,
-        )),
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-    cardColor: MyTheme.cardColor,
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: MyTheme.secondaryColor,
-    ),
-    buttonTheme: ButtonThemeData(
-      buttonColor: MyTheme.secondaryColor,
-      padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      textTheme: ButtonTextTheme.primary,
-    ),
-
-    dialogTheme: DialogTheme(
-      backgroundColor: MyTheme.backgroundColor,
-      titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
-    ),
+  return ThemeData.dark().copyWith(
     cupertinoOverrideTheme: CupertinoThemeData(
       textTheme: CupertinoTextThemeData(
         dateTimePickerTextStyle: TextStyle(
@@ -84,19 +49,62 @@ ThemeData appTheme(context) {
       ),
       primaryColor: Colors.white,
     ),
-
-    cursorColor: MyTheme.secondaryColor,
-    scaffoldBackgroundColor: MyTheme.backgroundColor,
-    inputDecorationTheme: InputDecorationTheme(
-      contentPadding: EdgeInsets.all(0),
-      fillColor: const Color(0xFF272120),
-      filled: true,
-      border: OutlineInputBorder(
-          borderSide: BorderSide.none, borderRadius: BorderRadius.circular(5)),
-      hintStyle: TextStyle(
-          fontSize: 17, color: MyTheme.onPrimaryColor.withOpacity(0.5)),
+    appBarTheme: AppBarTheme(color: ThemeData.dark().primaryColor),
+    textTheme: TextTheme(
+      bodyText2: TextStyle(
+        fontSize: 18.0,
+      ),
     ),
-    canvasColor: MyTheme.backgroundColor,
-    dialogBackgroundColor: MyTheme.backgroundColor,
   );
+  // return ThemeData(
+  //   // fontFamily: 'PlayFair_Display',
+  //   fontFamily: 'Quicksand',
+  //   // buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.accent),
+
+  //   primaryColor: MyTheme.primaryColor,
+  //   backgroundColor: MyTheme.backgroundColor,
+  //   buttonColor: MyTheme.primaryColor,
+  //   splashColor: MyTheme.secondaryColor,
+  //   iconTheme: IconThemeData(color: Colors.white, opacity: 1.0, size: 33.0),
+
+  //   visualDensity: VisualDensity.adaptivePlatformDensity,
+  //   cardColor: MyTheme.cardColor,
+  //   floatingActionButtonTheme: FloatingActionButtonThemeData(
+  //     backgroundColor: MyTheme.secondaryColor,
+  //   ),
+  //   buttonTheme: ButtonThemeData(
+  //     buttonColor: MyTheme.secondaryColor,
+  //   ),
+  //   dialogTheme: DialogTheme(
+  //     backgroundColor: MyTheme.backgroundColor,
+  //     titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+  //     contentTextStyle: TextStyle(color: Colors.white)
+  //   ),
+
+  //   cursorColor: MyTheme.secondaryColor,
+  //   scaffoldBackgroundColor: MyTheme.backgroundColor,
+  //   inputDecorationTheme: InputDecorationTheme(
+  //     contentPadding: EdgeInsets.all(0),
+  //     border: UnderlineInputBorder(
+  //       borderSide: BorderSide(
+  //         color: Colors.white,
+  //       ),
+  //     ),
+  //     enabledBorder: UnderlineInputBorder(
+  //       borderSide: BorderSide(
+  //         color: Colors.white,
+  //       ),
+  //     ),
+  //     focusedBorder: UnderlineInputBorder(
+  //       borderSide: BorderSide(
+  //         color: Colors.white,
+  //       ),
+  //     ),
+  //   ),
+  //   canvasColor: MyTheme.backgroundColor,
+  //   dialogBackgroundColor: MyTheme.backgroundColor,
+  //   snackBarTheme: SnackBarThemeData(
+  //     backgroundColor: Color.fromARGB(1, 30, 30, 30),
+  //   ),
+  // );
 }

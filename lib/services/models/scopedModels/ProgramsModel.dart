@@ -27,24 +27,7 @@ class ProgramsModel extends Model {
     return null;
   }
 
-  Program _currentProgram;
-  Program get currentProgram => _currentProgram;
-
-  Future fetchProgram(id) async {
-    try {
-      print(id);
-      var response = await http.get('$url/$id');
-      if (response.statusCode == 200) {
-        var jsonProgram = jsonDecode(response.body)['result'];
-        _currentProgram = Program.fromJson(jsonProgram);
-        print(_currentProgram.sets);
-        notifyListeners();
-      }
-    } catch (e) {
-      print('error fetching program');
-      print(e);
-    }
-  }
+ 
 
 
 
