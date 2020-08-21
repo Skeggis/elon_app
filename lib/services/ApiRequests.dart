@@ -25,6 +25,54 @@ class ApiRequests {
     return response;
   }
 
+  static Future<Response> deleteOrganization(int organizationId) async {
+    print("CUD");
+    Map data = {
+      'uuid': await UsersPreferences.getUsersUUID(),
+      'organization_id': organizationId
+    };
+
+    print("HERESONESISE");
+
+    Response response = await genericPostApiRequest(
+        organizationUrl + '/deleteOrganization', data);
+
+    return response;
+  }
+
+  static Future<Response> joinOrganization(int organizationId) async {
+    print("CUD");
+    Map data = {
+      'uuid': await UsersPreferences.getUsersUUID(),
+      'organization_id': organizationId
+    };
+
+    print("HERESONESISE");
+
+    Response response = await genericPostApiRequest(
+        organizationUrl + '/requestToJoinOrganization', data);
+
+    return response;
+  }
+
+  static Future<Response> editOrganization(
+      String imageUrl, String name, int organizationId) async {
+    print("CUD");
+    Map data = {
+      'imageUrl': imageUrl,
+      'name': name,
+      'uuid': await UsersPreferences.getUsersUUID(),
+      'organization_id': organizationId
+    };
+
+    print("HERESONESISE");
+
+    Response response = await genericPostApiRequest(
+        organizationUrl + '/editOrganization', data);
+
+    return response;
+  }
+
   static Future<Response> getMyOrganization() async {
     Map data = {'uuid': await UsersPreferences.getUsersUUID()};
 
@@ -125,11 +173,15 @@ class ApiRequests {
       print("${response.statusCode}");
       print("${response.body}");
 
-      dynamic bodyDecoded = jsonDecode(response.body);
-      Response responseClass = Response.fromJson(bodyDecoded);
+      Response responseClass;
 
       if (response.statusCode == 200) {
-      } else {}
+        dynamic bodyDecoded = jsonDecode(response.body);
+        responseClass = Response.fromJson(bodyDecoded);
+      } else {
+        responseClass = Response(
+            success: false, errors: ["Server error. please try again later."]);
+      }
 
       return responseClass;
     } catch (e) {

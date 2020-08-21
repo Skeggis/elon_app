@@ -17,26 +17,23 @@ import 'package:myapp/components/screens/OrganizationScreen/components/EditUserD
 
 import 'package:myapp/services/ApiRequests.dart';
 import 'package:myapp/services/models/Response.dart';
+import 'package:myapp/services/models/JoinRequest.dart';
 
 import 'package:myapp/services/helpers.dart' as helpers;
 
 class OrganizationBody extends StatefulWidget {
   Organization organization;
+  User joinRequest;
 
-  OrganizationBody({@required this.organization});
+  OrganizationBody({@required this.organization, joinRequest});
   @override
   State<StatefulWidget> createState() => _OrganizationBody();
 }
 
 class _OrganizationBody extends State<OrganizationBody> {
-  Organization organization;
-
   @override
   void initState() {
     super.initState();
-    setState(() {
-      organization = widget.organization;
-    });
   }
 
   void _onAcceptRequest(User user) {}
@@ -201,7 +198,7 @@ class _OrganizationBody extends State<OrganizationBody> {
       ),
       SizedBox(height: 10),
       Text(
-        this.organization.name ?? 'No Name',
+        widget.organization.name ?? 'No Name',
         style: TextStyle(
             color: Theme.of(context)
                 .primaryTextTheme
@@ -222,51 +219,60 @@ class _OrganizationBody extends State<OrganizationBody> {
         child: Column(
           children: [
             _header(context),
-            Expanded(
-              child: Container(
-                // decoration: BoxDecoration(color: Colors.blue),
-                child: Expanded(
-                  child: RefreshIndicator(
-                    color: Theme.of(context).splashColor,
-                    onRefresh: () async {
-                      Response response = await ApiRequests.refreshOrganization(
-                          organization.id);
-                      if (response.success) {
-                        return setState(() {
-                          organization = response.organization == null
-                              ? organization
-                              : response.organization;
-                        });
-                      }
-                      return helpers.showSnackBar(
-                          context,
-                          response.errors == null || response.errors.length == 0
-                              ? ["Could not process your request"]
-                              : response.errors);
-                    },
-                    child: ListView(
-                      // mainAxisSize: MainAxisSize.min,
-                      // shrinkWrap: true,
-                      children: [
-                        SizedBox(height: 25),
-                        Center(child: Text("Join Requests: ")),
-                        SizedBox(height: 5),
-                        ...[
-                          for (User user in organization.joinRequests ?? [])
-                            _joinRequestItem(context, user)
-                        ],
-                        SizedBox(height: 25),
-                        Center(child: Text("Members: ")),
-                        SizedBox(height: 5),
-                        for (User user in organization.members ?? [])
-                          _userItem(context, user),
-                        SizedBox(height: 100),
-                      ],
+            widget.joinRequest == null
+                ? Expanded(
+                    child: Container(
+                      // decoration: BoxDecoration(color: Colors.blue),
+                      child: RefreshIndicator(
+                        color: Theme.of(context).splashColor,
+                        onRefresh: () async {
+                          Response response =
+                              await ApiRequests.refreshOrganization(
+                                  widget.organization.id);
+                          if (response.success) {
+                            return setState(() {
+                              widget.organization =
+                                  response.organization == null
+                                      ? widget.organization
+                                      : response.organization;
+                            });
+                          }
+                          return helpers.showSnackBar(
+                              context,
+                              response.errors == null ||
+                                      response.errors.length == 0
+                                  ? ["Could not process your request"]
+                                  : response.errors);
+                        },
+                        child: ListView(
+                          // mainAxisSize: MainAxisSize.min,
+                          // shrinkWrap: true,
+                          children: [
+                            SizedBox(height: 25),
+                            Center(child: Text("Join Requests: ")),
+                            SizedBox(height: 5),
+                            ...[
+                              for (User user
+                                  in widget.organization.joinRequests ?? [])
+                                _joinRequestItem(context, user)
+                            ],
+                            SizedBox(height: 25),
+                            Center(child: Text("Members: ")),
+                            SizedBox(height: 5),
+                            for (User user in widget.organization.members ?? [])
+                              _userItem(context, user),
+                            SizedBox(height: 100),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                : Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [_joinRequestItem(context, widget.joinRequest)],
                     ),
                   ),
-                ),
-              ),
-            ),
             // SizedBox(height: 25),
           ],
         ),

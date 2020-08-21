@@ -1,12 +1,12 @@
 import 'package:myapp/services/models/Organization.dart';
-import 'package:myapp/services/models/JoinRequest.dart';
+import 'package:myapp/services/models/User.dart';
 
 class Response {
   List<String> errors;
   bool success;
   Organization organization;
   List<Organization> organizations;
-  JoinRequest joinRequest;
+  User joinRequest;
 
   Response(
       {this.errors,
@@ -38,7 +38,7 @@ class Response {
               .toList(),
       joinRequest: json['joinRequest'] == null
           ? null
-          : JoinRequest.fromJson(json['joinRequest']),
+          : User.fromJson(json['joinRequest']),
     );
   }
 }

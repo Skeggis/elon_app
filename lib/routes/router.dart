@@ -21,6 +21,7 @@ import 'package:myapp/components/screens/CompeteScreen/components/PlayersModal/c
 
 import 'package:myapp/services/models/scopedModels/PlayersModel.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:myapp/services/models/Organization.dart';
 
 import 'package:myapp/Root.dart';
 
@@ -60,13 +61,12 @@ void organization(context) {
   UIModel.of(context).changeRoute(OrganizationScreen.routeName);
 }
 
-void editOrganization(context) {
+void editOrganization(context, Organization organization) {
   Navigator.push(
     context,
     MaterialPageRoute(
-        builder: (context) => CreateOrganizationScreen(
-              isCreating: false,
-            )),
+        builder: (context) =>
+            CreateOrganizationScreen(organization: organization)),
   );
 }
 

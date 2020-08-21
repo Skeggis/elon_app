@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:myapp/services/models/Organization.dart';
 import 'package:myapp/styles/theme.dart';
 
+typedef void OnDeleteOrganization(Organization organization);
+
 class DeleteOrganizationDialog extends StatelessWidget {
   final Organization organization;
-  Function onDeleteOrganization;
+  OnDeleteOrganization onDeleteOrganization;
   DeleteOrganizationDialog(
       {@required this.organization, this.onDeleteOrganization});
   @override
@@ -22,8 +24,8 @@ class DeleteOrganizationDialog extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Text(
-            (this.organization.name ?? 'No Name') +
-                " wants to join your organization",
+            "You sure you want to delete this organization: " +
+                (this.organization.name ?? 'No Name'),
             style: TextStyle(
                 color: Theme.of(context)
                     .primaryTextTheme
@@ -41,8 +43,8 @@ class DeleteOrganizationDialog extends StatelessWidget {
                 color: Colors.red[400],
                 child: Text('Delete organization'),
                 onPressed: () {
-                  this.onDeleteOrganization();
                   Navigator.pop(context);
+                  this.onDeleteOrganization(organization);
                 },
               ),
               SizedBox(width: 20),

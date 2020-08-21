@@ -18,9 +18,8 @@ import 'package:myapp/services/models/Organization.dart';
 //https://pub.dev/packages/image_picker/install
 
 class CreateOrganizationBody extends StatefulWidget {
-  bool isCreating;
   Organization organization;
-  CreateOrganizationBody({this.isCreating = true, this.organization});
+  CreateOrganizationBody({this.organization});
   @override
   State<StatefulWidget> createState() => _CreateOrganizationBody();
 }
@@ -28,11 +27,16 @@ class CreateOrganizationBody extends StatefulWidget {
 class _CreateOrganizationBody extends State<CreateOrganizationBody> {
   File _imageFile;
   TextEditingController nameController = TextEditingController();
+  bool loading;
 
   @override
   void initState() {
     super.initState();
-    setState(() {});
+    setState(() {
+      loading = false;
+      nameController.text =
+          widget.organization == null ? '' : widget.organization.name ?? '';
+    });
   }
 
   Future<void> _pickImage() async {
@@ -134,6 +138,16 @@ class _CreateOrganizationBody extends State<CreateOrganizationBody> {
   Widget _createOrganizationButton(BuildContext context) {
     return MaterialButton(
         onPressed: () async {
+          print("Pressed");
+          if (loading) return;
+          print("GotThorught!");
+          setState(() {
+            loading = true;
+          });
+          if (widget.organization != null) {
+            //TODO: first delete old image from Firebase store and set new image.
+
+          }
           print("HERE SONE!");
           //TODO: first send image to Firebase store!
           String imageUrl = "";
@@ -148,11 +162,20 @@ class _CreateOrganizationBody extends State<CreateOrganizationBody> {
           print("THERE");
           Response response;
           try {
-            response = await OrganizationModel.of(context)
-                .createOrganization(imageUrl, nameController.text);
+            if (widget.organization == null) {
+              response = await OrganizationModel.of(context)
+                  .createOrganization(imageUrl, nameController.text);
+            } else {
+              response = await OrganizationModel.of(context).editOrganization(
+                  imageUrl, nameController.text, widget.organization.id);
+            }
           } catch (e) {
             print("ERROR: $e");
+            response = Response(success: false);
           }
+          setState(() {
+            loading = false;
+          });
 
           print("THERE");
           if (response.success) {
@@ -165,7 +188,9 @@ class _CreateOrganizationBody extends State<CreateOrganizationBody> {
               context, ['Something went wrong. Please try again later.']);
         },
         child: Text(
-          widget.isCreating ? "Create Organization" : "Edit Organization",
+          widget.organization == null
+              ? "Create Organization"
+              : "Edit Organization",
           style: TextStyle(fontSize: 18),
         ),
         color: Theme.of(context).accentColor,
@@ -177,14 +202,44 @@ class _CreateOrganizationBody extends State<CreateOrganizationBody> {
         highlightElevation: 12);
   }
 
-  void _onDeleteOrganization() {}
+  Future<void> _onDeleteOrganization(BuildContext context) async {
+    setState(() {
+      loading = true;
+    });
+
+    print("THERE");
+    Response response;
+    try {
+      response = await OrganizationModel.of(context)
+          .deleteOrganization(widget.organization.id);
+    } catch (e) {
+      print("ERROR: $e");
+      response = Response(success: false);
+    }
+    setState(() {
+      loading = false;
+    });
+
+    print("THERE");
+    print(response.success);
+    if (response.success) {
+      Navigator.of(context).pop();
+    } else if (response.errors != null && response.errors.length > 0) {
+      return helpers.showSnackBar(context, response.errors);
+    }
+
+    print("THERE");
+    return helpers.showSnackBar(
+        context, ['Something went wrong. Please try again later.']);
+  }
+
   Future<void> _deleteOrganizationDialog(BuildContext context) async {
     return showDialog(
         context: context,
         barrierDismissible: true,
-        builder: (context) => DeleteOrganizationDialog(
+        builder: (dialogContext) => DeleteOrganizationDialog(
               organization: widget.organization,
-              onDeleteOrganization: _onDeleteOrganization,
+              onDeleteOrganization: (_) => _onDeleteOrganization(context),
             ));
   }
 
@@ -204,13 +259,13 @@ class _CreateOrganizationBody extends State<CreateOrganizationBody> {
               ),
             ],
           ),
-          widget.isCreating
+          widget.organization == null
               ? Container()
               : Positioned(
                   right: 5,
                   child: OutlineButton(
                     shape: CircleBorder(),
-                    onPressed: () {},
+                    onPressed: () => _deleteOrganizationDialog(context),
                     color: Colors.red[400],
                     // borderSide: BorderSide(width: 1, color: Colors.red[400]),
                     child: Icon(
@@ -219,7 +274,8 @@ class _CreateOrganizationBody extends State<CreateOrganizationBody> {
                       color: Colors.red[400],
                     ),
                   ),
-                )
+                ),
+          loading ? Center(child: CircularProgressIndicator()) : Container()
         ],
       ),
     );

@@ -24,7 +24,7 @@ class JoinRequestDialog extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Text(
-            this.organization.name,
+            "Request to join " + this.organization.name,
             style: TextStyle(
                 color: Theme.of(context)
                     .primaryTextTheme

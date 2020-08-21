@@ -16,6 +16,8 @@ import 'package:myapp/components/screens/OrganizationScreen/components/JoinReque
 import 'package:myapp/services/ApiRequests.dart';
 import 'package:myapp/services/models/Response.dart';
 
+import 'package:myapp/services/models/scopedModels/OrganizationModel.dart';
+
 class NoOrganizationBody extends StatefulWidget {
   List<Organization> organizations;
 
@@ -26,25 +28,53 @@ class NoOrganizationBody extends StatefulWidget {
 
 class _NoOrganizationBody extends State<NoOrganizationBody> {
   List<Organization> organizations = [];
+  bool loading;
 
   @override
   void initState() {
     super.initState();
     setState(() {
       organizations = widget.organizations;
+      loading = false;
     });
   }
 
-  void _onJoinOrganization(Organization org) {}
+  void _onJoinOrganization(BuildContext context, Organization org) async {
+    setState(() {
+      loading = true;
+    });
+
+    print("THERE");
+    Response response;
+    try {
+      response = await OrganizationModel.of(context).joinOrganization(org.id);
+    } catch (e) {
+      print("ERROR: $e");
+      response = Response(success: false);
+    }
+    setState(() {
+      loading = false;
+    });
+
+    print("THERE");
+    print(response.success);
+    if (response.errors != null && response.errors.length > 0) {
+      return helpers.showSnackBar(context, response.errors);
+    }
+
+    print("THERE");
+    return helpers.showSnackBar(
+        context, ['Something went wrong. Please try again later.']);
+  }
 
   Future<void> _joinRequestDialog(
       BuildContext context, Organization org) async {
     return showDialog(
         context: context,
         barrierDismissible: true,
-        builder: (context) => JoinRequestDialog(
+        builder: (dialogContext) => JoinRequestDialog(
               organization: org,
-              onJoinOrganization: _onJoinOrganization,
+              onJoinOrganization: (_) => _onJoinOrganization(context, org),
             ));
   }
 
@@ -132,55 +162,59 @@ class _NoOrganizationBody extends State<NoOrganizationBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints.expand(),
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-        child: Column(
-          children: [
-            SearchBar(
-              height: 50,
-              searchHint: "Search for organization to join",
-            ),
-            Expanded(
-              child: RefreshIndicator(
-                color: Theme.of(context).splashColor,
-                onRefresh: () async {
-                  Response response = await ApiRequests.refreshOrganizations();
-                  if (response.success) {
-                    return setState(() {
-                      organizations = response.organizations == null
-                          ? []
-                          : response.organizations;
-                    });
-                  }
-                  return helpers.showSnackBar(
-                      context,
-                      response.errors == null || response.errors.length == 0
-                          ? ["Could not process your request"]
-                          : response.errors);
-                },
-                child: Container(
-                  // decoration: BoxDecoration(color: Colors.blue),
-                  child: Expanded(
-                    child: ListView(
-                      // mainAxisSize: MainAxisSize.min,
-                      // shrinkWrap: true,
-                      children: [
-                        SizedBox(height: 25),
-                        for (Organization org in organizations)
-                          _organizationItem(context, org),
-                        SizedBox(height: 100),
-                      ],
+    return Stack(
+      children: [
+        Container(
+          constraints: BoxConstraints.expand(),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: Column(
+              children: [
+                SearchBar(
+                  height: 50,
+                  searchHint: "Search for organization to join",
+                ),
+                Expanded(
+                  child: RefreshIndicator(
+                    color: Theme.of(context).splashColor,
+                    onRefresh: () async {
+                      Response response =
+                          await ApiRequests.refreshOrganizations();
+                      if (response.success) {
+                        return setState(() {
+                          organizations = response.organizations == null
+                              ? []
+                              : response.organizations;
+                        });
+                      }
+                      return helpers.showSnackBar(
+                          context,
+                          response.errors == null || response.errors.length == 0
+                              ? ["Could not process your request"]
+                              : response.errors);
+                    },
+                    child: Container(
+                      // decoration: BoxDecoration(color: Colors.blue),
+                      child: ListView(
+                        // mainAxisSize: MainAxisSize.min,
+                        // shrinkWrap: true,
+                        children: [
+                          SizedBox(height: 25),
+                          for (Organization org in organizations)
+                            _organizationItem(context, org),
+                          SizedBox(height: 100),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
+                SizedBox(height: 25),
+              ],
             ),
-            SizedBox(height: 25),
-          ],
+          ),
         ),
-      ),
+        loading ? Center(child: CircularProgressIndicator()) : Container()
+      ],
     );
   }
 }
