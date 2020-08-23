@@ -19,19 +19,34 @@ class ProgramScreenBody extends StatelessWidget {
       future: ProgramModel.of(context).fetchProgram(args.id),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          Program program = ProgramModel.of(context).program;
+          ProgramModel model = ProgramModel.of(context, rebuildOnChange: true);
+          Program program = model.program;
 
-          return Container(
-            child: Column(
-              children: [
-                ProgramInfoBar(
-                  program: program,
+          return Stack(
+            children: [
+              Container(
+                child: Column(
+                  children: [
+                    ProgramInfoBar(
+                      program: program,
+                    ),
+                    RoutinesList(
+                      program: program,
+                    ),
+                  ],
                 ),
-                RoutinesList(
-                  program: program,
-                ),
-              ],
-            ),
+              ),
+              model.countdown
+                  ? SizedBox.expand(
+                      child: Container(
+                        color: Color.fromARGB(200, 0, 0, 0),
+                        child: Center(
+                          child: Text(model.countDownTime.toString(), style: TextStyle(fontSize: 72),),
+                        ),
+                      ),
+                    )
+                  : SizedBox.shrink()
+            ],
           );
         } else {
           return Center(child: CircularProgressIndicator());

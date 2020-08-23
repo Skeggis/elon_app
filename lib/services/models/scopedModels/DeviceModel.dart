@@ -231,23 +231,24 @@ class DeviceModel extends Model {
     return (String message) => print('Error: writing charactaristic not found');
   }
 
-  BluetoothCharacteristic char;
-  Future test() async {
-    for (int i = 0; i < _elonServices.length; i++) {
-      for (int j = 0; j < _elonServices[i].characteristics.length; j++) {
-        if (_elonServices[i].characteristics[j].properties.read) {
-          char = _elonServices[i].characteristics[j];
-          var sub = char.value.listen((event) {
-            print('GOT BLUETOOTH MESSAGE');
-            print(event);
-            print(utf8.decode(event));
-          });
+  Future shotFinished(Function step) async {
+    return  Future.delayed(Duration(milliseconds: 500), () async {
+      BluetoothCharacteristic char = _elonServices[2].characteristics[0];
 
-          await char.read();
-          sub.cancel();
+      await char.setNotifyValue(true);
+
+      StreamSubscription s;
+      s = char.value.listen((event) async {
+        String command = utf8.decode(event);
+        print("value: " + command);
+        if (command == "#") {
+          print('stepping');
+          await char.setNotifyValue(false);
+          await s.cancel();
+          step();
         }
-      }
-    }
+      });
+    });
   }
 
   static DeviceModel of(BuildContext context, {bool rebuildOnChange = false}) =>

@@ -42,8 +42,12 @@ class ProgramModel extends Model {
     }
   }
 
-BuildContext currentContext;
+  BuildContext currentContext;
   bool playing = false;
+  bool paused = false;
+  bool countdown = false; //countdown when play is pressed
+  static int initialCountDown = 3;
+  int countDownTime = initialCountDown;
   int currentSet = 0;
   int currentRoutine = 0;
   int currentRoutineRound = 0;
@@ -53,17 +57,34 @@ BuildContext currentContext;
   bool setResting = false;
   void play(BuildContext context) {
     currentContext = context;
-    playing = true;
+    countdown = true;
     notifyListeners();
-    Timer(Duration(seconds: 2), () {
-      currentShot = 0;
-      step();
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      if (!paused) {
+        countDownTime -= 1;
+        notifyListeners();
+
+        if (countDownTime == 0) {
+          countdown = false;
+          playing = true;
+          countDownTime = initialCountDown;
+          currentShot = 0;
+          notifyListeners();
+          step();
+          timer.cancel();
+        }
+      }
     });
   }
 
   void pause() {
     //hmm
-    playing = false;
+    paused = true;
+    notifyListeners();
+  }
+
+  void continuePlaying() {
+    paused = false;
     notifyListeners();
   }
 
@@ -79,11 +100,13 @@ BuildContext currentContext;
             routineResting = true;
             notifyListeners();
             timer = Timer.periodic(Duration(seconds: 1), (timer) {
-              program.routines[currentRoutine].displayTimeout -= 1;
-              notifyListeners();
-              if (program.routines[currentRoutine].displayTimeout == 0) {
-                nextSet();
-                timer.cancel();
+              if (!paused) {
+                program.routines[currentRoutine].displayTimeout -= 1;
+                notifyListeners();
+                if (program.routines[currentRoutine].displayTimeout == 0) {
+                  nextSet();
+                  timer.cancel();
+                }
               }
             });
           }
@@ -92,12 +115,14 @@ BuildContext currentContext;
           routineResting = true;
           notifyListeners();
           timer = Timer.periodic(Duration(seconds: 1), (timer) {
-            program.routines[currentRoutine].displayTimeout -= 1;
-            notifyListeners();
-            if (program.routines[currentRoutine].displayTimeout == 0) {
-              nextRoutine();
-              step();
-              timer.cancel();
+            if (!paused) {
+              program.routines[currentRoutine].displayTimeout -= 1;
+              notifyListeners();
+              if (program.routines[currentRoutine].displayTimeout == 0) {
+                nextRoutine();
+                step();
+                timer.cancel();
+              }
             }
           });
         }
@@ -115,7 +140,7 @@ BuildContext currentContext;
     notifyListeners();
   }
 
-  void basicStep()async {
+  void basicStep() async {
     if (routineResting) {
       routineResting = false;
     }
@@ -125,23 +150,26 @@ BuildContext currentContext;
           index: currentShot,
           duration: Duration(milliseconds: 800),
           curve: Curves.easeInOut);
-          print(DeviceModel.of(currentContext).elon.name);
-        await DeviceModel.of(currentContext).sendCommand(program.routines[currentRoutine].routineDesc[currentShot].toString());
-       await DeviceModel.of(currentContext).test(); 
- 
+      await DeviceModel.of(currentContext).sendCommand(
+          program.routines[currentRoutine].routineDesc[currentShot].toString());
+      await DeviceModel.of(currentContext).shotFinished(step);
+      print('her');
+      shooting = false;
     } else {
       timer = Timer.periodic(Duration(seconds: 1), (timer) {
-        program.routines[currentRoutine].routineDesc[currentShot]
-            .displayTimeout -= 1;
-        print('countdown');
-        notifyListeners();
-        if (program.routines[currentRoutine].routineDesc[currentShot]
-                .displayTimeout ==
-            0) {
-          currentShot += 1;
-          shooting = true;
-          step();
-          timer.cancel();
+        if (!paused) {
+          program.routines[currentRoutine].routineDesc[currentShot]
+              .displayTimeout -= 1;
+          print('countdown');
+          notifyListeners();
+          if (program.routines[currentRoutine].routineDesc[currentShot]
+                  .displayTimeout ==
+              0) {
+            currentShot += 1;
+            shooting = true;
+            step();
+            timer.cancel();
+          }
         }
       });
     }
@@ -163,18 +191,20 @@ BuildContext currentContext;
     setResting = true;
     notifyListeners();
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      program.displayTimeout -= 1;
-      notifyListeners();
-      if (program.displayTimeout == 0) {
-        currentSet += 1;
-        currentRoutine = 0;
-        currentShot = 0;
-        currentRoutineRound = 0;
-        shooting = true;
-        setResting = false;
-        program.resetDisplay();
-        step();
-        timer.cancel();
+      if (!paused) {
+        program.displayTimeout -= 1;
+        notifyListeners();
+        if (program.displayTimeout == 0) {
+          currentSet += 1;
+          currentRoutine = 0;
+          currentShot = 0;
+          currentRoutineRound = 0;
+          shooting = true;
+          setResting = false;
+          program.resetDisplay();
+          step();
+          timer.cancel();
+        }
       }
     });
   }

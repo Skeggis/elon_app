@@ -23,7 +23,6 @@ class ProgramScreen extends StatelessWidget {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              
               model.clearTimer();
               Navigator.pop(context);
             },
@@ -31,16 +30,24 @@ class ProgramScreen extends StatelessWidget {
         ),
         body: ProgramScreenBody(args),
         floatingActionButton: Builder(
-          builder: (context) =>
-              ProgramModel.of(context, rebuildOnChange: true).playing
-                  ? FloatingActionButton(
-                      child: Icon(Icons.pause),
-                      onPressed: () => ProgramModel.of(context).pause(),
-                    )
-                  : FloatingActionButton(
-                      child: Icon(Icons.play_arrow),
-                      onPressed: () => ProgramModel.of(context).play(context),
-                    ),
+          builder: (context) => ProgramModel.of(context, rebuildOnChange: true)
+                  .playing
+              ? FloatingActionButton(
+                  child: Icon(ProgramModel.of(context).paused
+                      ? Icons.play_arrow
+                      : Icons.pause),
+                  onPressed: () => ProgramModel.of(context).paused
+                      ? ProgramModel.of(context).continuePlaying()
+                      : ProgramModel.of(context).pause(),
+                )
+              : FloatingActionButton(
+                  child: Icon(model.countdown
+                      ? model.paused ? Icons.play_arrow : Icons.pause
+                      : Icons.play_arrow),
+                  onPressed: () => model.countdown
+                      ? model.paused ? model.continuePlaying() : model.pause()
+                      : model.play(context),
+                ),
         ),
       ),
     );
