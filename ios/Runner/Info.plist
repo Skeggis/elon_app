@@ -58,5 +58,11 @@
 		</array>
 	</dict>
 </array>
+
+<!-- Image Picker-->
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Need access to library</string>
+<!-- <key>NSCameraUsageDescription</key>
+<string>Need access to camera</string> -->
 </dict>
 </plist>

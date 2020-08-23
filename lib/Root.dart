@@ -12,13 +12,14 @@ import 'package:myapp/components/screens/HomeScreen/HomeScreen.dart';
 import 'package:myapp/components/screens/ControllerScreen/ControllerScreen.dart';
 
 import 'package:myapp/components/screens/CompeteScreen/CompeteScreen.dart';
+import 'package:myapp/components/screens/OrganizationScreen/OrganizationScreen.dart';
 
 import 'package:myapp/routes/Routes.dart';
 
 import 'package:myapp/services/models/UIModel.dart';
 
 import 'package:myapp/services/models/UserModel.dart';
-import 'package:myapp/components/screens/LoginSignUpScreen/LoginScreen.dart';
+import 'package:myapp/components/screens/LoginSignUpScreen/InitialScreen.dart';
 
 import 'package:myapp/services/UsersPreferences.dart';
 
@@ -29,7 +30,7 @@ class Root extends StatelessWidget {
     // bool isLoggedIn = UserModel.of(context, rebuildOnChange: true).isLoggedIn;
 
     // if (!isLoggedIn) {
-    //   return LoginScreen();
+    //   return InitialScreen();
     // }
 
     String route = UIModel.of(context, rebuildOnChange: true).route;
@@ -37,8 +38,8 @@ class Root extends StatelessWidget {
     Widget screen;
     Widget fab;
     String screenTitle = "Elon";
-    if (route == Routes.login) {
-      return new LoginScreen();
+    if (route == Routes.initial) {
+      return new InitialScreen();
     }
     switch (route) {
       case Routes.home:
@@ -63,9 +64,13 @@ class Root extends StatelessWidget {
         screen = new CompeteScreen();
         screenTitle = 'Compete';
         break;
+      case Routes.organization:
+        screen = new OrganizationScreen();
+        screenTitle = 'Organization';
+
+        break;
       default:
-        screen = LoginScreen();
-        screenTitle = "Not Found";
+        screen = InitialScreen();
     }
 
     bool loading = UIModel.of(context, rebuildOnChange: true).loading;
@@ -89,7 +94,7 @@ class Root extends StatelessWidget {
               loading ? Center(child: CircularProgressIndicator()) : Container()
             ]);
           } else {
-            return LoginScreen();
+            return new InitialScreen();
           }
         });
   }

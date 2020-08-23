@@ -86,14 +86,23 @@ class AppDrawer extends StatelessWidget {
             ),
             _divider(),
             _createDrawerItem(
-              // icon: Icons.sports, hmm virkar ekki hjá mér
-              icon: Icons.ac_unit,
-              text: 'Compete',
+              icon: Icons.location_city,
+              text: 'Organization',
               onTap: () {
                 Navigator.pop(context);
-                UIModel.of(context).changeRoute(Routes.compete);
+                UIModel.of(context).changeRoute(Routes.organization);
               },
             ),
+            // _divider(),
+            // _createDrawerItem(
+            //   // icon: Icons.sports, hmm virkar ekki hjá mér
+            //   icon: Icons.ac_unit,
+            //   text: 'Compete',
+            //   onTap: () {
+            //     Navigator.pop(context);
+            //     UIModel.of(context).changeRoute(Routes.compete);
+            //   },
+            // ),
             _divider(),
             _createDrawerItem(
               icon: Icons.bluetooth,
@@ -103,16 +112,17 @@ class AppDrawer extends StatelessWidget {
                 UIModel.of(context).changeRoute(Routes.bluetoothConnect);
               },
             ),
-            // _divider(),
-            // _createDrawerItem(
-            //   icon: Icons.leaderboard,
-            //   text: 'Stats',
-            // ),
             _divider(),
             _createDrawerItem(
               icon: Icons.settings,
               text: 'Settings',
             ),
+
+            // _divider(),
+            // _createDrawerItem(
+            //   icon: Icons.leaderboard,
+            //   text: 'Stats',
+            // ),
             _divider(),
             _createDrawerItem(
                 icon: Icons.exit_to_app,

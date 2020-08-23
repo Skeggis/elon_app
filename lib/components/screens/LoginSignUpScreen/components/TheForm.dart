@@ -7,7 +7,8 @@ import 'package:myapp/services/models/UIModel.dart';
 
 class TheForm extends StatefulWidget {
   bool isSignUp;
-  TheForm({this.isSignUp = false});
+  Function onSuccessfulSubmit;
+  TheForm({this.isSignUp = false, this.onSuccessfulSubmit});
   @override
   State<StatefulWidget> createState() => _TheForm();
 }
@@ -18,6 +19,7 @@ class _TheForm extends State<TheForm> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
 
   FocusNode confirmPassFocus;
 
@@ -71,10 +73,6 @@ class _TheForm extends State<TheForm> {
         Scaffold.of(context).showSnackBar(snackBar);
         UserModel.of(context).cleanUpErrors();
       });
-
-      // errors.map((error) {
-
-      // });
     }
     return Form(
       child: Padding(
@@ -90,19 +88,27 @@ class _TheForm extends State<TheForm> {
               textAlign: TextAlign.left,
               onEditingComplete: () => FocusScope.of(context).nextFocus(),
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(0),
-                  prefixIcon: Icon(Icons.mail,
-                      color: MyTheme.onPrimaryColor.withOpacity(0.75)),
-                  fillColor: const Color(0xFF272120),
-                  filled: true,
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(5)),
-                  hintText: "Email",
-                  hintStyle: TextStyle(
-                      fontSize: 17,
-                      color: MyTheme.onPrimaryColor.withOpacity(0.5))),
+                prefixIcon: Icon(Icons.mail,
+                    color: MyTheme.onPrimaryColor.withOpacity(0.75)),
+                hintText: "Email",
+              ),
             ),
+            SizedBox(height: 15),
+            widget.isSignUp
+                ? TextFormField(
+                    controller: nameController,
+                    style:
+                        TextStyle(color: MyTheme.onPrimaryColor, fontSize: 15),
+                    cursorColor: MyTheme.onPrimaryColor.withOpacity(0.5),
+                    textAlign: TextAlign.left,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.person,
+                          color: MyTheme.onPrimaryColor.withOpacity(0.75)),
+                      hintText: "Name",
+                    ),
+                  )
+                : SizedBox(height: 0),
             SizedBox(height: 15),
             TextFormField(
               obscureText: !_passwordVisible,
@@ -118,32 +124,22 @@ class _TheForm extends State<TheForm> {
                 }
               },
               decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                    splashColor: Colors.transparent,
-                    icon: Icon(
-                      _passwordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: MyTheme.onPrimaryColor.withOpacity(0.75),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _passwordVisible = !_passwordVisible;
-                      });
-                    },
+                suffixIcon: IconButton(
+                  splashColor: Colors.transparent,
+                  icon: Icon(
+                    _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                    color: MyTheme.onPrimaryColor.withOpacity(0.75),
                   ),
-                  contentPadding: EdgeInsets.all(0),
-                  prefixIcon: Icon(Icons.lock,
-                      color: MyTheme.onPrimaryColor.withOpacity(0.75)),
-                  fillColor: const Color(0xFF272120),
-                  filled: true,
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(5)),
-                  hintText: "Password",
-                  hintStyle: TextStyle(
-                      fontSize: 17,
-                      color: MyTheme.onPrimaryColor.withOpacity(0.5))),
+                  onPressed: () {
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  },
+                ),
+                prefixIcon: Icon(Icons.lock,
+                    color: MyTheme.onPrimaryColor.withOpacity(0.75)),
+                hintText: "Password",
+              ),
             ),
             SizedBox(height: 15),
             widget.isSignUp
@@ -156,47 +152,35 @@ class _TheForm extends State<TheForm> {
                     cursorColor: MyTheme.onPrimaryColor.withOpacity(0.5),
                     textAlign: TextAlign.left,
                     decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                          splashColor: Colors.transparent,
-                          icon: Icon(
-                            _confirmPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: MyTheme.onPrimaryColor.withOpacity(0.75),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _confirmPasswordVisible =
-                                  !_confirmPasswordVisible;
-                            });
-                          },
+                      suffixIcon: IconButton(
+                        splashColor: Colors.transparent,
+                        icon: Icon(
+                          _confirmPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: MyTheme.onPrimaryColor.withOpacity(0.75),
                         ),
-                        contentPadding: EdgeInsets.all(0),
-                        prefixIcon: Icon(Icons.lock,
-                            color: MyTheme.onPrimaryColor.withOpacity(0.75)),
-                        fillColor: const Color(0xFF272120),
-                        filled: true,
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(5)),
-                        hintText: "Confirm Password",
-                        hintStyle: TextStyle(
-                            fontSize: 17,
-                            color: MyTheme.onPrimaryColor.withOpacity(0.5))),
+                        onPressed: () {
+                          setState(() {
+                            _confirmPasswordVisible = !_confirmPasswordVisible;
+                          });
+                        },
+                      ),
+                      prefixIcon: Icon(Icons.lock,
+                          color: MyTheme.onPrimaryColor.withOpacity(0.75)),
+                      hintText: "Confirm Password",
+                    ),
                   )
                 : SizedBox(height: 0),
             widget.isSignUp ? SizedBox(height: 25) : SizedBox(height: 0),
-            MaterialButton(
-                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                color: MyTheme.primaryColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
+            RaisedButton(
                 onPressed: () async {
                   print(
                       "${emailController.text} ${passwordController.text} ${confirmPasswordController.text}");
 
                   if (widget.isSignUp) {
                     if (emailController.text == '' ||
+                        nameController.text == '' ||
                         passwordController.text == '' ||
                         confirmPasswordController.text == '') {
                       var snackBar = _snackBar(
@@ -228,13 +212,15 @@ class _TheForm extends State<TheForm> {
                     UIModel.of(context).setLoading(true);
                     bool success = await UserModel.of(context).signUp(
                         emailController.text,
+                        nameController.text,
                         passwordController.text,
                         confirmPasswordController.text);
                     UIModel.of(context).setLoading(false);
 
                     if (success) {
-                      Navigator.of(context).pop();
-                      router.home(context);
+                      if (widget.onSuccessfulSubmit != null) {
+                        widget.onSuccessfulSubmit();
+                      }
                     }
                   } else {
                     if (emailController.text == '' ||
@@ -249,13 +235,15 @@ class _TheForm extends State<TheForm> {
                         .login(emailController.text, passwordController.text);
                     UIModel.of(context).setLoading(false);
                     if (success) {
-                      router.home(context);
+                      if (widget.onSuccessfulSubmit != null) {
+                        widget.onSuccessfulSubmit();
+                      }
                     }
                   }
                 },
-                child: Text(widget.isSignUp ? 'Sign Up' : 'Login',
-                    style: TextStyle(
-                        color: MyTheme.onPrimaryColor, fontSize: 17))),
+                child: Text(
+                  widget.isSignUp ? 'Sign Up' : 'Login',
+                )),
           ],
         ),
       ),

@@ -188,7 +188,8 @@ class DeviceModel extends Model {
   }
 
 //Todo: Now the command writes to ALL characteristics of the connected device. Only send to the one with the correct id?
-  Future sendCommand(String command) async {
+  void sendCommand(String command) async {
+    print("Should send?");
     if (!(await readyForSending())) return;
     print("Sending command: $command");
 

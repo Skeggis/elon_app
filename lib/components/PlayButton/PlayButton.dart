@@ -48,7 +48,8 @@ class _PlayButton extends State<PlayButton>
       child: PlayButtonAnimations(
         controller: _animationController,
         child: Icon(widget.play ? Icons.pause : Icons.play_arrow,
-            color: Theme.of(context).backgroundColor, size: widget.width * 0.75),
+            color: Theme.of(context).backgroundColor,
+            size: widget.width * 0.75),
       ),
     );
   }

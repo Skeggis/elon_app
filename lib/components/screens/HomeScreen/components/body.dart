@@ -37,8 +37,8 @@ class HomeButtons extends StatelessWidget {
         onPressed: (BuildContext context) => router.controller(context)),
     GenericButtonConfig(
         title: "Programs", onPressed: (context) => router.programs(context)),
-    GenericButtonConfig(
-        title: "Compete", onPressed: (context) => router.compete(context)),
+    // GenericButtonConfig(
+    //     title: "Compete", onPressed: (context) => router.compete(context)),
     GenericButtonConfig(title: "Stats", onPressed: () {})
   ];
   @override

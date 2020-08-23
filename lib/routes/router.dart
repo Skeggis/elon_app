@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/components/screens/ControllerScreen/ControllerScreen.dart';
+import 'package:myapp/components/screens/CreateOrganizationScreen/CreateOrganizationScreen.dart';
 import 'package:myapp/components/screens/CreateRoutineScreen/CreateRoutineScreen.dart';
 import 'package:myapp/components/screens/HomeScreen/HomeScreen.dart';
 import 'package:myapp/components/screens/LoginSignUpScreen/SignUpScreen.dart';
@@ -8,6 +9,7 @@ import 'package:myapp/components/screens/ProgramScreen/ProgramScreenCreate.dart'
 import 'package:myapp/components/screens/ProgramsScreen/ProgramsScreen.dart';
 import 'package:myapp/components/screens/ProgramScreen/ProgramScreen.dart';
 import 'package:myapp/components/screens/CompeteScreen/CompeteScreen.dart';
+import 'package:myapp/components/screens/OrganizationScreen/OrganizationScreen.dart';
 
 import 'package:myapp/components/screens/CompeteScreen/components/PlayersModal/PlayersModal.dart';
 import 'package:myapp/components/screens/CompeteScreen/components/PlayersModal/components/AddPlayerModal.dart';
@@ -19,6 +21,7 @@ import 'package:myapp/components/screens/CompeteScreen/components/PlayersModal/c
 
 import 'package:myapp/services/models/scopedModels/PlayersModel.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:myapp/services/models/Organization.dart';
 
 import 'package:myapp/Root.dart';
 
@@ -34,10 +37,12 @@ Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   LoginScreen.routeName: (BuildContext context) => new LoginScreen(),
   SignUpScreen.routeName: (BuildContext context) => new SignUpScreen(),
   Root.routeName: (BuildContext context) => new Root(),
+  CreateOrganizationScreen.routeName: (BuildContext context) =>
+      new CreateOrganizationScreen(),
 };
 
 void login(BuildContext context) {
-  Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+  Navigator.pushNamed(context, LoginScreen.routeName);
 }
 
 void signUp(BuildContext context) {
@@ -51,6 +56,22 @@ void home(BuildContext context) {
 void controller(BuildContext context) {
   Navigator.pushNamed(context, ControllerScreen.routeName);
 }
+
+void organization(context) {
+  UIModel.of(context).changeRoute(OrganizationScreen.routeName);
+}
+
+void editOrganization(context, Organization organization) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+        builder: (context) =>
+            CreateOrganizationScreen(organization: organization)),
+  );
+}
+
+void createOrganization(context) =>
+    Navigator.pushNamed(context, CreateOrganizationScreen.routeName);
 
 void programs(context) {
   UIModel.of(context).changeRoute(ProgramsScreen.routeName);

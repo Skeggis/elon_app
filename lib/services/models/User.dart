@@ -9,6 +9,7 @@ class User {
   User({this.name, this.uuid, this.email, this.organizationId});
 
   factory User.fromJson(dynamic json) {
+    print("USERSTHING");
     return User(
       name: json['name'] as String,
       uuid: json['uuid'] as String,

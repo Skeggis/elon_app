@@ -7,6 +7,9 @@ import 'package:myapp/components/screens/ProgramsScreen/ProgramsScreen.dart';
 import 'package:myapp/components/screens/CompeteScreen/CompeteScreen.dart';
 import 'package:myapp/components/screens/LoginSignUpScreen/LoginScreen.dart';
 import 'package:myapp/components/screens/LoginSignUpScreen/SignUpScreen.dart';
+import 'package:myapp/components/screens/LoginSignUpScreen/InitialScreen.dart';
+import 'package:myapp/components/screens/OrganizationScreen/OrganizationScreen.dart';
+import 'package:myapp/components/screens/CreateOrganizationScreen/CreateOrganizationScreen.dart';
 import 'package:myapp/Root.dart';
 
 class Routes {
@@ -20,4 +23,7 @@ class Routes {
   static const String login = LoginScreen.routeName;
   static const String signUp = SignUpScreen.routeName;
   static const String root = Root.routeName;
+  static const String initial = InitialScreen.routeName;
+  static const String organization = OrganizationScreen.routeName;
+  static const String createOrganization = CreateOrganizationScreen.routeName;
 }
