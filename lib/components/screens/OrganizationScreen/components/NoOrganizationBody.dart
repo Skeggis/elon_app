@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/services/models/User.dart';
+import 'package:myapp/services/models/scopedModels/UserModel.dart';
 import 'package:myapp/styles/theme.dart';
 import 'package:myapp/services/helpers.dart' as helpers;
 import 'package:myapp/components/Logo/Logo.dart';
@@ -29,6 +30,7 @@ class NoOrganizationBody extends StatefulWidget {
 class _NoOrganizationBody extends State<NoOrganizationBody> {
   List<Organization> organizations = [];
   bool loading;
+  Organization requestingOrganization;
 
   @override
   void initState() {
@@ -36,6 +38,8 @@ class _NoOrganizationBody extends State<NoOrganizationBody> {
     setState(() {
       organizations = widget.organizations;
       loading = false;
+      requestingOrganization =
+          OrganizationModel.of(context).requestingOrganization;
     });
   }
 
@@ -76,6 +80,83 @@ class _NoOrganizationBody extends State<NoOrganizationBody> {
               organization: org,
               onJoinOrganization: (_) => _onJoinOrganization(context, org),
             ));
+  }
+
+  Widget _usersJoinRequestItem(BuildContext context, org) {
+    double borderRadius = 10;
+    return Container(
+      margin: EdgeInsets.only(top: 7.5, bottom: 7.5, left: 15, right: 15),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(borderRadius),
+        border: Border.fromBorderSide(
+          BorderSide(color: Colors.grey, width: 1),
+        ),
+      ),
+      // boxShadow: [BoxShadow(blurRadius: 50, color: Colors.black)]
+      child: Container(
+        width: 300,
+        height: 70,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.25),
+          borderRadius: BorderRadius.circular(borderRadius),
+        ),
+        child: Container(
+          child: Material(
+            borderRadius: BorderRadius.circular(borderRadius),
+            color: Colors.transparent,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(width: 15),
+                Container(
+                  decoration: BoxDecoration(shape: BoxShape.circle),
+                  constraints: BoxConstraints(
+                    maxWidth: 30,
+                    maxHeight: 30,
+                  ),
+                  child: Image.network(
+                      'https://www.fristund.is/sites/default/files/styles/logo_felaga/public/badmintonfelag_hafnarfjardar.png?itok=_42tH5Mn'),
+                ),
+                SizedBox(width: 10),
+                Flexible(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // SizedBox(height: 10),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Text(org.name ?? 'No Name',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 17)),
+                      ),
+                      // SizedBox(height: 5),
+                      // Text('Wants to join',
+                      //     style: TextStyle(
+                      //         fontSize: 15,
+                      //         color: Theme.of(context)
+                      //             .primaryTextTheme
+                      //             .bodyText1
+                      //             .color
+                      //             .withOpacity(0.5)))
+                    ],
+                  ),
+                ),
+                SizedBox(width: 15),
+                Expanded(
+                  child: IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {},
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _members(BuildContext context, int amount) {
@@ -174,6 +255,10 @@ class _NoOrganizationBody extends State<NoOrganizationBody> {
                   height: 50,
                   searchHint: "Search for organization to join",
                 ),
+                if (requestingOrganization != null) ...[
+                  Text('Currently requesting'),
+                  _usersJoinRequestItem(context, requestingOrganization)
+                ],
                 Expanded(
                   child: RefreshIndicator(
                     color: Theme.of(context).splashColor,
@@ -200,9 +285,9 @@ class _NoOrganizationBody extends State<NoOrganizationBody> {
                         // shrinkWrap: true,
                         children: [
                           SizedBox(height: 25),
-                          for (Organization org in organizations)
-                            _organizationItem(context, org),
-                          SizedBox(height: 100),
+                          // for (Organization org in organizations)
+                          //   _organizationItem(context, org),
+                          // SizedBox(height: 100),
                         ],
                       ),
                     ),

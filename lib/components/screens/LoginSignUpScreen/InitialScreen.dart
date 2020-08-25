@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/components/screens/LoginSignUpScreen/components/InitialBody.dart';
 import 'package:myapp/styles/theme.dart';
-import 'package:myapp/services/models/UserModel.dart';
+import 'package:myapp/services/models/scopedModels/UserModel.dart';
 import 'package:myapp/services/models/UIModel.dart';
 
 class InitialScreen extends StatelessWidget {

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/services/ApiRequests.dart';
+import 'package:myapp/services/models/Response.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -165,7 +167,9 @@ class UserModel extends Model {
 
   Future<void> checkIfUserIsLoggedIn() async {
     _isLoggedIn = await UsersPreferences.isLoggedIn();
-    if (_isLoggedIn) notifyListeners();
+    if (_isLoggedIn) {
+      notifyListeners();
+    }
   }
 
   Future<bool> signUp(String email, String name, String password,

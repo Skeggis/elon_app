@@ -18,7 +18,7 @@ import 'package:myapp/routes/Routes.dart';
 
 import 'package:myapp/services/models/UIModel.dart';
 
-import 'package:myapp/services/models/UserModel.dart';
+import 'package:myapp/services/models/scopedModels/UserModel.dart';
 import 'package:myapp/components/screens/LoginSignUpScreen/InitialScreen.dart';
 
 import 'package:myapp/services/UsersPreferences.dart';

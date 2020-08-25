@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:scoped_model/scoped_model.dart';
 import 'package:myapp/services/ApiRequests.dart';
 import 'package:myapp/services/models/Organization.dart';
@@ -14,6 +16,9 @@ class OrganizationModel extends Model {
         response.organizations == null || response.organizations.length == 0;
     _organizations = response.organizations;
     _organization = response.organization;
+    requestingOrganization = response.requestingOrganization;
+    print('WTFFFFFFFFFFFF');
+    print('OOOOOOORGANIZATION:' + requestingOrganization.toString());
 
     if (context != null &&
         !response.success &&
@@ -86,6 +91,8 @@ class OrganizationModel extends Model {
 
   User _joinRequest;
   User get joinRequest => _joinRequest;
+
+  Organization requestingOrganization;
 
   static OrganizationModel of(BuildContext context,
           {bool rebuildOnChange = false}) =>

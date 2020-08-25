@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/services/models/scopedModels/UserModel.dart';
 import 'package:myapp/styles/theme.dart';
 import 'package:myapp/services/helpers.dart';
 import 'package:myapp/components/Logo/Logo.dart';
@@ -248,15 +249,20 @@ class _OrganizationBody extends State<OrganizationBody> {
                           // mainAxisSize: MainAxisSize.min,
                           // shrinkWrap: true,
                           children: [
-                            SizedBox(height: 25),
-                            Center(child: Text("Join Requests: ")),
-                            SizedBox(height: 5),
-                            ...[
-                              for (User user
-                                  in widget.organization.joinRequests ?? [])
-                                _joinRequestItem(context, user)
-                            ],
-                            SizedBox(height: 25),
+                            widget.organization.isOwner
+                                ? [
+                                    SizedBox(height: 25),
+                                    Center(child: Text("Join Requests: ")),
+                                    SizedBox(height: 5),
+                                    ...[
+                                      for (User user
+                                          in widget.organization.joinRequests ??
+                                              [])
+                                        _joinRequestItem(context, user)
+                                    ],
+                                    SizedBox(height: 25),
+                                  ]
+                                : SizedBox.shrink(),
                             Center(child: Text("Members: ")),
                             SizedBox(height: 5),
                             for (User user in widget.organization.members ?? [])

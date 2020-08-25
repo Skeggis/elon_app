@@ -7,6 +7,7 @@ class ApiRequests {
   static final String baseUrl = 'https://elon-server.herokuapp.com';
   static final String organizationUrl =
       'https://elon-server.herokuapp.com/organization';
+  static final String userUrl = 'https://elon-server.herokuapp.com/users';
 
   static Future<Response> createOrganization(
       String imageUrl, String name) async {
@@ -164,6 +165,12 @@ class ApiRequests {
     return response;
   }
 
+  static Future<Response> getUser(String uuid) async {
+    Response response = await genericGetApiRequest(userUrl, param: uuid);
+
+    return response;
+  }
+
   static Future<Response> genericPostApiRequest(String url, Map data) async {
     var body = json.encode(data);
 
@@ -186,6 +193,32 @@ class ApiRequests {
       return responseClass;
     } catch (e) {
       print('error posting stuff');
+      print(e);
+      return Response(success: false, errors: ["Error trying to execute"]);
+    }
+  }
+
+  static Future<Response> genericGetApiRequest(String url,
+      {String param = ''}) async {
+    print('Geeeeeeeetting');
+    print('uuid: ' + param);
+    try {
+      var response = await http
+          .get('$url/$param', headers: {"Content-Type": "application/json"});
+      print("${response.statusCode}");
+      print("${response.body}");
+
+      Response responseClass;
+      if (response.statusCode == 200) {
+        dynamic bodyDecoded = jsonDecode(response.body);
+        responseClass = Response.fromJson(bodyDecoded);
+      } else {
+        responseClass = Response(
+            success: false, errors: ["Server error, please try again later"]);
+      }
+      return responseClass;
+    } catch (e) {
+      print('error getting stuff');
       print(e);
       return Response(success: false, errors: ["Error trying to execute"]);
     }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/components/screens/OrganizationScreen/components/NoOrganizationBody.dart';
 import 'package:myapp/components/screens/OrganizationScreen/components/OrganizationBody.dart';
 import 'package:myapp/styles/theme.dart';
-import 'package:myapp/services/models/UserModel.dart';
+import 'package:myapp/services/models/scopedModels/UserModel.dart';
 import 'package:myapp/services/models/UIModel.dart';
 import 'package:myapp/services/models/Response.dart';
 import 'package:myapp/routes/Routes.dart';
@@ -73,7 +73,8 @@ class _OrganizationScreenState extends State<OrganizationScreen> {
                                   },
                                   child: Icon(organization.isOwner
                                       ? Icons.settings
-                                      : Icons.logout))
+                                      : Icons.exit_to_app),
+                                )
                               : null)
                           : FloatingActionButton(
                               onPressed: () =>

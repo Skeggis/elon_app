@@ -4,7 +4,7 @@ import 'package:myapp/routes/Routes.dart';
 import 'package:myapp/services/models/UIModel.dart';
 
 import 'package:myapp/styles/theme.dart';
-import 'package:myapp/services/models/UserModel.dart';
+import 'package:myapp/services/models/scopedModels/UserModel.dart';
 
 class AppDrawer extends StatelessWidget {
   @override

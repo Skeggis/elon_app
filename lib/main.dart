@@ -8,7 +8,7 @@ import 'package:myapp/services/models/UIModel.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import 'package:myapp/Root.dart';
-import 'package:myapp/services/models/UserModel.dart';
+import 'package:myapp/services/models/scopedModels/UserModel.dart';
 import 'package:myapp/services/models/scopedModels/OrganizationModel.dart';
 
 void main() {

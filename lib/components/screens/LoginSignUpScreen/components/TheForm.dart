@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/styles/theme.dart';
-import 'package:myapp/services/models/UserModel.dart';
+import 'package:myapp/services/models/scopedModels/UserModel.dart';
 import 'package:myapp/routes/Routes.dart';
 import 'package:myapp/routes/router.dart' as router;
 import 'package:myapp/services/models/UIModel.dart';

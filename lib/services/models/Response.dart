@@ -7,13 +7,16 @@ class Response {
   Organization organization;
   List<Organization> organizations;
   User joinRequest;
+  Organization requestingOrganization;
 
-  Response(
-      {this.errors,
-      this.success,
-      this.organization,
-      this.organizations,
-      this.joinRequest});
+  Response({
+    this.errors,
+    this.success,
+    this.organization,
+    this.organizations,
+    this.joinRequest,
+    this.requestingOrganization,
+  });
 
   factory Response.fromJson(Map<String, dynamic> json) {
     print("thing: ${json['organizations']}");
@@ -36,6 +39,8 @@ class Response {
           : (json['organizations'] as List)
               .map((org) => Organization.fromJson(org))
               .toList(),
+      requestingOrganization:
+          Organization.fromJson(json['requestingOrganization']),
       joinRequest: json['joinRequest'] == null
           ? null
           : User.fromJson(json['joinRequest']),
