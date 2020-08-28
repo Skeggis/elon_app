@@ -165,6 +165,18 @@ class ApiRequests {
     return response;
   }
 
+  static Future<Response> deleteJoinRequest(int organization_id) async {
+    Map data = {
+      'uuid': await UsersPreferences.getUsersUUID(),
+      'organization_id': organization_id,
+    };
+
+    Response response = await genericPostApiRequest(
+        organizationUrl + '/deleteJoinRequest', data);
+
+    return response;
+  }
+
   static Future<Response> getUser(String uuid) async {
     Response response = await genericGetApiRequest(userUrl, param: uuid);
 

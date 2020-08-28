@@ -67,6 +67,15 @@ class OrganizationModel extends Model {
     return response;
   }
 
+  Future<Response> deleteJoinRequest(int organizationId) async {
+    Response response = await ApiRequests.deleteJoinRequest(organizationId);
+    if (response.success) {
+      requestingOrganization = null;
+      notifyListeners();
+    }
+    return response;
+  }
+
   Future<Response> editOrganization(
       String imageUrl, String name, int organizationId) async {
     print("FUN");

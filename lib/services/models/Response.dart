@@ -39,8 +39,9 @@ class Response {
           : (json['organizations'] as List)
               .map((org) => Organization.fromJson(org))
               .toList(),
-      requestingOrganization:
-          Organization.fromJson(json['requestingOrganization']),
+      requestingOrganization: json['requestingOrganization'] == null
+          ? null
+          : Organization.fromJson(json['requestingOrganization']),
       joinRequest: json['joinRequest'] == null
           ? null
           : User.fromJson(json['joinRequest']),

@@ -57,6 +57,7 @@ class _OrganizationScreenState extends State<OrganizationScreen> {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
                     Response res = snapshot.data;
+                    print(res);
                     if (!res.success) {
                       return Center(
                           child: Text("Error!",

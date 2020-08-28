@@ -59,6 +59,7 @@ class _NoOrganizationBody extends State<NoOrganizationBody> {
     setState(() {
       loading = false;
     });
+    if (response.success) return;
 
     print("THERE");
     print(response.success);
@@ -67,6 +68,39 @@ class _NoOrganizationBody extends State<NoOrganizationBody> {
     }
 
     print("THERE");
+    return helpers.showSnackBar(
+        context, ['Something went wrong. Please try again later.']);
+  }
+
+  void _onDeleteJoinRequest(BuildContext context) async {
+    setState(() {
+      loading = true;
+    });
+
+    Response response;
+    try {
+      response = await OrganizationModel.of(context)
+          .deleteJoinRequest(requestingOrganization.id);
+    } catch (e) {
+      print("ERROR: $e");
+      response = Response(success: false);
+    }
+
+    setState(() {
+      loading = false;
+    });
+
+    if (response.success) {
+      setState(() {
+        requestingOrganization = null;
+      });
+      return;
+    }
+
+    if (response.errors != null && response.errors.length > 0) {
+      return helpers.showSnackBar(context, response.errors);
+    }
+
     return helpers.showSnackBar(
         context, ['Something went wrong. Please try again later.']);
   }
@@ -148,7 +182,9 @@ class _NoOrganizationBody extends State<NoOrganizationBody> {
                 Expanded(
                   child: IconButton(
                     icon: Icon(Icons.delete),
-                    onPressed: () {},
+                    onPressed: () {
+                      _onDeleteJoinRequest(context);
+                    },
                   ),
                 ),
               ],
@@ -285,9 +321,9 @@ class _NoOrganizationBody extends State<NoOrganizationBody> {
                         // shrinkWrap: true,
                         children: [
                           SizedBox(height: 25),
-                          // for (Organization org in organizations)
-                          //   _organizationItem(context, org),
-                          // SizedBox(height: 100),
+                          for (Organization org in organizations)
+                            _organizationItem(context, org),
+                          SizedBox(height: 100),
                         ],
                       ),
                     ),
