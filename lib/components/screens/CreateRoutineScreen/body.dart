@@ -114,15 +114,17 @@ class CreateRoutineBody extends StatelessWidget {
                               : Container(
                                   margin: EdgeInsets.symmetric(horizontal: 20),
                                   child: RoutineDescription(
-                                    creating: true,
                                     routineDesc: model.shots,
-                                    scrollController: CreateRoutineModel.of(context).scrollController,
+                                    scrollController:
+                                        CreateRoutineModel.of(context)
+                                            .scrollController,
+                                    editable: true,
                                   ),
                                 ),
                     ),
                     Container(
                       child: FloatingActionButton(
-                          child: Icon(Icons.save),
+                          child: Icon(Icons.done),
                           onPressed: () {
                             CreateRoutineModel model =
                                 CreateRoutineModel.of(context);
@@ -130,8 +132,7 @@ class CreateRoutineBody extends StatelessWidget {
                               createAlertDialog(context, 'Routine empty',
                                   'You can not create a empty routine. Try adding a shot');
                             } else {
-                              Routine routine = model.createRoutine();
-                              Navigator.of(context).pop(routine);
+                              Navigator.of(context).pop(model.shots);
                             }
                           }),
                       margin: EdgeInsets.only(right: 20),

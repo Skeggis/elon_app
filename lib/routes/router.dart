@@ -6,6 +6,7 @@ import 'package:myapp/components/screens/HomeScreen/HomeScreen.dart';
 import 'package:myapp/components/screens/LoginSignUpScreen/SignUpScreen.dart';
 import 'package:myapp/components/screens/LoginSignupScreen/LoginScreen.dart';
 import 'package:myapp/components/screens/ProgramScreen/ProgramScreenCreate.dart';
+import 'package:myapp/components/screens/ProgramScreen/arguments/ProgramScreenArguments.dart';
 import 'package:myapp/components/screens/ProgramsScreen/ProgramsScreen.dart';
 import 'package:myapp/components/screens/ProgramScreen/ProgramScreen.dart';
 import 'package:myapp/components/screens/CompeteScreen/CompeteScreen.dart';
@@ -18,6 +19,7 @@ import 'package:myapp/services/models/UIModel.dart';
 
 import 'package:myapp/components/screens/CompeteScreen/components/PlayersModal/components/body.dart';
 import 'package:myapp/components/screens/CompeteScreen/components/PlayersModal/components/SearchBar.dart';
+import 'package:myapp/services/models/scopedModels/DeviceModel.dart';
 
 import 'package:myapp/services/models/scopedModels/PlayersModel.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -75,6 +77,21 @@ void createOrganization(context) =>
 
 void programs(context) {
   UIModel.of(context).changeRoute(ProgramsScreen.routeName);
+}
+
+Future createProgram(context) {
+  DeviceModel.of(context).createProgram();
+  return Navigator.pushNamed(context, ProgramScreenCreate.routeName);
+}
+
+Future editProgram(context) {
+  DeviceModel.of(context).editProgram();
+  return Navigator.pushNamed(context, ProgramScreenCreate.routeName);
+}
+
+Future viewProgram(context, ProgramScreenArguments args) {
+  DeviceModel.of(context).viewProgram();
+  return Navigator.pushNamed(context, ProgramScreen.routeName, arguments: args);
 }
 
 void compete(context) {

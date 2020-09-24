@@ -8,15 +8,31 @@ import 'package:myapp/services/models/Program.dart';
 import 'package:myapp/services/models/scopedModels/ProgramModel.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class ProgramScreenBody extends StatelessWidget {
+class ProgramScreenBody extends StatefulWidget {
   final ProgramScreenArguments args;
 
   ProgramScreenBody(this.args);
 
   @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _ProgramScreenBody();
+  }
+}
+
+class _ProgramScreenBody extends State<ProgramScreenBody> {
+  Future testFuture;
+
+  @override
+  void initState() {
+    testFuture = ProgramModel.of(context).fetchProgram(widget.args.id);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ProgramModel.of(context).fetchProgram(args.id),
+      future: ProgramModel.of(context).fetchProgram(widget.args.id),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           ProgramModel model = ProgramModel.of(context, rebuildOnChange: true);
@@ -41,7 +57,10 @@ class ProgramScreenBody extends StatelessWidget {
                       child: Container(
                         color: Color.fromARGB(200, 0, 0, 0),
                         child: Center(
-                          child: Text(model.countDownTime.toString(), style: TextStyle(fontSize: 72),),
+                          child: Text(
+                            model.countDownTime.toString(),
+                            style: TextStyle(fontSize: 72),
+                          ),
                         ),
                       ),
                     )
@@ -69,11 +88,9 @@ class ProgramScreenBodyCreate extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   ProgramInfoBar(
-                    creating: true,
                     program: model.program,
                   ),
                   RoutinesList(
-                    creating: true,
                     program: model.program,
                   )
                 ],

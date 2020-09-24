@@ -6,6 +6,7 @@ import 'package:myapp/services/helper.dart';
 import 'package:myapp/services/models/Program.dart';
 import 'package:myapp/styles/theme.dart';
 import '../../../../../icons/CustomIcons.dart';
+import 'package:myapp/routes/router.dart' as router;
 
 class ProgramListItem extends StatelessWidget {
   final int index;
@@ -25,13 +26,11 @@ class ProgramListItem extends StatelessWidget {
       child: Material(
         elevation: 12,
         borderRadius: BorderRadius.all(Radius.circular(5)),
-        
         child: InkWell(
           borderRadius: BorderRadius.circular(5),
-          onTap: () => Navigator.pushNamed(
+          onTap: () async => await router.viewProgram(
             context,
-            ProgramScreen.routeName,
-            arguments: ProgramScreenArguments(
+            ProgramScreenArguments(
               id: program.id,
               name: program.name,
             ),

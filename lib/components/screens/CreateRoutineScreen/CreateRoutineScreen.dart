@@ -15,7 +15,7 @@ class CreateRoutineScreen extends StatelessWidget {
         ModalRoute.of(context).settings.arguments;
 
     return ScopedModel<CreateRoutineModel>(
-      model: CreateRoutineModel(args.shotLocations),
+      model: CreateRoutineModel(args.shotLocations, args.shots),
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,

@@ -5,21 +5,21 @@ import 'package:myapp/components/CustomTimePicker/CustomTimePicker.dart';
 import 'package:myapp/services/helper.dart';
 import 'package:myapp/services/models/scopedModels/CreateProgramModel.dart';
 import 'package:myapp/services/models/Program.dart';
+import 'package:myapp/services/models/scopedModels/DeviceModel.dart';
 import 'package:myapp/services/models/scopedModels/ProgramModel.dart';
 import 'package:myapp/styles/theme.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ProgramInfoBar extends StatelessWidget {
-  final bool creating;
   final Program program;
 
   ProgramInfoBar({
-    this.creating = false,
     this.program,
   });
 
   @override
   Widget build(BuildContext context) {
+    bool creating = !DeviceModel.of(context).viewingProgram;
     Widget sets = creating
         ? SizedBox(
             width: 50,
@@ -82,16 +82,18 @@ class ProgramInfoBar extends StatelessWidget {
                           .displayTimeout),
                   style: TextStyle(fontSize: 24),
                 ),
-              ),ProgramModel.of(context, rebuildOnChange: true).setResting ? 
-              Positioned(
-                top: 0,
-                right: 0,
-                child: Icon(
-                  Icons.brightness_1,
-                  color: Theme.of(context).accentColor,
-                  size: 8,
-                ),
-              ) :SizedBox.shrink()
+              ),
+              ProgramModel.of(context, rebuildOnChange: true).setResting
+                  ? Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Icon(
+                        Icons.brightness_1,
+                        color: Theme.of(context).accentColor,
+                        size: 8,
+                      ),
+                    )
+                  : SizedBox.shrink()
             ],
           );
 

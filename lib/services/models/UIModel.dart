@@ -12,7 +12,7 @@ class UIModel extends Model {
     notifyListeners();
   }
 
-  String _route = Routes.organization;
+  String _route = Routes.programs;
   String get route => _route;
   void changeRoute(String newRoute) {
     _route = newRoute;

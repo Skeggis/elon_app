@@ -23,7 +23,7 @@ class ProgramScreen extends StatelessWidget {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              model.clearTimer();
+              //  model.clearTimer();
               Navigator.pop(context);
             },
           ),

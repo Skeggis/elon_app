@@ -2,26 +2,31 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/components/CustomInput/CustomInput.dart';
 import 'package:myapp/components/CustomTimePicker/CustomTimePicker.dart';
+import 'package:myapp/components/screens/CreateRoutineScreen/CreateRoutineScreen.dart';
+import 'package:myapp/components/screens/CreateRoutineScreen/arguments/CreateRoutineArguments.dart';
 import 'package:myapp/components/screens/ProgramScreen/components/RoutineDescription.dart';
 import 'package:myapp/services/helper.dart';
 import 'package:myapp/services/models/Program.dart';
 import 'package:myapp/services/models/Routine.dart';
 import 'package:myapp/services/models/scopedModels/CreateProgramModel.dart';
+import 'package:myapp/services/models/scopedModels/CreateRoutineModel.dart';
+import 'package:myapp/services/models/scopedModels/DeviceModel.dart';
 import 'package:myapp/services/models/scopedModels/ProgramModel.dart';
 
 class RoutineListItem extends StatelessWidget {
   final Routine routine;
   final int index;
-  final bool creating;
 
   RoutineListItem({
     this.routine,
     this.index,
-    this.creating = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    print(routine.routineDesc);
+    bool creating = !DeviceModel.of(context).viewingProgram;
+
     Future<void> showTimeoutDialog(BuildContext myContext) {
       return showDialog(
         context: context,
@@ -152,7 +157,8 @@ class RoutineListItem extends StatelessWidget {
                   ),
                 ),
               ),
-              ProgramModel.of(context, rebuildOnChange: true).isRoutineResting(index)
+              ProgramModel.of(context, rebuildOnChange: true)
+                      .isRoutineResting(index)
                   ? Positioned(
                       top: 0,
                       right: 0,
@@ -170,6 +176,40 @@ class RoutineListItem extends StatelessWidget {
       margin: EdgeInsets.only(top: index == 0 ? 20 : 0),
       child: Column(
         children: [
+          creating
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () async {
+                              var editedRoutine = await Navigator.pushNamed(
+                                context,
+                                CreateRoutineScreen.routeName,
+                                arguments: CreateRoutineArguments(
+                                  shotLocations: CreateProgramModel.of(context)
+                                      .shotLocations,
+                                  shots: routine.routineDesc,
+                                ),
+                              );
+                              CreateProgramModel.of(context)
+                                  .updateRoutineDesc(index, editedRoutine);
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () => CreateProgramModel.of(context)
+                                .removeRoutine(index),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              : SizedBox.shrink(),
           Row(
             children: <Widget>[
               Container(
@@ -182,14 +222,11 @@ class RoutineListItem extends StatelessWidget {
               ),
               Expanded(
                 child: RoutineDescription(
-                  creating: creating,
                   index: index,
                   routineDesc: routine.routineDesc,
-                  scrollController: creating ? null : ProgramModel.of(context).scrollControllers[index],
-                  handleDelete: creating
-                      ? () =>
-                          CreateProgramModel.of(context).removeRoutine(index)
-                      : null,
+                  scrollController: creating
+                      ? null
+                      : ProgramModel.of(context).scrollControllers[index],
                 ),
               ),
             ],

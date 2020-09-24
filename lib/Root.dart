@@ -22,6 +22,7 @@ import 'package:myapp/services/models/scopedModels/UserModel.dart';
 import 'package:myapp/components/screens/LoginSignUpScreen/InitialScreen.dart';
 
 import 'package:myapp/services/UsersPreferences.dart';
+import 'package:myapp/routes/router.dart' as router;
 
 class Root extends StatelessWidget {
   static const String routeName = '/root';
@@ -55,7 +56,7 @@ class Root extends StatelessWidget {
         screenTitle = 'Programs';
         fab = FloatingActionButton(
           onPressed: () async {
-            await Navigator.pushNamed(context, ProgramScreenCreate.routeName);
+            await router.createProgram(context);
           },
           child: Icon(Icons.add),
         );

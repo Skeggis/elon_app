@@ -7,6 +7,7 @@ import 'package:myapp/routes/router.dart';
 import 'package:myapp/services/helper.dart';
 import 'package:myapp/services/models/Program.dart';
 import 'package:myapp/services/models/Routine.dart';
+import 'package:myapp/services/models/Shot.dart';
 import 'package:myapp/services/models/ShotLocation.dart';
 import 'package:myapp/services/models/ShotType.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -153,6 +154,11 @@ class CreateProgramModel extends Model {
   void removeRoutine(int index) {
     program.routines.removeAt(index);
     print(index);
+    notifyListeners();
+  }
+
+  void updateRoutineDesc(int index, List<Shot> routineDesc) {
+    program.routines[index].routineDesc = routineDesc;
     notifyListeners();
   }
 

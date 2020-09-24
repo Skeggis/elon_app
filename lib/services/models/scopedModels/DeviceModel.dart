@@ -28,6 +28,33 @@ class DeviceModel extends Model {
   List<BluetoothDevice> _foundDevices = [];
   List<BluetoothDevice> get foundDevices => _foundDevices;
 
+//user is either viewing a program or editing / creating a program
+  bool viewingProgram = false;
+//is user creating or editing a program
+  bool creatingProgram = false;
+  bool editingProgram = false;
+
+  void createProgram() {
+    viewingProgram = false;
+    creatingProgram = true;
+    editingProgram = false;
+    notifyListeners();
+  }
+
+  void editProgram() {
+    viewingProgram = false;
+    editingProgram = true;
+    creatingProgram = false;
+    notifyListeners();
+  }
+
+  void viewProgram() {
+    viewingProgram = true;
+    editingProgram = false;
+    creatingProgram = false;
+    notifyListeners();
+  }
+
   //TODO: find a way so that _connectedDevicesStream does not have to be periodic (Now it is called every .5 sec)
   DeviceModel() {
     Function eq = const ListEquality().equals;
@@ -233,7 +260,7 @@ class DeviceModel extends Model {
   }
 
   Future shotFinished(Function step) async {
-    return  Future.delayed(Duration(milliseconds: 500), () async {
+    return Future.delayed(Duration(milliseconds: 500), () async {
       BluetoothCharacteristic char = _elonServices[2].characteristics[0];
 
       await char.setNotifyValue(true);

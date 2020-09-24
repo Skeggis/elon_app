@@ -21,7 +21,7 @@ class ProgramScreenCreate extends StatelessWidget {
 
     Future<Map<String, dynamic>> createFinalDialog(
         CreateProgramModel model, myContext) async {
-      Map test = await  showDialog<Map<String, dynamic>>(
+      Map test = await showDialog<Map<String, dynamic>>(
         context: context,
         builder: (dialogContext) => AlertDialog(
           title: Text('Insert information'),
@@ -76,10 +76,7 @@ class ProgramScreenCreate extends StatelessWidget {
                         }
                       } else {
                         print('her');
-                 
-                        
                       }
-                      
                     },
               child: Text('Save'),
             )
@@ -106,9 +103,12 @@ class ProgramScreenCreate extends StatelessWidget {
                       var createdRoutine = await Navigator.pushNamed(
                         context,
                         '/createRoutine',
-                        arguments: CreateRoutineArguments(model.shotLocations),
+                        arguments: CreateRoutineArguments(
+                          shotLocations: model.shotLocations,
+                        ),
                       );
-                      model.addRoutine(createdRoutine);
+                      model
+                          .addRoutine(new Routine(routineDesc: createdRoutine));
                     },
                     child: Icon(Icons.add),
                     heroTag: null,
@@ -119,13 +119,11 @@ class ProgramScreenCreate extends StatelessWidget {
                     children: <Widget>[
                       FloatingActionButton(
                         onPressed: () async {
-                          
-                              await createFinalDialog(model, scopedContext);
- 
+                          await createFinalDialog(model, scopedContext);
                         },
                         child: model.createProgramLoading
                             ? CircularProgressIndicator()
-                            : Icon(Icons.save),
+                            : Icon(Icons.done),
                         heroTag: null,
                       ),
                       SizedBox(width: 10),
@@ -134,10 +132,11 @@ class ProgramScreenCreate extends StatelessWidget {
                           var createdRoutine = await Navigator.pushNamed(
                             context,
                             '/createRoutine',
-                            arguments:
-                                CreateRoutineArguments(model.shotLocations),
+                            arguments: CreateRoutineArguments(
+                                shotLocations: model.shotLocations),
                           );
-                          model.addRoutine(createdRoutine);
+                          model.addRoutine(
+                              new Routine(routineDesc: createdRoutine));
                         },
                         child: Icon(Icons.add),
                         heroTag: null,

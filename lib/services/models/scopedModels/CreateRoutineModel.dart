@@ -8,8 +8,11 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 class CreateRoutineModel extends Model {
   final int _initialTimeout = 1;
 
-  CreateRoutineModel(List<ShotLocation> shotLocations) {
+  CreateRoutineModel(List<ShotLocation> shotLocations, List<Shot> shots) {
     _shotLocations = shotLocations;
+    if (shots != null) {
+      _shots = shots;
+    }
     currentShotTimeout = _initialTimeout;
   }
 
@@ -53,7 +56,7 @@ class CreateRoutineModel extends Model {
     if (_scrollController.isAttached) {
       Future.delayed(Duration(milliseconds: 100), () {
         _scrollController.scrollTo(
-          index: shots.length -1,
+          index: shots.length - 1,
           duration: Duration(milliseconds: 500),
           curve: Curves.easeOut,
         );
@@ -61,10 +64,6 @@ class CreateRoutineModel extends Model {
     }
 
     notifyListeners();
-  }
-
-  Routine createRoutine() {
-    return new Routine(routineDesc: shots);
   }
 
   ItemScrollController _scrollController = ItemScrollController();

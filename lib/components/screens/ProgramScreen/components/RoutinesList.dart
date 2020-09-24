@@ -4,18 +4,19 @@ import 'package:myapp/services/models/scopedModels/DeviceModel.dart';
 import 'package:myapp/services/models/Program.dart';
 
 class RoutinesList extends StatelessWidget {
-  final bool creating;
   final Program program;
 
-  RoutinesList({this.creating = false, this.program});
+  RoutinesList({this.program});
 
   @override
   Widget build(BuildContext context) {
-
     return Expanded(
       child: program.routines.length == 0
           ? Center(
-              child: Text('Add a routine', style: TextStyle(fontSize: 18),),
+              child: Text(
+                'Add a routine',
+                style: TextStyle(fontSize: 18),
+              ),
             )
           : Container(
               child: ListView(
@@ -30,7 +31,6 @@ class RoutinesList extends StatelessWidget {
                         child: RoutineListItem(
                           routine: program.routines[index],
                           index: index,
-                          creating: creating
                         ),
                       ),
                     ),
